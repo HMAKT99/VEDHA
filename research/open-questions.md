@@ -3,8 +3,8 @@
 | ID | Question | Why it matters | How to close |
 |---|---|---|---|
 | Q1 | (Closed, E-086) Behaviours on 1.64.1 vs source 1.65.0-next: identical except timing-dependent poll repetition counts | - | - |
-| Q2 | Firefox, WebKit, BiDi paths: same actionability/retry semantics? | Cross-browser claims | Run `exp1.mjs` per browser; read `server/firefox`, `server/webkit`, `server/bidi` |
-| Q3 | (Partly closed, E-085) Selected upstream specs pass on the pinned source (Chromium): 264 page + 196 runner tests. Remaining: other specs, Firefox/WebKit projects | Broader verified_test coverage | Run more spec files/projects in the isolated build |
+| Q2 | (Partly closed, E-087) Firefox/WebKit: the nine traced-scenario page specs pass on both. Remaining: library, runner and bidi projects on those engines | Cross-browser claims | Run more projects in the isolated build |
+| Q3 | (Mostly closed, E-085/E-087) Full tests/page on Chromium (2617) and 196 runner specs pass. Remaining: tests/library and the rest of tests/playwright-test | Broader verified_test coverage | Run them in the isolated build |
 | Q4 | (Partially closed, E-073) No replay subcommand in `playwright trace`; UI-mode/time-travel and recorder not checked | Core to failure-replay gap | Check ui mode and `server/recorder` |
 | Q5 | (Closed for sample, E-071) Remaining: per-action byte cost on longer traces and when aria-snapshot events are emitted | Compact trace design | Longer sample, config scan of `tracing.ts:574` |
 | Q6 | (Closed for sample, E-070) Output at scale unmeasured | Competing needs this baseline | Run on a 50-action trace |
