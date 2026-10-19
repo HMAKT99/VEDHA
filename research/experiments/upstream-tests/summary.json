@@ -1,0 +1,64 @@
+{
+ "pinned": {
+  "commit": "b335271cdc2b57cac2be8ad37c5dd283ac6b8938",
+  "version": "1.65.0-next",
+  "builtIn": "isolated copy (not the research/upstream clone)"
+ },
+ "environment": {
+  "node": "v22.20.0",
+  "os": "macOS 15.6.1 arm64"
+ },
+ "procedure": [
+  "cp -R research/upstream/playwright <scratch>/pw-build",
+  "npm ci --ignore-scripts",
+  "npm run build",
+  "node packages/playwright-core/cli.js install chromium",
+  "page specs: node packages/playwright/cli.js test --config=tests/library/playwright.config.ts --project=chromium-page <9 spec files>",
+  "runner specs: node tests/playwright-test/stable-test-runner/node_modules/@playwright/test/cli test --config=tests/playwright-test/playwright.config.ts --project=playwright-test timeout.spec retry.spec shard.spec playwright-test/fixtures.spec playwright-test/expect.spec playwright.trace.spec"
+ ],
+ "page": {
+  "stats": {
+   "startTime": "2026-10-19T03:19:19.385Z",
+   "duration": 37289.502,
+   "expected": 264,
+   "skipped": 1,
+   "unexpected": 0,
+   "flaky": 0
+  },
+  "filesAndTestCounts": {
+   "page/expect-timeout.spec.ts": 15,
+   "page/locator-click.spec.ts": 5,
+   "page/page-add-locator-handler.spec.ts": 14,
+   "page/page-aria-snapshot-ai.spec.ts": 48,
+   "page/page-click-timeout-1.spec.ts": 4,
+   "page/page-click-timeout-2.spec.ts": 2,
+   "page/page-click.spec.ts": 93,
+   "page/page-goto.spec.ts": 67,
+   "page/page-wait-for-selector-1.spec.ts": 17
+  }
+ },
+ "runner": {
+  "stats": {
+   "startTime": "2026-10-19T03:20:36.629Z",
+   "duration": 239141.97499999998,
+   "expected": 196,
+   "skipped": 0,
+   "unexpected": 0,
+   "flaky": 0
+  },
+  "filesAndTestCounts": {
+   "expect.spec.ts": 44,
+   "fixtures.spec.ts": 33,
+   "override-timeout.spec.ts": 3,
+   "playwright.trace.spec.ts": 59,
+   "retry.spec.ts": 14,
+   "shard.spec.ts": 19,
+   "timeout.spec.ts": 24
+  }
+ },
+ "notes": [
+  "Only Chromium was exercised.",
+  "The single page-suite result with status failed is an upstream expected failure (counted in expected).",
+  "First attempt at runner specs collected 0 tests because the stable test runner must be used (recorded, not a product failure)."
+ ]
+}

@@ -28,3 +28,6 @@ Pinned to `microsoft/playwright@b335271c` (1.65.0-next). `pwc:` = `packages/play
 
 ## Observed sizes (REA statistics, `pwcore-src-analysis.json`)
 `playwright-core/src`: 331 relevant files, 532,496 AST nodes, 0 parse failures; 4,948 module nodes, 4,338 import edges. Semantic graph truncated at its 100,000-node ceiling (covers 101 modules) - see `rea-investigation-log.md` L-06.
+
+## Update (E-085/E-086)
+After this map was written, selected supporting tests were **executed** in an isolated build of the pinned commit (Chromium): 264 page specs (page-click, locator-click, page-goto, expect-timeout, page-add-locator-handler, page-wait-for-selector-1, page-aria-snapshot-ai, page-click-timeout-1/2) and 196 runner specs (timeout, retry, shard, fixtures, expect, trace) passed with 0 unexpected failures. See `research/experiments/upstream-tests/summary.json`. Rows tagged **T** elsewhere in this file for other spec files remain "exists, not executed".

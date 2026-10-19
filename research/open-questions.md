@@ -2,9 +2,9 @@
 
 | ID | Question | Why it matters | How to close |
 |---|---|---|---|
-| Q1 | Do behaviours observed on `playwright@1.64.1` hold on source `1.65.0-next` (`b335271c`)? | Runtime evidence and static pins differ by one minor | Build the pinned source in an isolated copy, rerun `exp1.mjs` and the failing-test suite |
+| Q1 | (Closed, E-086) Behaviours on 1.64.1 vs source 1.65.0-next: identical except timing-dependent poll repetition counts | - | - |
 | Q2 | Firefox, WebKit, BiDi paths: same actionability/retry semantics? | Cross-browser claims | Run `exp1.mjs` per browser; read `server/firefox`, `server/webkit`, `server/bidi` |
-| Q3 | How are the pinned supporting tests behaving (pass/fail) in this environment? | Ledger has no `verified_test` entries | Run selected specs from `tests/page/*`, `tests/playwright-test/*` in an isolated build (needs explicit approval to run upstream scripts) |
+| Q3 | (Partly closed, E-085) Selected upstream specs pass on the pinned source (Chromium): 264 page + 196 runner tests. Remaining: other specs, Firefox/WebKit projects | Broader verified_test coverage | Run more spec files/projects in the isolated build |
 | Q4 | (Partially closed, E-073) No replay subcommand in `playwright trace`; UI-mode/time-travel and recorder not checked | Core to failure-replay gap | Check ui mode and `server/recorder` |
 | Q5 | (Closed for sample, E-071) Remaining: per-action byte cost on longer traces and when aria-snapshot events are emitted | Compact trace design | Longer sample, config scan of `tracing.ts:574` |
 | Q6 | (Closed for sample, E-070) Output at scale unmeasured | Competing needs this baseline | Run on a 50-action trace |

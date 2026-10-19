@@ -7,7 +7,7 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 | Phase                | Status                          | Evidence                                                                                                                                                    |
 | -------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 Environment + REA  | **Done, one gap**               | `research/environment.md`; REA 6.7.0 CLI used; MCP registered but **MCP tools not invoked in-session** (needs a Claude Code restart; Q14)                   |
-| 1 Playwright via REA | **Done**                        | 10 deliverables in `research/`; ledger `research/evidence-ledger.json` (66 findings); 6 traced scenarios with runtime confirmation                          |
+| 1 Playwright via REA | **Done**                        | 10 deliverables in `research/`; ledger `research/evidence-ledger.json` (68 findings); 6 traced scenarios with runtime confirmation                          |
 | 2 Ecosystem          | **Done** (depth varies)         | `research/competitive-landscape.md`, `architecture-comparison.md`, `agent-testing-gaps.md`; Skyvern/Magnitude only metadata + README                        |
 | 3 Gap matrix         | **Done**                        | `research/playwright-gap-matrix.md`                                                                                                                         |
 | 4 Design             | **Done**                        | `design/` (3 proposals, selection, migration, 6 ADRs)                                                                                                       |
@@ -22,7 +22,8 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 - `vitest run`: **61 tests passed** (core unit incl. runner decisions with a fake adapter, implicit read-back, exact targets, verifiers, policy/redaction/path guards, observation levels/deltas, bundle/replay/promotion, schema validation; real-browser integration; CLI end to end).
 - Integration suite re-run with `VEDHA_BROWSER=firefox` and `=webkit`: 15/15 pass on each.
 - Benchmarks: `vedha-n20-frozen` and `vedha-n20-postfix` (1,500 trials each, 0 harness errors); `xb-firefox`, `xb-webkit` (150 each); observation track (n=10). See `benchmarks/analysis/vedha-n20-interpretation.md`.
-- Upstream Playwright's own tests: **not run** (needs explicit approval to execute upstream scripts; no `verified_test` ledger entries).
+- Upstream Playwright's own tests, run in an isolated build of the pinned commit (Chromium only): 264 page specs + 196 runner specs passed, 0 unexpected (E-085). My runtime experiment re-run on 1.65.0-next matched 1.64.1 apart from a timing-dependent repeat count (E-086).
+- GitHub Actions CI: passes on a clean Ubuntu runner (build, lint, format, 61 tests).
 
 ## Honest results summary
 
@@ -36,11 +37,10 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 - Scenarios and framework share an author; no independent hold-out set. Not built: multi-tab, responsive/visual, long-horizon, unfamiliar apps, real third-party sites.
 - REA MCP server not exercised in-session; REA could not resolve `this.method()` call edges (E-060).
 - Policy limits: after an allowed POST redirect the page URL stays at the POST URL; `fromPage` sessions cannot block service workers; DNS rebinding / IP-literal tricks beyond hostname matching not handled.
-- CI workflow never run; package not published to npm.
+- Package not published to npm.
 
 ## Unverified assumptions
 
-- Playwright 1.64.1 runtime behaviour equals 1.65.0-next source behaviour (Q1).
 - Ref stability beyond DOM insertion (Q8 partial).
 - `pw-strong` as an "expert" baseline is the author's reconstruction.
 
@@ -48,6 +48,6 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 
 1. Model key/budget → LLM `Actor` adapter outside core; same scenarios, same model and prompt across Playwright MCP, browser-use, Stagehand, agent-browser, Vedha.
 2. Independently authored hold-out scenarios and a trial on a real app.
-3. Run selected upstream Playwright tests in an isolated build (needs approval); close Q1.
+3. Run more upstream spec files and the Firefox/WebKit projects in the isolated build.
 4. Restart Claude Code and re-run key Phase 1 queries via REA's MCP tools.
-5. Run CI on GitHub; publish packages when ready.
+5. Publish packages when ready.

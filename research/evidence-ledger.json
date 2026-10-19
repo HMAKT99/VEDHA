@@ -1035,6 +1035,36 @@
    "remaining_questions": [
     "small n; fixture only; real sites untested"
    ]
+  },
+  {
+   "id": "E-085",
+   "question": "Do upstream Playwright tests covering the scenarios we traced pass on the pinned source?",
+   "method": "built pinned commit in an isolated copy; ran 9 page spec files (click, locator-click, goto, expect-timeout, add-locator-handler, wait-for-selector-1, aria-snapshot-ai, click-timeout-1/2) and 6 runner spec files (timeout, retry, shard, fixtures, expect, trace) ",
+   "rea_tool": null,
+   "target": "microsoft/playwright@b335271c (1.65.0-next), Chromium only",
+   "source_path": "research/experiments/upstream-tests/summary.json",
+   "lines": null,
+   "evidence": "Page specs: 264 expected, 1 skipped, 0 unexpected, 0 flaky. Runner specs: 196 expected, 0 unexpected, 0 flaky",
+   "interpretation": "The supporting tests for traced scenarios T2-T6 pass on the pinned source; they exercised the same code paths we cite",
+   "confidence": "high",
+   "status": "verified_test",
+   "remaining_questions": [
+    "Firefox/WebKit upstream projects not run; other spec files not run"
+   ]
+  },
+  {
+   "id": "E-086",
+   "question": "Does runtime behaviour on 1.65.0-next (pinned source build) match what we observed on published 1.64.1?",
+   "method": "re-ran research/experiments/pw-runtime/exp1.mjs against the built source",
+   "rea_tool": null,
+   "target": "call log, timeouts, ARIA snapshot",
+   "source_path": "research/experiments/upstream-tests/exp1-1.65.0-next-output.json",
+   "lines": null,
+   "evidence": "missingTimeout, waitedForDone, aria identical; clickTimeout identical except the last retry block repeated 3x instead of 2x (poll count within the time window)",
+   "interpretation": "Findings from 1.64.1 hold on the pinned source; the only difference is timing-dependent repetition count",
+   "confidence": "high",
+   "status": "verified_runtime",
+   "remaining_questions": []
   }
  ]
 }
