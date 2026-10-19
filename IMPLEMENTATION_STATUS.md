@@ -7,7 +7,7 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 | Phase                | Status                          | Evidence                                                                                                                                                    |
 | -------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 Environment + REA  | **Done, one gap**               | `research/environment.md`; REA 6.7.0 CLI used; MCP registered but **MCP tools not invoked in-session** (needs a Claude Code restart; Q14)                   |
-| 1 Playwright via REA | **Done**                        | 10 deliverables in `research/`; ledger `research/evidence-ledger.json` (70 findings); 6 traced scenarios with runtime confirmation                          |
+| 1 Playwright via REA | **Done**                        | 10 deliverables in `research/`; ledger `research/evidence-ledger.json` (71 findings); 6 traced scenarios with runtime confirmation                          |
 | 2 Ecosystem          | **Done** (depth varies)         | `research/competitive-landscape.md`, `architecture-comparison.md`, `agent-testing-gaps.md`; Skyvern/Magnitude only metadata + README                        |
 | 3 Gap matrix         | **Done**                        | `research/playwright-gap-matrix.md`                                                                                                                         |
 | 4 Design             | **Done**                        | `design/` (3 proposals, selection, migration, 6 ADRs)                                                                                                       |
@@ -23,6 +23,7 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 - Integration suite re-run with `VEDHA_BROWSER=firefox` and `=webkit`: 15/15 pass on each.
 - Benchmarks: `vedha-n20-frozen` and `vedha-n20-postfix` (1,500 trials each, 0 harness errors); `xb-firefox`, `xb-webkit` (150 each); observation track (n=10). See `benchmarks/analysis/vedha-n20-interpretation.md`.
 - Upstream Playwright's own tests, run in an isolated build of the pinned commit: full `tests/page` on Chromium 2,617 passed / 17 skipped / 0 unexpected; the nine traced-scenario page specs also pass on Firefox (264) and WebKit (265); 196 runner specs (timeout, retry, shard, fixtures, expect, trace) pass on Chromium (E-085, E-087). Full upstream `tests/library` on Chromium (161 spec files): 2,607 passed, 79 skipped; each of two runs had one failure - one caused by my own `--output` flag, one nondeterministic CDP test (CD-004) that failed 2 of 3 solo re-runs and passed in its full file; no deterministic failure found (E-088). My runtime experiment re-run on 1.65.0-next matched 1.64.1 apart from a timing-dependent repeat count (E-086).
+- Remaining upstream suites (E-089): runner suite on Chromium with the stable runner: 1732 passed / 209 failed at 4 workers, nearly all 30 s timeouts under load; `reporter-html`+`reporter-blob` pass with 1 worker and a 120 s timeout (256 passed). Deterministic failures on this machine, cause not diagnosed: `loader.spec` CSS-in-ESM (Node 22.20 and 24.9), Firefox `CO-054`/`CO-058` (Partitioned cookies). One `ui-mode-test-setup` SIGINT failure not re-checked solo. Firefox library 2403 passed / 3 failed; WebKit library 2425 passed / 0 failed.
 - GitHub Actions CI: passes on a clean Ubuntu runner (build, lint, format, 61 tests).
 
 ## Honest results summary
@@ -48,6 +49,6 @@ Project name: **Vedha** (renamed from the working name AgentFirst; packages `@ve
 
 1. Model key/budget → LLM `Actor` adapter outside core; same scenarios, same model and prompt across Playwright MCP, browser-use, Stagehand, agent-browser, Vedha.
 2. Independently authored hold-out scenarios and a trial on a real app.
-3. Run the rest of upstream `tests/playwright-test`, and the Firefox/WebKit library projects, in the isolated build; investigate why CD-004 is nondeterministic here.
+3. Diagnose the upstream failures listed above and CD-004; run the bidi/mobile projects and Firefox/WebKit runner specs.
 4. Restart Claude Code and re-run key Phase 1 queries via REA's MCP tools.
 5. Publish packages when ready.
