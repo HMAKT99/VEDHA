@@ -111,5 +111,47 @@
    "page-click-timeout-1",
    "page-click-timeout-2"
   ]
+ },
+ "library": {
+  "date": "2026-10-19",
+  "project": "chromium-library",
+  "specFiles": 161,
+  "command": "node packages/playwright/cli.js test --config=tests/library/playwright.config.ts --project=chromium-library --workers=4 tests/library/",
+  "runs": [
+   {
+    "name": "first run (with --output override to scratch dir)",
+    "stats": {
+     "startTime": "2026-10-19T03:54:01.143Z",
+     "duration": 410635.056,
+     "expected": 2607,
+     "skipped": 79,
+     "unexpected": 1,
+     "flaky": 0
+    },
+    "unexpected": [
+     "library/trace-viewer.spec.ts TV-122 take trace paths via stdin"
+    ],
+    "classification": "caused by the --output override; passes with default output dir (solo re-run 1 passed)"
+   },
+   {
+    "name": "clean re-run (default settings)",
+    "stats": {
+     "startTime": "2026-10-19T04:03:07.413Z",
+     "duration": 465933.935,
+     "expected": 2607,
+     "skipped": 79,
+     "unexpected": 1,
+     "flaky": 0
+    },
+    "unexpected": [
+     "library/chromium/connect-over-cdp.spec.ts CD-004 should connect when an existing page has been discarded (Test timeout of 60000ms exceeded)"
+    ],
+    "classification": "nondeterministic on this machine: solo re-runs failed, failed, passed; whole connect-over-cdp file with 4 workers passed (36/36). Cause not determined (machine state vs upstream timing)"
+   }
+  ],
+  "notNotRun": [
+   "firefox-library and webkit-library projects",
+   "bidi, mobile, electron, android projects"
+  ]
  }
 }
