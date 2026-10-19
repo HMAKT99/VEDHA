@@ -233,5 +233,32 @@
     "flaky": 0
    }
   }
+ },
+ "diagnosis": {
+  "date": "2026-10-19",
+  "loaderCssEsm": {
+   "test": "loader.spec 'should load css imports as empty modules in esm'",
+   "result": "cause identified",
+   "finding": "Fails on Node 22.20.0 and 24.9.0 with a null `source` from the load hook. A minimal repro with NO css import fails too: a pass-through async `register()` loader in playwright.config.ts is enough. Playwright installs its loader with synchronous `registerHooks` when available (packages/playwright/src/transform/transform.ts:443) and with async `register` only otherwise; the combination with a user's async hooks yields a null source for a CommonJS module. With PLAYWRIGHT_FORCE_ASYNC_LOADER=1 the same repro and the upstream test pass.",
+   "notEstablished": "whether upstream CI, with its own Node version, passes this test; whether newer Node releases fix the interaction"
+  },
+  "firefoxPartitionedCookies": {
+   "tests": [
+    "CO-054",
+    "CO-058"
+   ],
+   "result": "deterministic here, cause partly narrowed",
+   "finding": "Firefox revision 1562 (157.0), the revision the pinned commit requires, was used. In the third-party iframe the received cookie is 'top-level-non-partitioned=value' only; the test (browsercontext-cookies-third-party.spec.ts:222-223, marked 'TODO: reenable cookie partitioning?') expects '...; top-level-partitioned=value' for Firefox without BiDi.",
+   "notEstablished": "whether this build's cookie partitioning behaviour differs from what upstream CI sees; only macOS tested"
+  },
+  "uiModeSigint": {
+   "test": "ui-mode-test-setup 'should run teardown with SIGINT'",
+   "result": "flaky",
+   "finding": "3 solo runs: 1 had a failure, 2 passed fully"
+  },
+  "cd004": {
+   "result": "not reproduced",
+   "finding": "5 of 5 solo runs passed (5.5-7.3 s). The test launches headed Chrome on a fixed port (9339 + worker index) and drives chrome://discards, so it is sensitive to machine state; the earlier failures were not explained"
+  }
  }
 }
