@@ -34,3 +34,6 @@ After this map was written, selected supporting tests were **executed** in an is
 
 ### Second batch (E-087)
 The full upstream `tests/page` suite passes on Chromium (2,617 passed, 17 skipped, 0 unexpected, 0 flaky) and the nine traced-scenario specs also pass on Firefox (264) and WebKit (265). Not yet run: `tests/library`, the remaining runner specs, bidi and mobile projects.
+
+### Third batch (E-088)
+Full upstream `tests/library` on Chromium (161 spec files): 2,607 passed, 79 skipped, no deterministic failure. One CDP-attach test (CD-004) is nondeterministic on this machine; see `research/experiments/upstream-tests/summary.json`.

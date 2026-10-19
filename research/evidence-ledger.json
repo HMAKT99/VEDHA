@@ -1081,6 +1081,23 @@
    "remaining_questions": [
     "tests/library, tests/playwright-test beyond the six files, bidi and mobile projects not run"
    ]
+  },
+  {
+   "id": "E-088",
+   "question": "Does the upstream tests/library suite pass on the pinned source (Chromium)?",
+   "method": "full tests/library on chromium-library in the isolated build, run twice; failures re-run solo to classify",
+   "rea_tool": null,
+   "target": "microsoft/playwright@b335271c (1.65.0-next), Chromium",
+   "source_path": "research/experiments/upstream-tests/summary.json (library)",
+   "lines": null,
+   "evidence": "161 spec files: 2607 expected, 79 skipped, 0 flaky per reporter; 1 unexpected in each run. Run 1: trace-viewer TV-122, caused by my --output override (passes by default). Run 2: connect-over-cdp CD-004 60s timeout; solo reruns failed/failed/passed, whole file passed 36/36",
+   "interpretation": "No deterministic failure found. One Chromium CDP-attach test is nondeterministic on this machine; its cause was not determined and is not evidence about the code paths traced in Phase 1 (browser launch, locators, actionability, trace)",
+   "confidence": "medium",
+   "status": "verified_test",
+   "remaining_questions": [
+    "Why CD-004 is nondeterministic here",
+    "firefox-library, webkit-library, bidi, mobile projects not run"
+   ]
   }
  ]
 }
