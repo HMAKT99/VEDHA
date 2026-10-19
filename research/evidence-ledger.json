@@ -1118,6 +1118,25 @@
         "CD-004 nondeterminism",
         "bidi, mobile projects not run"
       ]
+    },
+    {
+      "id": "E-090",
+      "question": "Why did the upstream tests that failed in E-088/E-089 fail on this machine?",
+      "method": "minimal repros, variants, environment toggles, solo re-runs (see summary.json diagnosis)",
+      "rea_tool": null,
+      "target": "microsoft/playwright@b335271c (1.65.0-next)",
+      "source_path": "research/experiments/upstream-tests/summary.json (diagnosis)",
+      "lines": "packages/playwright/src/transform/transform.ts:443-455",
+      "evidence": "Loader CSS-in-ESM: reproduced without any css import using a pass-through async register() loader; passes with PLAYWRIGHT_FORCE_ASYNC_LOADER=1 (Node 22.20.0 and 24.9.0). Firefox CO-054/CO-058: Firefox 1562/157.0, partitioned cookie not delivered to third-party iframe, 2/2 solo failures. ui-mode SIGINT test: 1 failure in 3 solo runs. CD-004: 5/5 solo passes",
+      "interpretation": "Loader failure: caused by the interaction of Playwright's sync registerHooks loader and a user async register() loader on these Node versions. Firefox cookie tests: browser behaviour differs from the test's expectation; deeper cause unknown. SIGINT test: flaky. CD-004: not reproduced. None affects the Phase 1 traced paths",
+      "confidence": "medium",
+      "status": "verified_test",
+      "remaining_questions": [
+        "Does upstream CI pass the loader test, and on which Node?",
+        "Firefox CO-054/CO-058 on Linux",
+        "Root cause of CD-004 earlier failures",
+        "bidi, mobile, Firefox/WebKit runner specs not run"
+      ]
     }
   ]
 }
