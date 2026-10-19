@@ -1,0 +1,22 @@
+{
+  "name": "@vedha/core",
+  "version": "0.1.0",
+  "description": "Vedha core: verified semantic actions, independent verification, bounded recovery, bundles, promotion.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "zod": "4.1.5"
+  }
+}

@@ -1,0 +1,7 @@
+research/
+node_modules/
+dist/
+benchmarks/results/
+pnpm-lock.yaml
+LICENSE
+.github/

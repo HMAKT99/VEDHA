@@ -1,0 +1,92 @@
+
+Running 2 tests using 1 worker
+
+[1/2] t/fail.spec.mjs:2:1 › assertion failure
+  1) t/fail.spec.mjs:2:1 › assertion failure ───────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByRole('heading')
+    Expected: "Goodbye"
+    Received: "Hello"
+    Timeout:  1200ms
+
+    Call log:
+      - Expect "toHaveText" getByRole('heading') with timeout 1200ms
+      - waiting for getByRole('heading')
+        13 × locator resolved to <h1>Hello</h1>
+           - unexpected value "Hello"
+
+
+      2 | test('assertion failure', async ({ page }) => {
+      3 |   await page.setContent('<h1>Hello</h1><button>Go</button>');
+    > 4 |   await expect(page.getByRole('heading')).toHaveText('Goodbye', { timeout: 1200 });
+        |                                           ^
+      5 | });
+      6 | test('action timeout', async ({ page }) => {
+      7 |   await page.setContent('<button disabled>Go</button>');
+        at <repo>/research/experiments/pw-runtime/t/fail.spec.mjs:4:43
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/fail-assertion-failure/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/fail-assertion-failure/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/fail-assertion-failure/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/fail-assertion-failure/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[2/2] t/fail.spec.mjs:6:1 › action timeout
+  2) t/fail.spec.mjs:6:1 › action timeout ──────────────────────────────────────────────────────────
+
+    TimeoutError: locator.click: Timeout 1000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Go' })
+        - locator resolved to <button disabled>Go</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 500ms
+
+
+       6 | test('action timeout', async ({ page }) => {
+       7 |   await page.setContent('<button disabled>Go</button>');
+    >  8 |   await page.getByRole('button', { name: 'Go' }).click({ timeout: 1000 });
+         |                                                  ^
+       9 | });
+      10 |
+        at <repo>/research/experiments/pw-runtime/t/fail.spec.mjs:8:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/fail-action-timeout/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/fail-action-timeout/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/fail-action-timeout/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/fail-action-timeout/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  2 failed
+    t/fail.spec.mjs:2:1 › assertion failure ────────────────────────────────────────────────────────
+    t/fail.spec.mjs:6:1 › action timeout ───────────────────────────────────────────────────────────

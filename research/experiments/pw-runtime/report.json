@@ -1,0 +1,259 @@
+{
+  "config": {
+    "argv": [
+      "~/.nvm/versions/node/v22.20.0/bin/node",
+      "<repo>/research/experiments/pw-runtime/node_modules/playwright/cli.js",
+      "test"
+    ],
+    "configFile": "<repo>/research/experiments/pw-runtime/playwright.config.mjs",
+    "rootDir": "<repo>/research/experiments/pw-runtime/t",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/research/experiments/pw-runtime/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/research/experiments/pw-runtime/t",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 8000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/research/experiments/pw-runtime/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/research/experiments/pw-runtime/t",
+        "snapshotDir": "<repo>/research/experiments/pw-runtime/t",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 8000,
+        "use": {
+          "trace": "on",
+          "screenshot": "only-on-failure",
+          "headless": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": "report.json"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "fail.spec.mjs",
+      "file": "fail.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "assertion failure",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 8000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1447,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('heading')\nExpected: \u001b[32m\"Goodbye\"\u001b[39m\nReceived: \u001b[31m\"Hello\"\u001b[39m\nTimeout:  1200ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('heading') with timeout 1200ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading')\u001b[22m\n\u001b[2m    13 × locator resolved to <h1>Hello</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Hello\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('heading')\nExpected: \u001b[32m\"Goodbye\"\u001b[39m\nReceived: \u001b[31m\"Hello\"\u001b[39m\nTimeout:  1200ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('heading') with timeout 1200ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading')\u001b[22m\n\u001b[2m    13 × locator resolved to <h1>Hello</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Hello\"\u001b[22m\n\n    at <repo>/research/experiments/pw-runtime/t/fail.spec.mjs:4:43",
+                    "location": {
+                      "file": "<repo>/research/experiments/pw-runtime/t/fail.spec.mjs",
+                      "column": 43,
+                      "line": 4
+                    },
+                    "snippet": "  2 | test('assertion failure', async ({ page }) => {\n  3 |   await page.setContent('<h1>Hello</h1><button>Go</button>');\n> 4 |   await expect(page.getByRole('heading')).toHaveText('Goodbye', { timeout: 1200 });\n    |                                           ^\n  5 | });\n  6 | test('action timeout', async ({ page }) => {\n  7 |   await page.setContent('<button disabled>Go</button>');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/research/experiments/pw-runtime/t/fail.spec.mjs",
+                        "column": 43,
+                        "line": 4
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('heading')\nExpected: \u001b[32m\"Goodbye\"\u001b[39m\nReceived: \u001b[31m\"Hello\"\u001b[39m\nTimeout:  1200ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByRole('heading') with timeout 1200ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading')\u001b[22m\n\u001b[2m    13 × locator resolved to <h1>Hello</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Hello\"\u001b[22m\n\n\n  2 | test('assertion failure', async ({ page }) => {\n  3 |   await page.setContent('<h1>Hello</h1><button>Go</button>');\n> 4 |   await expect(page.getByRole('heading')).toHaveText('Goodbye', { timeout: 1200 });\n    |                                           ^\n  5 | });\n  6 | test('action timeout', async ({ page }) => {\n  7 |   await page.setContent('<button disabled>Go</button>');\n    at <repo>/research/experiments/pw-runtime/t/fail.spec.mjs:4:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T12:44:37.632Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/research/experiments/pw-runtime/test-results/fail-assertion-failure/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/research/experiments/pw-runtime/test-results/fail-assertion-failure/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "<repo>/research/experiments/pw-runtime/test-results/fail-assertion-failure/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/research/experiments/pw-runtime/t/fail.spec.mjs",
+                    "column": 43,
+                    "line": 4
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a34381c3c1022dab31fa-eeaacb89d4cac1f137e7",
+          "file": "fail.spec.mjs",
+          "line": 2,
+          "column": 1
+        },
+        {
+          "title": "action timeout",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 8000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1144,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 1000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Go' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled>Go</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 1000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Go' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled>Go</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\n    at <repo>/research/experiments/pw-runtime/t/fail.spec.mjs:8:50",
+                    "location": {
+                      "file": "<repo>/research/experiments/pw-runtime/t/fail.spec.mjs",
+                      "column": 50,
+                      "line": 8
+                    },
+                    "snippet": "   6 | test('action timeout', async ({ page }) => {\n   7 |   await page.setContent('<button disabled>Go</button>');\n>  8 |   await page.getByRole('button', { name: 'Go' }).click({ timeout: 1000 });\n     |                                                  ^\n   9 | });\n  10 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/research/experiments/pw-runtime/t/fail.spec.mjs",
+                        "column": 50,
+                        "line": 8
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 1000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Go' })\u001b[22m\n\u001b[2m    - locator resolved to <button disabled>Go</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\n\n   6 | test('action timeout', async ({ page }) => {\n   7 |   await page.setContent('<button disabled>Go</button>');\n>  8 |   await page.getByRole('button', { name: 'Go' }).click({ timeout: 1000 });\n     |                                                  ^\n   9 | });\n  10 |\n    at <repo>/research/experiments/pw-runtime/t/fail.spec.mjs:8:50"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T12:44:40.097Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/research/experiments/pw-runtime/test-results/fail-action-timeout/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/research/experiments/pw-runtime/test-results/fail-action-timeout/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "<repo>/research/experiments/pw-runtime/test-results/fail-action-timeout/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/research/experiments/pw-runtime/t/fail.spec.mjs",
+                    "column": 50,
+                    "line": 8
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a34381c3c1022dab31fa-4287186e489f8108b03e",
+          "file": "fail.spec.mjs",
+          "line": 6,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-18T12:44:36.814Z",
+    "duration": 4595.2699999999995,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "vedha-benchmarks",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@vedha/adapter-playwright": "workspace:*",
+    "@vedha/core": "workspace:*",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@playwright/mcp": "0.0.83",
+    "@playwright/test": "1.64.1",
+    "playwright": "1.64.1"
+  }
+}

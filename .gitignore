@@ -1,0 +1,14 @@
+research/upstream/
+node_modules/
+research/rea-evidence/*-analysis.json
+.vedha/
+benchmarks/results/.test-work/
+.playwright-mcp/
+dist/
+*.tsbuildinfo
+research/rea-evidence/*-request.json
+research/rea-evidence/queries/q001-out.json
+research/rea-evidence/queries/p2-*-out.json
+research/rea-evidence/slices/
+research/experiments/pw-runtime/test-results/
+research/experiments/pw-runtime/tz/

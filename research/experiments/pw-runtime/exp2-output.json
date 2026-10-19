@@ -1,0 +1,6 @@
+{
+ "s1": "- generic [active] [ref=e1]:\n  - button \"A\" [ref=e2]\n  - button \"B\" [ref=e3]\n  - paragraph [ref=e4]: hi",
+ "s2": "- generic [active] [ref=e1]:\n  - button \"New\" [ref=e5]\n  - button \"A\" [ref=e2]\n  - button \"B\" [ref=e3]\n  - paragraph [ref=e4]: hi",
+ "s3": "- generic [ref=e1]:\n  - button \"New\" [ref=e5]\n  - button \"A\" [ref=e2]\n  - button \"B\" [active] [ref=e3]\n  - paragraph [ref=e4]: hi",
+ "clickByOldRef": "clicked"
+}

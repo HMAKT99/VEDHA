@@ -1,0 +1,19 @@
+     # Time       Action                                                  Duration
+  ──── ─────────  ─────────────────────────────────────────────────────── ────────
+    1. 0:00.013  Before Hooks                                               152ms
+    2. 0:00.030    Fixture "browser"                                         74ms
+    3. 0:00.031      Launch browser                                          73ms
+    4. 0:00.105    Fixture "context"                                         21ms
+    5. 0:00.108      Create context                                           8ms
+    6. 0:00.126    Fixture "page"                                            40ms
+    7. 0:00.127      Create page                                             39ms
+    8. 0:00.167  Set content                                                 15ms
+    9. 0:00.185  Click                                                       1.0s  ✗
+                 getByRole('button', { name: 'Go' })
+   10. 0:01.193  After Hooks                                                 64ms
+   11. 0:01.206    Fixture "page"                                             0ms
+   12. 0:01.206    Fixture "context"                                         39ms
+   13. 0:01.241      Close context                                            4ms
+   14. 0:01.251  Attach "error-context"                                       0ms
+   15. 0:01.257  Worker Cleanup                                              18ms
+   16. 0:01.258    Fixture "browser"                                         16ms

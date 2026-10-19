@@ -1,0 +1,23 @@
+
+  ✗ Error
+    at fail.spec.mjs:8:50
+
+    TimeoutError: locator.click: Timeout 1000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'Go' })
+        - locator resolved to <button disabled>Go</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 100ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not enabled
+        - retrying click action
+          - waiting 500ms
+    
+

@@ -1,0 +1,107 @@
+{
+ "names": [
+  "browser_close",
+  "browser_resize",
+  "browser_console_messages",
+  "browser_handle_dialog",
+  "browser_emulate_media",
+  "browser_evaluate",
+  "browser_file_upload",
+  "browser_drop",
+  "browser_find",
+  "browser_fill_form",
+  "browser_press_key",
+  "browser_type",
+  "browser_navigate",
+  "browser_navigate_back",
+  "browser_network_requests",
+  "browser_network_request",
+  "browser_run_code_unsafe",
+  "browser_take_screenshot",
+  "browser_snapshot",
+  "browser_click",
+  "browser_drag",
+  "browser_hover",
+  "browser_select_option",
+  "browser_tabs",
+  "browser_wait_for"
+ ],
+ "schema": {
+  "browser_click": {
+   "type": "object",
+   "properties": {
+    "element": {
+     "description": "Human-readable element description used to obtain permission to interact with the element",
+     "type": "string"
+    },
+    "target": {
+     "type": "string",
+     "description": "Exact target element reference from the page snapshot, or a unique element selector"
+    },
+    "doubleClick": {
+     "description": "Whether to perform a double click instead of a single click",
+     "type": "boolean"
+    },
+    "button": {
+     "description": "Button to click, defaults to left",
+     "type": "string",
+     "enum": [
+      "left",
+      "right",
+      "middle"
+     ]
+    },
+    "modifiers": {
+     "description": "Modifier keys to press",
+     "type": "array",
+     "items": {
+      "type": "string",
+      "enum": [
+       "Alt",
+       "Control",
+       "ControlOrMeta",
+       "Meta",
+       "Shift"
+      ]
+     }
+    }
+   },
+   "required": [
+    "target"
+   ],
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "additionalProperties": false
+  },
+  "browser_type": {
+   "type": "object",
+   "properties": {
+    "element": {
+     "description": "Human-readable element description used to obtain permission to interact with the element",
+     "type": "string"
+    },
+    "target": {
+     "type": "string",
+     "description": "Exact target element reference from the page snapshot, or a unique element selector"
+    },
+    "text": {
+     "type": "string",
+     "description": "Text to type into the element"
+    },
+    "submit": {
+     "description": "Whether to submit entered text (press Enter after)",
+     "type": "boolean"
+    },
+    "slowly": {
+     "description": "Whether to type one character at a time. Useful for triggering key handlers in the page. By default entire text is filled in at once.",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "target",
+    "text"
+   ],
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "additionalProperties": false
+  }
+ }
+}

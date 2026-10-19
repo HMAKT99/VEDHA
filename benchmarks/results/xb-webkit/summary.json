@@ -1,0 +1,246 @@
+{
+  "pw-strong": {
+    "S01-order-clean": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 5,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.43449149475208104,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 5,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.43449149475208104,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 5
+    },
+    "S08-defect-disabled-submit": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 5,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.43449149475208104,
+      "falsePass": 0,
+      "duplicates": 5
+    },
+    "S11-search-paginate-open": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "vedha": {
+    "S01-order-clean": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S08-defect-disabled-submit": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S11-search-paginate-open": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 5,
+      "correct": 5,
+      "wilsonLo": 0.565508505247919,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  }
+}

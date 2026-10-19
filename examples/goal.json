@@ -1,0 +1,22 @@
+{
+  "goal": "place an order for Ada, quantity 3",
+  "fields": [
+    { "name": "name", "value": "Ada", "role": "textbox" },
+    { "name": "quantity", "value": "3", "role": "spinbutton" }
+  ],
+  "submit": {
+    "name": "place order",
+    "mutating": true,
+    "postconditions": [
+      { "type": "text", "target": { "role": "status" }, "contains": "Order placed" },
+      {
+        "type": "network",
+        "method": "POST",
+        "urlPattern": "/api/orders",
+        "status": "2xx",
+        "json": { "path": "qty", "equals": 3 }
+      }
+    ],
+    "reconcile": { "type": "api", "get": "/api/orders", "matchesAny": { "name": "Ada", "qty": 3 } }
+  }
+}

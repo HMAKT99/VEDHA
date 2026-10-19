@@ -1,0 +1,612 @@
+{
+  "pw-trust": {
+    "S01-order-clean": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S08-defect-disabled-submit": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S11-search-paginate-open": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-test": {
+    "S01-order-clean": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S08-defect-disabled-submit": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 20
+    },
+    "S11-search-paginate-open": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-strong": {
+    "S01-order-clean": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 20
+    },
+    "S08-defect-disabled-submit": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 20
+    },
+    "S11-search-paginate-open": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-heal-naive": {
+    "S01-order-clean": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S08-defect-disabled-submit": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S11-search-paginate-open": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "vedha": {
+    "S01-order-clean": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S02-order-slow-ui": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S03-order-cookie-banner": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S04-order-renamed-button": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S05-order-banner-and-rename": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S06-defect-silent-500": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S07-defect-wrong-quantity": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S08-defect-disabled-submit": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S09-transient-503": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S10-commit-then-late-response": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S11-search-paginate-open": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S12-login-then-order": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S13-defect-session-invalidated": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S14-ambiguous-delete": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "S15-delete-scoped-row": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  }
+}

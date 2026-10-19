@@ -1,0 +1,6 @@
+stagehand-extension | <repo>/research/upstream/stagehand/packages/extension | exit=0 | secs=51 | bytes= 181904228
+stagehand-sdkts | <repo>/research/upstream/stagehand/packages/sdk-ts/src | exit=0 | secs=12 | bytes= 24240058
+pw-agents | <repo>/research/upstream/playwright/packages/playwright/src/agents | exit=0 | secs=6 | bytes= 2861809
+pw-tools | <repo>/research/upstream/playwright/packages/playwright-core/src/tools | exit=0 | secs=32 | bytes= 80712614
+agentbrowser-evals | <repo>/research/upstream/agent-browser/evals | exit=0 | secs=119 | bytes= 5591041
+pwmcp-tests | <repo>/research/upstream/playwright-mcp/tests | exit=0 | secs=10 | bytes= 3291702
