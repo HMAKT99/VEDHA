@@ -153,5 +153,85 @@
    "firefox-library and webkit-library projects",
    "bidi, mobile, electron, android projects"
   ]
+ },
+ "runnerRemaining": {
+  "date": "2026-10-19",
+  "command": "node ./tests/playwright-test/stable-test-runner/node_modules/@playwright/test/cli test --config=tests/playwright-test/playwright.config.ts --project=playwright-test",
+  "fullRun": {
+   "workers": 4,
+   "stats": {
+    "expected": 1732,
+    "skipped": 10,
+    "unexpected": 209,
+    "flaky": 0
+   },
+   "note": "mostly 30 s test timeouts under load (reporter-html 183, reporter-blob 14, 11 others) plus a worker teardown timeout"
+  },
+  "rerunOf12Files": {
+   "workers": 2,
+   "tests": 544,
+   "stats": {
+    "expected": 439,
+    "skipped": 5,
+    "unexpected": 100,
+    "flaky": 0
+   },
+   "failuresByFile": {
+    "reporter-html": 91,
+    "reporter-blob": 7,
+    "loader": 1,
+    "ui-mode-test-setup": 1
+   },
+   "causes": {
+    "30s test timeout": 92,
+    "browserType.launch 180s timeout": 7,
+    "assertion": 1
+   }
+  },
+  "reporterHtmlBlob1Worker": {
+   "workers": 1,
+   "timeoutMs": 120000,
+   "stats": {
+    "expected": 256,
+    "skipped": 5,
+    "unexpected": 0,
+    "flaky": 0
+   },
+   "classification": "the reporter-html/reporter-blob failures were timeouts under parallel load on this machine, not defects"
+  },
+  "deterministicFailure": {
+   "test": "loader.spec.ts 'should load css imports as empty modules in esm'",
+   "detail": "TypeError: Expected a string, an ArrayBuffer, or a TypedArray to be returned for the \"source\" from the \"load\" hook but got null",
+   "reproduced": "solo on Node 22.20.0 and Node 24.9.0",
+   "cause": "not diagnosed"
+  },
+  "notRerunSolo": [
+   "ui-mode-test-setup 'should run teardown with SIGINT' failed in the 2-worker run; not re-checked in isolation"
+  ]
+ },
+ "firefoxWebkitLibrary": {
+  "date": "2026-10-19",
+  "workers": 2,
+  "firefox-library": {
+   "stats": {
+    "expected": 2403,
+    "skipped": 135,
+    "unexpected": 3,
+    "flaky": 0
+   },
+   "unexpected": [
+    "BC-006 should propagate default viewport to the page (passes solo; load effect)",
+    "CO-054 third party 'Partitioned;' cookies (fails 2/2 solo)",
+    "CO-058 top level 'Partitioned;' cookie and same origin iframe (fails 2/2 solo)"
+   ]
+  },
+  "webkit-library": {
+   "stats": {
+    "expected": 2425,
+    "skipped": 112,
+    "unexpected": 0,
+    "flaky": 0
+   }
+  }
  }
 }

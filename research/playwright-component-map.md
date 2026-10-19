@@ -37,3 +37,6 @@ The full upstream `tests/page` suite passes on Chromium (2,617 passed, 17 skippe
 
 ### Third batch (E-088)
 Full upstream `tests/library` on Chromium (161 spec files): 2,607 passed, 79 skipped, no deterministic failure. One CDP-attach test (CD-004) is nondeterministic on this machine; see `research/experiments/upstream-tests/summary.json`.
+
+### Fourth batch (E-089)
+Runner suite (Chromium), Firefox library (2403 passed, 3 failed) and WebKit library (2425 passed, 0 failed) were run. Three deterministic failures on this machine with undiagnosed causes (loader CSS-in-ESM, Firefox CO-054/CO-058); reporter-html/blob failures were load timeouts. See `research/experiments/upstream-tests/summary.json`.
