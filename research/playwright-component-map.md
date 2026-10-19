@@ -31,3 +31,6 @@ Pinned to `microsoft/playwright@b335271c` (1.65.0-next). `pwc:` = `packages/play
 
 ## Update (E-085/E-086)
 After this map was written, selected supporting tests were **executed** in an isolated build of the pinned commit (Chromium): 264 page specs (page-click, locator-click, page-goto, expect-timeout, page-add-locator-handler, page-wait-for-selector-1, page-aria-snapshot-ai, page-click-timeout-1/2) and 196 runner specs (timeout, retry, shard, fixtures, expect, trace) passed with 0 unexpected failures. See `research/experiments/upstream-tests/summary.json`. Rows tagged **T** elsewhere in this file for other spec files remain "exists, not executed".
+
+### Second batch (E-087)
+The full upstream `tests/page` suite passes on Chromium (2,617 passed, 17 skipped, 0 unexpected, 0 flaky) and the nine traced-scenario specs also pass on Firefox (264) and WebKit (265). Not yet run: `tests/library`, the remaining runner specs, bidi and mobile projects.

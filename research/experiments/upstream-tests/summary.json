@@ -60,5 +60,56 @@
   "Only Chromium was exercised.",
   "The single page-suite result with status failed is an upstream expected failure (counted in expected).",
   "First attempt at runner specs collected 0 tests because the stable test runner must be used (recorded, not a product failure)."
- ]
+ ],
+ "broader": {
+  "date": "2026-10-19",
+  "note": "Second batch, same isolated build of b335271c (1.65.0-next).",
+  "chromiumPageFullSuite": {
+   "command": "node packages/playwright/cli.js test --config=tests/library/playwright.config.ts --project=chromium-page --workers=4 tests/page/",
+   "stats": {
+    "startTime": "2026-10-19T03:37:14.705Z",
+    "duration": 187698.071,
+    "expected": 2617,
+    "skipped": 17,
+    "unexpected": 0,
+    "flaky": 0
+   },
+   "spawnedErrors": 0
+  },
+  "firefoxPageNineSpecs": {
+   "project": "firefox-page",
+   "stats": {
+    "startTime": "2026-10-19T03:40:40.113Z",
+    "duration": 71961.221,
+    "expected": 264,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+   },
+   "spawnedErrors": 0
+  },
+  "webkitPageNineSpecs": {
+   "project": "webkit-page",
+   "stats": {
+    "startTime": "2026-10-19T03:41:52.830Z",
+    "duration": 66941.748,
+    "expected": 265,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+   },
+   "spawnedErrors": 0
+  },
+  "nineSpecs": [
+   "page-click",
+   "locator-click",
+   "page-goto",
+   "expect-timeout",
+   "page-add-locator-handler",
+   "page-wait-for-selector-1",
+   "page-aria-snapshot-ai",
+   "page-click-timeout-1",
+   "page-click-timeout-2"
+  ]
+ }
 }

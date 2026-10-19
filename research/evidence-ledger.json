@@ -1065,6 +1065,22 @@
    "confidence": "high",
    "status": "verified_runtime",
    "remaining_questions": []
+  },
+  {
+   "id": "E-087",
+   "question": "Do the full upstream page suite (Chromium) and the traced-scenario specs on Firefox and WebKit pass on the pinned source?",
+   "method": "isolated build of b335271c; full tests/page on chromium-page; nine traced-scenario spec files on firefox-page and webkit-page",
+   "rea_tool": null,
+   "target": "microsoft/playwright@b335271c (1.65.0-next)",
+   "source_path": "research/experiments/upstream-tests/summary.json (broader)",
+   "lines": null,
+   "evidence": "Chromium full tests/page (136 spec files): 2617 expected, 17 skipped, 0 unexpected, 0 flaky. Firefox nine specs: 264 expected, 1 skipped, 0 unexpected. WebKit nine specs: 265 expected, 0 skipped, 0 unexpected",
+   "interpretation": "Actionability, retry, locator-handler, timeout and AI-ARIA-snapshot behaviour traced from source is exercised and passing on all three engines; supports cross-browser parity claims for these paths",
+   "confidence": "high",
+   "status": "verified_test",
+   "remaining_questions": [
+    "tests/library, tests/playwright-test beyond the six files, bidi and mobile projects not run"
+   ]
   }
  ]
 }
