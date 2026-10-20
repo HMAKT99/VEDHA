@@ -160,4 +160,29 @@ describe("writes count as mutating even when unmarked", () => {
     g.record(spec, r);
     expect(g.refuses({ ...spec, id: "again" })).toContain("refused");
   });
+
+  it("stops waiting for a text check once a write failed and the network is idle, and says why", async () => {
+    const a = new FakeAdapter();
+    a.pending = 0;
+    a.texts.set(key(status), "Error: 500");
+    a.queue(btn, () => a.net.push(entry("POST", URL_ORDERS, 500)));
+    const s = await Session.create(a, { readback: "off" });
+    const t0 = Date.now();
+    const r = await s.step({
+      id: "go",
+      intent: "place the order",
+      op: "click",
+      target: btn,
+      timeoutMs: 5000,
+      mutating: true,
+      synchronous: true,
+      postconditions: [
+        { type: "text", target: status, contains: "Order placed" },
+        { type: "network", method: "POST", urlPattern: "/api/orders", status: "2xx" },
+      ],
+    });
+    expect(Date.now() - t0).toBeLessThan(2000);
+    expect(r.status).toBe("failed");
+    expect(r.error?.message).toContain("POST /api/orders returned 500");
+  });
 });

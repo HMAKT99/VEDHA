@@ -19,13 +19,14 @@ export async function pollUntil<T>(
   fn: () => Promise<T | undefined>,
   timeoutMs: number,
   intervalMs = 50,
+  abort?: () => boolean,
 ): Promise<T | undefined> {
   const deadline = Date.now() + timeoutMs;
   let wait = Math.min(4, intervalMs);
   for (;;) {
     const v = await fn();
     if (v !== undefined) return v;
-    if (Date.now() >= deadline) return undefined;
+    if (Date.now() >= deadline || abort?.()) return undefined;
     await sleep(Math.min(wait, Math.max(0, deadline - Date.now())));
     wait = Math.min(intervalMs, Math.ceil(wait * 1.5));
   }
@@ -62,6 +63,8 @@ export interface VerifyContext {
   timeoutMs: number;
   /** Only network entries at index >= sinceIndex are considered. */
   sinceIndex: number;
+  /** Checked between polls: true means a definitive contradiction is already visible, stop waiting. */
+  abort?: () => boolean;
 }
 
 export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verdict> {
@@ -71,23 +74,33 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
       case "url": {
         const re = isRegexLiteral(v.matches) ? new RegExp(v.matches.slice(1, -1)) : undefined;
         let last = "";
-        const ok = await pollUntil(async () => {
-          last = await adapter.currentUrl();
-          return (re ? re.test(last) : last.includes(v.matches)) ? true : undefined;
-        }, timeoutMs);
+        const ok = await pollUntil(
+          async () => {
+            last = await adapter.currentUrl();
+            return (re ? re.test(last) : last.includes(v.matches)) ? true : undefined;
+          },
+          timeoutMs,
+          50,
+          ctx.abort,
+        );
         return ok
           ? { verifier: v, status: "pass", detail: `url ${last} matches ${v.matches}` }
           : { verifier: v, status: "fail", detail: `url ${last} does not match ${v.matches}` };
       }
       case "text": {
         let last: string | null = null;
-        const ok = await pollUntil(async () => {
-          last = await adapter.text(v.target, Math.min(500, timeoutMs));
-          if (last === null) return undefined;
-          if (v.equals !== undefined) return last.trim() === v.equals ? true : undefined;
-          if (v.contains !== undefined) return last.includes(v.contains) ? true : undefined;
-          return true;
-        }, timeoutMs);
+        const ok = await pollUntil(
+          async () => {
+            last = await adapter.text(v.target, Math.min(500, timeoutMs));
+            if (last === null) return undefined;
+            if (v.equals !== undefined) return last.trim() === v.equals ? true : undefined;
+            if (v.contains !== undefined) return last.includes(v.contains) ? true : undefined;
+            return true;
+          },
+          timeoutMs,
+          50,
+          ctx.abort,
+        );
         const want = v.equals ?? v.contains ?? "(any)";
         return ok
           ? { verifier: v, status: "pass", detail: `text matched ${JSON.stringify(want)}` }
@@ -102,10 +115,15 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
       }
       case "value": {
         let last: string | null = null;
-        const ok = await pollUntil(async () => {
-          last = await adapter.value(v.target, Math.min(500, timeoutMs));
-          return last === v.equals ? true : undefined;
-        }, timeoutMs);
+        const ok = await pollUntil(
+          async () => {
+            last = await adapter.value(v.target, Math.min(500, timeoutMs));
+            return last === v.equals ? true : undefined;
+          },
+          timeoutMs,
+          50,
+          ctx.abort,
+        );
         return ok
           ? { verifier: v, status: "pass", detail: `value equals ${JSON.stringify(v.equals)}` }
           : {
@@ -174,18 +192,23 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
         let detail = "no matching item";
         // The probe itself answered 2xx but the effect was never there: a contradiction, not an unknown.
         let answered = false;
-        const ok = await pollUntil(async () => {
-          const res = await adapter.fetchJson(v.get);
-          if (res.status < 200 || res.status >= 300) {
-            detail = `GET ${v.get} returned ${res.status}`;
+        const ok = await pollUntil(
+          async () => {
+            const res = await adapter.fetchJson(v.get);
+            if (res.status < 200 || res.status >= 300) {
+              detail = `GET ${v.get} returned ${res.status}`;
+              return undefined;
+            }
+            answered = true;
+            const items = Array.isArray(res.body) ? res.body : [res.body];
+            if (items.some((it) => matchesFields(it, v.matchesAny))) return true;
+            detail = `no item in GET ${v.get} matched ${JSON.stringify(v.matchesAny)} (${items.length} items)`;
             return undefined;
-          }
-          answered = true;
-          const items = Array.isArray(res.body) ? res.body : [res.body];
-          if (items.some((it) => matchesFields(it, v.matchesAny))) return true;
-          detail = `no item in GET ${v.get} matched ${JSON.stringify(v.matchesAny)} (${items.length} items)`;
-          return undefined;
-        }, timeoutMs);
+          },
+          timeoutMs,
+          50,
+          ctx.abort,
+        );
         return ok
           ? { verifier: v, status: "pass", detail: `GET ${v.get} contains matching item` }
           : { verifier: v, status: "fail", detail, definitive: answered };

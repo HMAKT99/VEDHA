@@ -13,8 +13,8 @@ export interface Variant {
   cookieBanner?: boolean;
   /** Submit button is permanently disabled (real defect: feature unusable). */
   disabledSubmit?: boolean;
-  /** "silent": server answers 500 but UI shows success. "wrongqty": server stores qty+1. */
-  bug?: "silent" | "wrongqty" | "dropped";
+  /** "silent": server answers 500 but UI shows success. "wrongqty": server stores qty+1. "honest500": server answers 500 and the UI says so (latency-to-verdict control). */
+  bug?: "silent" | "wrongqty" | "dropped" | "honest500";
   /** Server commits the order, then answers after `commitDelayMs` (response arrives too late). */
   commitDelayMs?: number;
   /** First POST /api/orders returns 503 without committing. */
@@ -314,7 +314,7 @@ export class ShopServer {
           if (v.transient503 && this.state.postCount === 1) {
             return send(503, JSON.stringify({ error: "unavailable" }), "application/json");
           }
-          if (v.bug === "silent")
+          if (v.bug === "silent" || v.bug === "honest500")
             return send(500, JSON.stringify({ error: "boom" }), "application/json");
           const qty = v.bug === "wrongqty" ? body.qty + 1 : body.qty;
           const order: Order = { id: this.nextId++, name: body.name, qty, product: body.product };

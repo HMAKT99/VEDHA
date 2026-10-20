@@ -26,6 +26,7 @@ import type {
   Verifier,
 } from "./types.js";
 import { runVerifier, runVerifiers, sleep } from "./verifiers.js";
+import { contradictions, failFast } from "./failfast.js";
 
 export interface RunnerContext {
   adapter: BrowserAdapter;
@@ -157,6 +158,25 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
         };
       }
     }
+    // A failed step says what the page saw, not only which check was unmet.
+    if (
+      status === "failed" &&
+      extra.error &&
+      extra.error.code !== "health_check_failed" &&
+      health &&
+      policy.health !== "off" &&
+      (healthApplies(spec, policy) || wroteData(adapter, health))
+    ) {
+      const found = contradictions(adapter, health, spec);
+      if (found.length)
+        extra = {
+          ...extra,
+          error: {
+            ...extra.error,
+            message: `${extra.error.message} (page reported: ${found.join("; ")})`,
+          },
+        };
+    }
     if (status === "outcome_unknown" && extra.error) {
       const repeat = `do not repeat this action. Check the page, or confirm the effect with a non-mutating step that declares an expectation and sets confirms: "${spec.id}"`;
       extra = {
@@ -282,7 +302,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   if (spec.preconditions?.length) {
     const pre = await runVerifiers(spec.preconditions, {
       adapter,
-      timeoutMs: Math.min(timeout, 2000),
+      // A server error with nothing in flight leaves little to wait for: one short look is enough.
+      timeoutMs: Math.min(
+        timeout,
+        health && !adapter.pendingRequests?.() && contradictions(adapter, health, spec).length
+          ? 300
+          : 2000,
+      ),
       sinceIndex: adapter.networkLog().length,
     });
     verdicts = pre;
@@ -412,10 +438,20 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   // most common input steps do not leave the whole run "unverified". Values are never echoed.
   const implicit = declared.length === 0 ? implicitPostconditions(spec) : [];
   const post = declared.length ? declared : implicit;
+  // Fail fast only where the final health check would also apply (mutating or write-sending steps).
+  const failFastUnlessRead = (h: HealthWindow): (() => boolean) => {
+    const ff = failFast(adapter, h, spec);
+    return () => (healthApplies(spec, policy) || wroteData(adapter, h)) && ff();
+  };
   const dispatchedUncertain = !!err; // only true here for mutating+dispatched
   verdicts = dispatchedUncertain
     ? []
-    : await runVerifiers(post, { adapter, timeoutMs: timeout, sinceIndex });
+    : await runVerifiers(post, {
+        adapter,
+        timeoutMs: timeout,
+        sinceIndex,
+        ...(health && policy.health !== "off" ? { abort: failFastUnlessRead(health) } : {}),
+      });
   if (implicit.length) verdicts = verdicts.map(hideImplicit);
   trace.emit("verdict", {
     id: spec.id,
@@ -502,7 +538,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     }
     const probe = await runVerifier(spec.reconcile, {
       adapter,
-      timeoutMs: Math.min(timeout, 2000),
+      // A server error with nothing in flight leaves little to wait for: one short look is enough.
+      timeoutMs: Math.min(
+        timeout,
+        health && !adapter.pendingRequests?.() && contradictions(adapter, health, spec).length
+          ? 300
+          : 2000,
+      ),
       sinceIndex: adapter.networkLog().length,
     });
     if (probe.status === "pass" && !verdicts.some((v) => v.definitive)) {
@@ -544,7 +586,12 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       );
       return finish("failed", { error: cause });
     }
-    verdicts = await runVerifiers(post, { adapter, timeoutMs: timeout, sinceIndex: beforeRetry });
+    verdicts = await runVerifiers(post, {
+      adapter,
+      timeoutMs: timeout,
+      sinceIndex: beforeRetry,
+      ...(policy.health !== "off" ? { abort: failFastUnlessRead(health) } : {}),
+    });
     const ok = verdicts.length > 0 && verdicts.every((v) => v.status === "pass");
     record(
       "retry_transient",

@@ -41,6 +41,8 @@ const scenarioIds = arg(
     ? "S01,S02,S03,S04,S06,S07,S09,S10"
     : POOLS[setName]!.map((s) => s.id).join(","),
 ).split(",");
+// Re-run only these trials ("SCENARIO:TRIAL,..."), e.g. cells that ended in driver_error; seeds stay trial+1.
+const only = new Set(arg("only", "").split(",").filter(Boolean));
 const runId = arg("run-id", `llm-mcp-${new Date().toISOString().slice(0, 10)}`);
 const outDir = path.resolve(`benchmarks/results/${runId}`);
 const TOOL_RESULT_CAP = 12_000;
@@ -232,6 +234,7 @@ async function main() {
   outer: for (let t = 0; t < trials; t++) {
     for (const sc of scenarios) {
       for (const arm of armsFor(sc)) {
+        if (only.size && !only.has(`${sc.id}:${t}`)) continue;
         const server = makeServer(sc, t + 1);
         const url = await server.start();
         const t0 = Date.now();
