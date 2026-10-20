@@ -1,1 +1,0 @@
-[      30ms] [ERROR] WebSocket connection to 'ws://localhost:54037/ws' failed: Connection closed before receiving a handshake response @ http://127.0.0.1:54037/ws-page:0

@@ -1,4 +1,0 @@
-- generic [active] [ref=e1]:
-  - heading "Post form" [level=1] [ref=e2]
-  - button "Go" [ref=e4]
-  - button "Evil" [ref=e6]
