@@ -1,0 +1,4 @@
+- generic [active] [ref=e1]:
+  - heading "Frame" [level=1] [ref=e2]
+  - iframe [ref=e3]:
+    - generic: This page has been blocked by Chromium

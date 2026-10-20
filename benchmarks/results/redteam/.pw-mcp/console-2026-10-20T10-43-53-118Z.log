@@ -1,0 +1,2 @@
+[      54ms] [ERROR] Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector @ http://localhost:53982/leak?cors:0
+[      54ms] [ERROR] Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector @ http://localhost:53982/leak?beacon:0

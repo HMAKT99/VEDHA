@@ -1,0 +1,3 @@
+[      47ms] [ERROR] Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector @ http://localhost:53789/leak?img:0
+[      47ms] [ERROR] Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector @ http://localhost:53789/leak?pixel:0
+[      47ms] [ERROR] Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector @ http://localhost:53789/leak?fetch:0
