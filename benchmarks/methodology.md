@@ -57,6 +57,29 @@ S12-S15 were written **after** Vedha was feature-complete for S01-S11 and were r
 
 Because these fixes were prompted by the new scenarios, **S12 and S13 are no longer hold-out for the post-fix numbers**; the frozen-run numbers are the honest hold-out result. Both runs are kept. The earlier S01-S11-only run is archived in `results/archive/` (it predates the rename; driver id `agentfirst`).
 
+## 4b. Selenium baselines, held-out widget families and the minimal-declarations track
+
+Added after `preregistration.md` (read its amendments A1-A3 for what was seen before the freeze).
+
+| id           | what it is                                                                                                                                                                                                                                                                                                                                             |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sel-trust`  | Selenium WebDriver (Chrome), 5 s implicit wait, no assertions; success = no exception. Counterpart of `pw-trust`.                                                                                                                                                                                                                                      |
+| `sel-strong` | What an expert Selenium author writes: explicit waits (visible and enabled), UI assertions with waits, fetch instrumentation for response assertions (WebDriver has no first-class one), a read-only HTTP state probe, known-banner dismissal, prompts accepted, JS-dispatched drag events, one whole-test retry. No alternate locators, no read-back. |
+
+Selenium drivers are opt-in (`--drivers sel-trust,sel-strong`) and need a local Chrome; they are Chromium-only.
+
+**Driver capability matrix** (which declared check kinds a driver acts on): `pw-trust`/`sel-trust` none; `pw-test` text, value, state, url (plus dialogs accepted when the scenario says so); `pw-strong`/`sel-strong` those plus response checks (status, JSON), read-only state probes and known-interstitial handling; `vedha` every kind, plus implicit read-back for fill/check, the page-health check, recovery, reconcile and the repeat guard. Giving the strong baselines state probes is deliberate: it is the generous reading of "expert", so a Vedha advantage cannot come from withholding a technique.
+
+**Held-out widget families** (`fixtures/widgets.ts`, `scenarios/widgets.ts`, `--set held-out`): W01-W10 healthy (hover menu, double click, uncheck, upload, scroll-triggered load, drag and drop, confirm dialog, popup tab, iframe form, history back) and seven defect variants. Every effect is recorded in a server-side event log that only the harness reads. Defect variants make the server either answer 200 and record nothing (`silent`) or answer 500 (`error`) while the page shows success.
+
+**Minimal declarations** (`--set held-out-minimal`): the same scenarios with only text and url checks. This is the realistic case for checks written by a novice or an LLM. By design, only a framework with its own page-health check can catch a rejected write here; nothing can catch a silent drop without a state probe, and those cells are expected to read as missed for every driver.
+
+## 4c. LLM tracks (`benchmarks/llm/`)
+
+- Pilots 1 and 2 use a custom adapter written by this project's author around one model; they are a record of a failed first design, not a comparison of products (see `llm/README.md`).
+- Pilot 3 and later are **MCP vs MCP**: `@playwright/mcp` and `@vedha/mcp` are launched as stdio servers; the same model, system prompt, tool-result cap and turn limit drive both; the model ends with `RESULT: success|failure`, classified against server-side truth. Model: `minimax/minimax-m3.1-flash` through Vercel AI Gateway, provider pinned, temperature 0, free window and a $1 budget cap; the run aborts on any non-zero reported cost.
+- Each run's `env.json` records the git commit; `packages/` is not rebuilt while a run is in progress (each trial spawns the server from `dist`).
+
 ## 5. Oracles and metric definitions
 
 Truth is the server-side state (`OracleState`): orders, viewed items, POST count.

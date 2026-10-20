@@ -1,0 +1,968 @@
+{
+  "pw-trust": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 5,
+      "wilsonLo": 0.11186005278940306,
+      "wilsonHi": 0.4687050099580635,
+      "falsePass": 15,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-test": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-strong": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 19,
+      "wilsonLo": 0.7638641064874331,
+      "wilsonHi": 0.9911187805671267,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-heal-naive": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 2,
+      "wilsonLo": 0.027865893984153196,
+      "wilsonHi": 0.30103820641179335,
+      "falsePass": 18,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "sel-trust": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 6,
+      "wilsonLo": 0.14547527396899385,
+      "wilsonHi": 0.5189767762289793,
+      "falsePass": 14,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.1611301254949332,
+      "falsePass": 20,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "sel-strong": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "vedha": {
+    "W01-hover-menu": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W01-hover-menu-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W02-double-click-DEFECT-error": {
+      "n": 20,
+      "correct": 19,
+      "wilsonLo": 0.7638641064874331,
+      "wilsonHi": 0.9911187805671267,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W03-uncheck-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W04-upload-DEFECT-error": {
+      "n": 20,
+      "correct": 19,
+      "wilsonLo": 0.7638641064874331,
+      "wilsonHi": 0.9911187805671267,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W05-scroll-load": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W06-drag-drop-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W07-confirm-dialog-DEFECT-error": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W08-popup-tab": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W09-iframe-form-DEFECT-silent": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "W10-history-back": {
+      "n": 20,
+      "correct": 20,
+      "wilsonLo": 0.8388698745050667,
+      "wilsonHi": 0.9999999999999998,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  }
+}

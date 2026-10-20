@@ -8,11 +8,15 @@ A testing framework for agent-driven and developer-authored browser tests. Core 
 - **Bounded observations.** `controls` (interactive elements only), `outline` (ARIA tree, refs from Playwright), region/detail on demand, deltas between observations. Page-derived text is flagged `untrusted`.
 - **Explore → promote → replay.** An actor (scripted, rule-based, or your LLM adapter) explores through the same verified runner; the result becomes a reviewable `TestProposal` and a plain `@playwright/test` spec, which can be replay-checked.
 - **Failure bundles.** Goal, steps, verdicts, recovery records, network summary, redacted trace; `replay` re-drives the steps and reports divergences (and states what cannot be replayed).
+- **Agents can make mistakes without breaking the run.** Failures come back with a hint (`fill` on a dropdown: "use select"); the explore loop continues, but a repeat guard refuses to run the same mutating action again while its earlier outcome is unresolved, and an independent check (`confirms`) can clear an unknown outcome.
+- **Server errors cannot hide behind an optimistic page.** A page-health check fails a mutating step if a request returned 5xx, a write was rejected, or the page threw, even when the declared checks passed.
+- **Real-app reach.** Beyond click/fill/select/check/press: hover, double click, uncheck, upload (fail-closed `uploadRoots`), scroll, drag, wait, back, reload, tab switching, iframe targets, dialog policy.
+- **Usable from any MCP client.** `@vedha/mcp` exposes the same engine as a stdio MCP server.
 - **No LLM required.** The core has no model dependency; LLM actors implement a small `Actor` interface outside the core.
 
 It is **not** a Playwright wrapper that forwards commands: it uses Playwright as a replaceable browser substrate (`BrowserAdapter`) and owns the action/verification/recovery/promotion/bundle layers. It does not replace Playwright Test, and it reuses Playwright's actionability and auto-waiting (the strongest part of Playwright, per `research/playwright-execution-model.md`).
 
-> **Status: v0.1 research MVP.** Superiority over other tools is _not_ claimed in general. See [Measured results](#measured-results) for exactly what was measured, with limits.
+> **Status: v0.1 research MVP.** Superiority over other tools is _not_ claimed in general; it ties expert baselines when everything is declared and leads in specific, measured cases. See [Measured results](#measured-results) for exactly what was measured, with limits.
 
 ## Quick start
 
@@ -101,6 +105,15 @@ node packages/cli/dist/bin.js explore goal.json --start-url http://localhost:300
 
 The shipped `RuleActor` is a heuristic form-filler used for tests and benchmarks. To use an LLM, implement `Actor.decide({goal, observation, history, step})` and return an `ActionSpec` or `done`; the framework enforces policy, verification and budgets regardless of what the actor proposes. No provider is bundled and nothing is sent anywhere by default.
 
+### Use it from an MCP client
+
+```bash
+pnpm build
+node packages/mcp/dist/bin.js --allow-domain localhost --out ./vedha-out
+```
+
+Tools: `vedha_act` (one action with the checks you declare in `expect`), `vedha_observe`, `vedha_report`, `vedha_promote` (verified steps to a Playwright spec), `vedha_bundle`, `vedha_close`. The server refuses to start without `--allow-domain HOST` or an explicit `--allow-any-domain`. Mark data-changing steps `mutating: true`; after an unknown outcome Vedha refuses to repeat them until a check confirms the effect (`confirms: "<step id>"`).
+
 ### Migrating a Playwright test
 
 ```ts
@@ -127,21 +140,23 @@ More in `design/migration-and-compatibility.md`.
 
 ## Measured results
 
-See `benchmarks/results/<run>/results.md` (generated from raw `trials.jsonl`) and the limits in `benchmarks/methodology.md`. The summary section below is filled from the final run.
+Everything below is from raw `trials.jsonl` files under `benchmarks/results/`; protocols, limits and amendments are in `benchmarks/preregistration.md` and `benchmarks/methodology.md`. Scripted tracks use no model. "Expert" baselines (`pw-strong`, `sel-strong`) were given every technique the scenarios' declared checks allow, including state probes.
 
-Scripted (non-LLM) actors, 15 synthetic scenarios, 20 trials each, 1,500 trials per run; raw data in `benchmarks/results/`. Interpretation and limits: [`benchmarks/analysis/vedha-n20-interpretation.md`](benchmarks/analysis/vedha-n20-interpretation.md). Chromium, post-fix run (`vedha-n20-postfix`):
+| Track                                                                            | What was run                                                        | Result                                                                                                                                                                                                                                                                     |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Held-out widget families, full declarations                                      | 17 scenarios x 7 drivers x 20 trials (`heldout-n20-final`)          | Vedha, expert Playwright and expert Selenium tie: 200/200 healthy, 138-140/140 defects, 0 false passes. Weaker baselines detect 0/140.                                                                                                                                     |
+| Held-out widget families, minimal declarations (text/url only)                   | same, 20 trials (`heldout-min-n20-final`)                           | **Vedha detects 60/140** (every rejected-write defect); every Playwright and Selenium baseline 0/140; healthy 200/200 for Vedha and the expert baselines; false-pass 19-28% vs 36-58%. All frameworks miss silent drops (HTTP 200, nothing recorded) on these fixtures.    |
+| Cross-implementation: 16 third-party TodoMVC implementations                     | 4 user-level scenarios, 3 trials (`multi-n3-final`)                 | Vedha 189/192 (96-99%); expert Playwright 182, expert Selenium 183, `pw-test` 183 (all 91-98%): best point estimate, **intervals overlap**. Vedha 0 false passes and 0 false fails; expert Playwright 6 false fails (its default `toHaveText` also reads CSS-hidden text). |
+| Independent app with mutants (TodoMVC)                                           | 10 scenarios, n=5, Vedha vs expert Playwright                       | both 50/50 after idle-aware classification (before it Vedha reported "uncertain" on client-only defects). n=20 and the other drivers still to run.                                                                                                                         |
+| Conventional-REST silent drop (S16, added after the feature: a positive control) | 10 trials                                                           | Vedha 10/10 detected via read-back inference; `pw-trust`, `pw-test`, `pw-strong` 0/10 with the same typical declarations. On the pre-registered widget silent drops (non-conventional endpoints) read-back caught **0/20**; that planned target was not met.               |
+| Generated regression test (B8)                                                   | explore -> promote, run on 3 healthy and 4 broken variants          | promoted test: 9/9 healthy, 12/12 defects caught; recorder-style references 9/9 and 3/12 (constructed references, one app).                                                                                                                                                |
+| Security red-team over MCP (B7)                                                  | 5 hostile cases, 3 trials, each MCP server configured as documented | Playwright MCP's origin allowlist let a GET redirect, a POST redirect and a WebSocket through 3/3 each; Vedha 0/15; both blocked subresources and redacted a secret. Consistent with Playwright MCP's own docs that origin filtering is not a security boundary.           |
+| Overhead (B5)                                                                    | 8 healthy scenarios, 10 trials, concurrency 1                       | Vedha 1.06-1.44x expert Playwright per scenario (+10-110 ms); the planned <=15% target is **not met** in relative terms; faster on the slow-UI scenario.                                                                                                                   |
+| LLM, MCP vs MCP (pilot 3b, one free model, n=2 per cell)                         | Playwright MCP vs Vedha MCP on 8 shop scenarios                     | completion tie (11/12 each), Vedha about 18% fewer tokens; neither model concluded on the defect scenarios within the turn cap. The held-out widget LLM track (pilot 4) is running.                                                                                        |
 
-|                                                                                         | pw-trust | pw-test | pw-strong | pw-heal-naive | vedha |
-| --------------------------------------------------------------------------------------- | -------- | ------- | --------- | ------------- | ----- |
-| Seeded defects reported as pass (5 scenarios, 100 trials)                               | 40%      | 40%     | 0%        | 60%           | 0%    |
-| Effect scenarios ending in a reported failure with no effect (10 scenarios, 200 trials) | 20%      | 30%     | 30%       | 20%           | 0%    |
-| Mean duplicate side effects per trial                                                   | 0.00     | 0.07    | 0.13      | 0.00          | 0.00  |
+What this does **not** show: that Vedha beats expert Playwright or expert Selenium when the author declares everything (it ties); anything about models beyond one free model family; anything about real production apps; Chromium-only for Selenium. Several results are mechanism-specific by design (read-back needs a conventional REST convention; the page-health check needs a request that returned an error).
 
-On Firefox and WebKit (150 trials each, `vedha` vs `pw-strong` only) Vedha was correct in 75/75 on both; `pw-strong` 60/75 on both.
-
-Reading it: on _these_ author-built scenarios, framework-run postconditions, recorded recovery and reconcile-before-retry avoided every false pass and duplicate; an expert Playwright configuration (`pw-strong`) matched on defect detection but not on UI changes or duplicate avoidance. **Hold-out caveat:** four scenarios (S12-S15) were run once on frozen code first; Vedha scored 0/20 on S12 there (it reported `uncertain` because an input step had no postcondition) and its label check was too loose. Both were fixed afterwards, so post-fix S12/S13 are no longer hold-out. This does **not** show Vedha is better in general: scenarios were chosen and the framework tuned by the same author, actors were scripted, and no LLM-driven tool (browser-use, Stagehand, Playwright MCP agents) was run end to end. Observation size (separate track): on a 400-row page an actor reads a median of 876 characters with `controls` observations versus 38k-114k for Playwright MCP snapshots (scripted; characters, not tokens; accuracy untested).
-
-Reproduce: `pnpm bench -- --trials 20 --concurrency 4 --run-id my-run && npx tsx benchmarks/analysis/analyze.ts benchmarks/results/my-run`.
+Reproduce a scripted track: `pnpm bench -- --set held-out --trials 20 --concurrency 3 --run-id my-run` (sets: `seen`, `held-out`, `held-out-minimal`, `independent`, `multi`; the last two need `VEDHA_TODOMVC_DIR` pointing at a clone of tastejs/todomvc; Selenium drivers are opt-in via `--drivers sel-trust,sel-strong`). Merge valid parts of several runs with `benchmarks/analysis/merge.ts`.
 
 ## Repository map
 
