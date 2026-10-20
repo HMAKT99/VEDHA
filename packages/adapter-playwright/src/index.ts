@@ -15,7 +15,7 @@ import type {
   Target,
 } from "@vedha/core";
 
-export { runGeneratedSpec } from "./replayCheck.js";
+export { runGeneratedSpec, runGeneratedSpecRepeated } from "./replayCheck.js";
 
 const ANSI = /\u001b\[[0-9;]*m/g;
 const MAX_JSON_BYTES = 200_000;

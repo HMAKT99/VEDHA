@@ -75,6 +75,79 @@ describe("read-back inference", () => {
     expect(r.error?.code).toBe("readback_contradiction");
   });
 
+  it("finds the collection at the plural sibling when the write path has no GET", async () => {
+    const dropped = await run((a) => {
+      a.net.push(
+        write("POST", "http://app.test/api/event", {
+          status: 200,
+          json: { ok: true },
+          requestJson: { type: "laptops" },
+        }),
+      );
+      a.apiStatus.set("/api/event", 404);
+      a.api.set("/api/events", []);
+    });
+    expect(dropped.r.error?.code).toBe("readback_contradiction");
+    expect(dropped.r.error?.message).toContain("/api/events");
+    const kept = await run((a) => {
+      a.net.push(
+        write("POST", "http://app.test/api/event", {
+          status: 200,
+          requestJson: { type: "laptops" },
+        }),
+      );
+      a.apiStatus.set("/api/event", 404);
+      a.api.set("/api/events", [{ type: "laptops" }]);
+    });
+    expect(kept.r.status).toBe("verified");
+    expect(kept.r.readback?.[0]).toContain("/api/events");
+  });
+
+  it("does not ask again about a path that already proved unsupported", async () => {
+    const a = new FakeAdapter();
+    a.texts.set(key(status), "Saved");
+    let probes = 0;
+    const orig = a.fetchJson.bind(a);
+    a.fetchJson = async (p: string) => {
+      probes++;
+      return orig(p);
+    };
+    a.apiStatus.set("/api/orders", 404);
+    a.apiStatus.set("/api/order", 404);
+    a.queue(btn, () => a.net.push(write("POST", ORDERS, { requestJson: { name: "Ada" } })));
+    const s = await Session.create(a, {});
+    const step = (id: string): ActionSpec => ({
+      id,
+      intent: id,
+      op: "click",
+      target: btn,
+      mutating: true,
+      timeoutMs: 100,
+      postconditions: [{ type: "text", target: status, contains: "Saved" }],
+    });
+    await s.step(step("one"));
+    const first = probes;
+    a.queue(btn, () => a.net.push(write("POST", ORDERS, { requestJson: { name: "Ada" } })));
+    await s.step(step("two"));
+    expect(first).toBe(2); // same path and sibling, once
+    expect(probes).toBe(2); // not asked again
+  });
+
+  it("never probes authentication, GraphQL or tracking endpoints", async () => {
+    for (const url of [
+      "http://app.test/api/login",
+      "http://app.test/graphql",
+      "http://app.test/api/track",
+    ]) {
+      const { a, r } = await run((a) => {
+        a.net.push(write("POST", url, { requestJson: { u: "ada" } }));
+        a.api.set(new URL(url).pathname, []);
+      });
+      expect(r.status).toBe("verified");
+      expect(a.performed.length).toBe(1);
+    }
+  });
+
   it("matches by the fields that were sent when there is no id", async () => {
     const { r } = await run((a) => {
       a.net.push(
@@ -103,6 +176,7 @@ describe("read-back inference", () => {
     for (const extra of cases) {
       const { r } = await run((a) => {
         a.net.push(write("POST", ORDERS, { requestJson: { name: "Ada" } }));
+        a.apiStatus.set("/api/order", 404); // a guessed sibling path that does not exist
         extra(a);
       });
       expect(r.status).toBe("verified");

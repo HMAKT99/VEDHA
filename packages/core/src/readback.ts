@@ -13,6 +13,9 @@ export interface ReadBack {
 }
 
 const WRITES = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+/** Authentication and similar endpoints never list what was posted to them; probing them is wasted work. */
+const NEVER_PROBE =
+  /\/(login|logout|signin|signout|sign-in|sign-out|session|sessions|auth|oauth|token|tokens|csrf|password|otp|verify|graphql|beacon|collect|track|log|analytics)(\/|$|\?)/i;
 const MAX_ITEMS = 100;
 const SETTLE_MS = 1200;
 
@@ -47,6 +50,17 @@ function primitives(o: unknown): Array<[string, string | number | boolean]> {
   );
 }
 
+/** Singular/plural sibling of the last path segment: POST /api/event is often listed at GET /api/events. */
+function siblings(path: string): string[] {
+  const segs = path.split("/");
+  const last = segs.at(-1) ?? "";
+  if (!last || /^\d+$/.test(last)) return [];
+  const alt = last.endsWith("s") ? last.slice(0, -1) : `${last}s`;
+  return alt.length > 1 ? [[...segs.slice(0, -1), alt].join("/")] : [];
+}
+
+const unsupported = new WeakMap<object, Set<string>>();
+
 const idOf = (o: unknown): string | undefined => {
   if (!isObj(o)) return undefined;
   const v = o.id ?? o._id ?? o.uuid;
@@ -65,7 +79,7 @@ function matchesSubset(item: Json, fields: Array<[string, unknown]>): boolean {
 function plan(
   e: NetworkEntry,
 ):
-  | { probe: string; check: (items: Json[]) => "ok" | "missing" | "unclear"; what: string }
+  | { probes: string[]; check: (items: Json[]) => "ok" | "missing" | "unclear"; what: string }
   | undefined {
   const method = e.method.toUpperCase();
   const path = pathOf(e.url).split("?")[0]!;
@@ -74,7 +88,7 @@ function plan(
     const fields = primitives(e.requestJson);
     if (!id && !fields.length) return undefined;
     return {
-      probe: path,
+      probes: [path, ...siblings(path)],
       what: `${method} ${path}`,
       check: (items) => {
         if (id) return hasId(items, id) ? "ok" : "missing";
@@ -89,7 +103,7 @@ function plan(
     const fields = primitives(e.requestJson);
     if (!fields.length) return undefined;
     return {
-      probe: path,
+      probes: [path],
       what: `${method} ${path}`,
       check: (items) => {
         const one = items[0];
@@ -104,7 +118,7 @@ function plan(
     if (!id || segs.length < 2) return undefined;
     const parent = "/" + segs.slice(0, -1).join("/");
     return {
-      probe: parent,
+      probes: [parent],
       what: `${method} ${path}`,
       check: (items) => {
         if (!items.some((it) => idOf(it) !== undefined)) return "unclear";
@@ -148,36 +162,54 @@ export async function readBack(
   for (const e of adapter.networkLog().slice(from.net)) {
     if (!WRITES.has(e.method.toUpperCase()) || e.status < 200 || e.status >= 300) continue;
     if (exempt.some((x) => e.url.includes(x))) continue;
+    if (NEVER_PROBE.test(pathOf(e.url))) continue;
     const p = plan(e);
     if (!p || seen.has(p.what)) continue;
     seen.add(p.what);
-    const deadline = Date.now() + SETTLE_MS;
+    const dead = unsupported.get(adapter) ?? new Set<string>();
+    unsupported.set(adapter, dead);
     let verdict: "ok" | "missing" | "unclear" = "unclear";
-    let answered = false;
-    for (;;) {
-      let res: { status: number; body: unknown };
-      try {
-        res = await adapter.fetchJson(p.probe);
-      } catch {
+    let used = "";
+    for (const probe of p.probes) {
+      if (dead.has(probe)) continue;
+      const deadline = Date.now() + SETTLE_MS;
+      let answered = false;
+      for (;;) {
+        let res: { status: number; body: unknown };
+        try {
+          res = await adapter.fetchJson(probe);
+        } catch {
+          break;
+        }
+        if (res.status < 200 || res.status >= 300) {
+          dead.add(probe); // 404/405/...: this convention does not hold here; do not ask again
+          break;
+        }
+        const items = itemsOf(res.body);
+        if (!items) {
+          dead.add(probe);
+          break;
+        }
+        if (items.length >= MAX_ITEMS) break;
+        answered = true;
+        verdict = p.check(items);
+        if (verdict !== "missing" || Date.now() >= deadline) break;
+        await sleep(150); // eventual consistency: give the item a moment to appear
+      }
+      if (answered) {
+        used = probe;
         break;
       }
-      if (res.status < 200 || res.status >= 300) break;
-      const items = itemsOf(res.body);
-      if (!items || items.length >= MAX_ITEMS) break;
-      answered = true;
-      verdict = p.check(items);
-      if (verdict !== "missing" || Date.now() >= deadline) break;
-      await sleep(150); // eventual consistency: give the item a moment to appear
     }
-    if (!answered) continue;
+    if (!used) continue;
     if (verdict === "ok") {
-      out.confirmed.push(`read-back ${p.probe} confirms ${p.what}`);
+      out.confirmed.push(`read-back ${used} confirms ${p.what}`);
       const fields = ["POST", "PUT", "PATCH"].includes(e.method.toUpperCase())
         ? Object.fromEntries(primitives(e.requestJson))
         : {};
-      if (Object.keys(fields).length) out.probes.push({ get: p.probe, matchesAny: fields });
+      if (Object.keys(fields).length) out.probes.push({ get: used, matchesAny: fields });
     } else if (verdict === "missing") {
-      out.contradiction = `${p.what} returned 2xx but reading ${p.probe} back does not show the written item`;
+      out.contradiction = `${p.what} returned 2xx but reading ${used} back does not show the written item`;
       return out;
     }
   }

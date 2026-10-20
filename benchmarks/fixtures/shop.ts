@@ -237,6 +237,33 @@ export class ShopServer {
           `<!doctype html><title>WS</title><h1>WebSocket</h1><script>try{const w=new WebSocket("ws://localhost:${port}/ws");w.onerror=()=>{};}catch(e){}</script>`,
         );
       }
+      const evilPages: Record<string, (evil: string) => string> = {
+        "/x-popup": (e) => `<h1>Popup</h1><script>window.open("${e}?popup")</script>`,
+        "/x-meta": (e) => `<meta http-equiv="refresh" content="0;url=${e}?meta"><h1>Meta</h1>`,
+        "/x-iframe": (e) => `<h1>Frame</h1><iframe src="${e}?iframe"></iframe>`,
+        "/x-form": (e) =>
+          `<h1>Form</h1><form id="f" method="get" action="${e}"><input name="q" value="1"></form><script>document.getElementById("f").submit()</script>`,
+        "/x-css": (e) => `<h1>Css</h1><style>body{background:url(${e}?css)}</style>`,
+        "/x-beacon": (e) =>
+          `<h1>Beacon</h1><script>navigator.sendBeacon("${e}?beacon","x");fetch("${e}?cors",{mode:"no-cors"}).catch(()=>{})</script>`,
+        "/x-sw": (e) =>
+          `<h1>SW</h1><script>navigator.serviceWorker.register("/x-sw.js?e=${encodeURIComponent(e)}").catch(()=>{})</script>`,
+      };
+      if (req.method === "GET" && evilPages[u.pathname]) {
+        const port = (this.server!.address() as AddressInfo).port;
+        return send(
+          200,
+          `<!doctype html><title>x</title>${evilPages[u.pathname]!(`http://localhost:${port}/leak`)}`,
+        );
+      }
+      if (req.method === "GET" && u.pathname === "/x-sw.js") {
+        const e = u.searchParams.get("e") ?? "";
+        return send(
+          200,
+          `self.addEventListener("install",()=>{fetch(${JSON.stringify(e + "?sw")}).catch(()=>{})});self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()))`,
+          "text/javascript",
+        );
+      }
       if (req.method === "GET" && u.pathname === "/hostile") {
         return send(
           200,

@@ -22,16 +22,25 @@ const MAX_TEXT = 12_000;
 /** Flat, model-friendly target: exactly one way of finding the element, plus an optional iframe. */
 export const targetInput = z
   .object({
-    role: z.string().optional().describe("ARIA role, e.g. button, textbox, link, combobox"),
-    name: z.string().optional().describe("accessible name; use with role"),
-    label: z.string().optional().describe("form field label"),
-    text: z.string().optional().describe("visible text"),
-    test_id: z.string().optional().describe("data-testid value"),
-    ref: z.string().optional().describe("ref from the latest observation, e.g. e5"),
-    frame: z.string().optional().describe("CSS selector of the iframe that contains the element"),
-    exact: z.boolean().optional().describe("exact match for name/label/text (default true)"),
+    role: z.string().optional().describe("ARIA role, e.g. button"),
+    name: z.string().optional().describe("accessible name (with role)"),
+    label: z.string().optional(),
+    text: z.string().optional(),
+    test_id: z.string().optional(),
+    ref: z.string().optional().describe("ref from the latest observation"),
+    frame: z.string().optional().describe("CSS selector of the containing iframe"),
+    exact: z.boolean().optional().describe("exact match (default true)"),
   })
-  .describe("Pick ONE of: role(+name), label, text, test_id, ref");
+  .describe("ONE of: role(+name), label, text, test_id, ref");
+/** Shorter form for secondary targets (drag destination, expectations). */
+const targetLite = z
+  .object({
+    role: z.string().optional(),
+    name: z.string().optional(),
+    label: z.string().optional(),
+    text: z.string().optional(),
+  })
+  .describe("role(+name), label or text");
 type TargetInput = z.infer<typeof targetInput>;
 
 export function toTarget(t: TargetInput): Target {
@@ -51,10 +60,10 @@ export function toTarget(t: TargetInput): Target {
 
 export const expectInput = z
   .object({
-    text_contains: z.string().optional().describe("text that must appear on the page"),
-    url_contains: z.string().optional().describe("the page URL must contain this"),
-    visible: targetInput.optional().describe("element that must become visible"),
-    hidden: targetInput.optional().describe("element that must become hidden"),
+    text_contains: z.string().optional(),
+    url_contains: z.string().optional(),
+    visible: targetLite.optional(),
+    hidden: targetLite.optional(),
     request: z
       .object({
         method: z.string().optional(),
@@ -62,9 +71,9 @@ export const expectInput = z
         status_2xx: z.boolean().optional(),
       })
       .optional()
-      .describe("a network request this action must trigger, and that it succeeds"),
+      .describe("a request this action must send, and that it succeeds"),
   })
-  .describe("Checks Vedha runs itself after the action. Declare what success looks like.");
+  .describe("Checks Vedha runs itself afterwards: declare what success looks like");
 
 export const actInput = {
   op: z.enum([
@@ -85,56 +94,52 @@ export const actInput = {
     "reload",
     "switch_tab",
   ]),
-  intent: z.string().min(1).max(200).describe("what this step is for, in a few words"),
+  intent: z.string().min(1).max(200).describe("what this step is for"),
   target: targetInput.optional(),
-  to: targetInput.optional().describe("destination for drag"),
+  to: targetLite.optional().describe("drag destination"),
   value: z
     .string()
     .optional()
-    .describe(
-      "url for goto; text for fill; option label for select; key for press; file path for upload; down|up|top|bottom for scroll; first|last|index for switch_tab",
-    ),
+    .describe("url | text | option label | key | file path | scroll direction | tab index"),
   mutating: z
     .boolean()
     .optional()
     .describe(
-      "true for actions that change data (submit, delete, pay). Vedha will not repeat them if the outcome is unknown.",
+      "true if it changes data (submit, delete, pay); never repeated after an unknown outcome",
     ),
   destructive: z
     .boolean()
     .optional()
-    .describe("true for irreversible actions; blocked unless the operator allowed them"),
+    .describe("irreversible; blocked unless the operator allows it"),
   expect: expectInput.optional(),
   reconcile: z
     .object({ get: z.string().startsWith("/"), matches: z.record(z.string(), z.unknown()) })
     .optional()
     .describe(
-      "read-only GET (path) that returns JSON containing an item matching `matches` iff the effect happened; lets Vedha confirm a mutating action without repeating it",
+      "read-only GET returning JSON with an item matching `matches` iff the effect happened",
     ),
   synchronous: z
     .boolean()
     .optional()
     .describe(
-      "true if this action's effect is immediate (client-side). Then an unmet expectation is a failure instead of an unknown outcome.",
+      "effect is immediate (client-side): an unmet expectation is then a failure, not unknown",
     ),
   enabling: z
     .boolean()
     .optional()
     .describe(
-      "true if this step only makes a later step possible (open a menu, reveal an item). hover, scroll, wait, switch_tab, back and reload default to true.",
+      "only makes a later step possible; hover, scroll, wait, switch_tab, back, reload default true",
     ),
   confirms: z
     .string()
     .optional()
     .describe(
-      "id of an earlier step whose outcome was unknown (for example step-3). If this step verifies, that effect counts as confirmed. Use a non-mutating op such as wait, with an expect.",
+      "id of an earlier unresolved step; if this step verifies (use wait with an expect) its effect is confirmed",
     ),
   repeat: z
     .boolean()
     .optional()
-    .describe(
-      "set true only to deliberately repeat a mutating action whose earlier outcome was unknown",
-    ),
+    .describe("deliberately repeat a mutating action whose outcome was unknown"),
 };
 
 function verifiersOf(e: z.infer<typeof expectInput> | undefined): Verifier[] {

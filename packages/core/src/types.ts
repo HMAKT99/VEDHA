@@ -330,7 +330,13 @@ export interface TestProposal {
   confidence: number;
   assumptions: string[];
   /** Filled by promote(): result of replaying the generated test. */
-  replayCheck?: { passed: boolean; detail: string };
+  replayCheck?: {
+    passed: boolean;
+    detail: string;
+    runs?: number;
+    passes?: number;
+    flaky?: boolean;
+  };
 }
 
 export interface FailureBundle {

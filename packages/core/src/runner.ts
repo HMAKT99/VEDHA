@@ -41,6 +41,8 @@ const ENABLING_OPS: ReadonlySet<string> = new Set([
 ]);
 
 const DEFAULT_TIMEOUT_MS = 5000;
+/** First-attempt budget when alternates exist (see executeAction). */
+const FAST_FIRST_MS = 2000;
 const RECOVERY_CLICK_TIMEOUT_MS = 1200;
 const ALT_TARGET_TIMEOUT_MS = 1500;
 
@@ -318,12 +320,18 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   };
 
   // 3. Perform with ladder.
-  let err = await attempt(spec.target, timeout);
-  const originalError = err ? info(err) : undefined;
+  // With author-supplied alternates, do not wait out the whole timeout for a target that is not there:
+  // try it briefly, then the alternates, then give the primary the rest of its time (so a merely slow
+  // page still gets the full wait). Recovery after a rename drops from timeout + alt to about 2 s + alt.
+  const fastFirst = !!spec.altTargets?.length && spec.op !== "goto" && timeout > FAST_FIRST_MS;
+  const firstBudget = fastFirst ? FAST_FIRST_MS : timeout;
+  let topUp = fastFirst;
+  let err = await attempt(spec.target, firstBudget);
+  let originalError = err ? info(err) : undefined;
   let dismissRounds = 0;
   let transient = 0;
   let altIndex = 0;
-  while (err && attempts < maxAttempts + (spec.altTargets?.length ?? 0)) {
+  while (err && attempts < maxAttempts + (spec.altTargets?.length ?? 0) + (fastFirst ? 1 : 0)) {
     if (err.code === "policy_blocked") return finish("blocked", { error: info(err) });
     if (err.dispatched && spec.mutating) break; // input may have landed: handled by reconcile below
 
@@ -359,6 +367,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       // An alternate that resolved but was blocked/not actionable is the right element: keep it for the next rung.
       if (!next || next.code === "blocked_by_overlay" || next.code === "not_actionable")
         usedTarget = alt;
+      err = next;
+      continue;
+    }
+    if (topUp && !altRemaining && (err.code === "not_found" || err.code === "timeout")) {
+      topUp = false;
+      const next = await attempt(spec.target, timeout - firstBudget);
+      if (next) originalError = info(next); // report the failure after the full wait, not the short probe
       err = next;
       continue;
     }

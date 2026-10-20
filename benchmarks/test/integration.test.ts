@@ -1,7 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { PlaywrightAdapter, classifyError, runGeneratedSpec } from "@vedha/adapter-playwright";
+import {
+  PlaywrightAdapter,
+  classifyError,
+  runGeneratedSpec,
+  runGeneratedSpecRepeated,
+} from "@vedha/adapter-playwright";
 import {
   RuleActor,
   Session,
@@ -372,4 +377,32 @@ describe("agent mistakes get advice and the actor can recover (real browser)", (
       expect((await server.oracle()).orders).toHaveLength(1);
     });
   }, 60_000);
+});
+
+describe("flake detection on generated tests", () => {
+  const spec = `import { test, expect } from "@playwright/test";
+test("heading", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "New order" })).toBeVisible({ timeout: 3000 });
+});
+`;
+  it("reports a stable test as passing every run and an intermittent one as flaky", async () => {
+    const server = new ShopServer({});
+    const url = await server.start();
+    try {
+      const stable = await runGeneratedSpecRepeated(spec, url, path.join(WORK, "flake-ok"), 2);
+      expect(stable).toMatchObject({ passed: true, runs: 2, passes: 2, flaky: false });
+      let n = 0;
+      const flaky = await runGeneratedSpecRepeated(
+        spec,
+        async () => (n++ === 0 ? url : "http://127.0.0.1:9"),
+        path.join(WORK, "flake-bad"),
+        2,
+      );
+      expect(flaky).toMatchObject({ passed: false, passes: 1, flaky: true });
+      expect(flaky.detail).toContain("FLAKY");
+    } finally {
+      await server.stop();
+    }
+  }, 120_000);
 });
