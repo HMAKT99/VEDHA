@@ -131,3 +131,33 @@ describe("request summary", () => {
     expect(r.requests).toEqual(["POST /api/orders 201", "GET /favicon.ico 404"]);
   });
 });
+
+describe("writes count as mutating even when unmarked", () => {
+  it("fails an unmarked step whose write returned 500 and reports it", async () => {
+    const r = await run((a) => a.net.push(entry("POST", URL_ORDERS, 500)), { mutating: false });
+    expect(r.status).toBe("failed");
+    expect(r.error?.code).toBe("health_check_failed");
+    expect(r.requests).toEqual(["POST /api/orders 500"]);
+  });
+
+  it("the repeat guard also protects an unmarked step that wrote", async () => {
+    const { RepeatGuard } = await import("../src/repeatGuard.js");
+    const a = new FakeAdapter();
+    a.pending = 0;
+    a.texts.set(key(status), "not yet");
+    a.queue(btn, () => a.net.push(entry("POST", URL_ORDERS, 201)));
+    const s = await Session.create(a, { readback: "off" });
+    const spec: ActionSpec = {
+      id: "go",
+      intent: "place the order",
+      op: "click",
+      target: btn,
+      timeoutMs: 100,
+      postconditions: [{ type: "text", target: status, contains: "Order placed" }],
+    };
+    const r = await s.step(spec);
+    const g = new RepeatGuard();
+    g.record(spec, r);
+    expect(g.refuses({ ...spec, id: "again" })).toContain("refused");
+  });
+});

@@ -1,6 +1,12 @@
 import { AdapterError } from "./adapter.js";
 import type { BrowserAdapter } from "./adapter.js";
-import { healthApplies, healthFindings, healthWindow, requestSummary } from "./health.js";
+import {
+  healthApplies,
+  healthFindings,
+  healthWindow,
+  requestSummary,
+  wroteData,
+} from "./health.js";
 import { readBack } from "./readback.js";
 import type { HealthWindow } from "./health.js";
 import { hintForFailure, postconditionHint, preflightHint, roleOf } from "./hints.js";
@@ -130,7 +136,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     if (
       (status === "verified" || status === "unverified" || status === "outcome_unknown") &&
       health &&
-      healthApplies(spec, policy)
+      (healthApplies(spec, policy) || (policy.health !== "off" && wroteData(adapter, health)))
     ) {
       const found = healthFindings(adapter, health, spec);
       if (found.length) {
@@ -178,6 +184,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
           .slice(0, 5)
       : [];
     const requests = health ? requestSummary(adapter, health) : [];
+    const wrote = !!health && wroteData(adapter, health);
     const result: ActionResult = {
       schema: SCHEMAS.actionResult,
       actionId: spec.id,
@@ -191,6 +198,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       ...((spec.enabling ?? ENABLING_OPS.has(spec.op)) ? { enabling: true } : {}),
       ...(seen.length ? { observed: seen } : {}),
       ...(requests.length ? { requests } : {}),
+      ...(wrote ? { wroteData: true } : {}),
       ...extra,
     };
     trace.emit("step_finished", {
@@ -217,7 +225,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     if (
       (declared === "verified" || declared === "unverified") &&
       health &&
-      healthApplies(spec, policy)
+      (healthApplies(spec, policy) || (policy.health !== "off" && wroteData(adapter, health)))
     ) {
       const rb = await readBack(adapter, health, spec, policy);
       if (rb.contradiction) {

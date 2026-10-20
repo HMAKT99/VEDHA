@@ -82,3 +82,15 @@ export function requestSummary(adapter: BrowserAdapter, from: HealthWindow): str
   }
   return [...new Set(out)].slice(0, 5);
 }
+
+/**
+ * Did the step send a write (POST/PUT/PATCH/DELETE)? A model or author may forget to mark a step
+ * `mutating`; a step that wrote data is treated as mutating for the health check, read-back and repeat
+ * guard whatever its flag says.
+ */
+export function wroteData(adapter: BrowserAdapter, from: HealthWindow): boolean {
+  return adapter
+    .networkLog()
+    .slice(from.net)
+    .some((e) => !READ_METHODS.has(e.method.toUpperCase()));
+}

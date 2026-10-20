@@ -16,7 +16,8 @@ const NOT_DISPATCHED: ReadonlySet<string> = new Set([
  * safe to repeat when it verified (nothing to repeat) or provably never reached the page.
  */
 export function effectPossible(spec: ActionSpec, r: ActionResult): boolean {
-  if (!spec.mutating) return false;
+  // A step that sent a write counts as mutating even if nobody marked it (models often forget).
+  if (!spec.mutating && !r.wroteData) return false;
   if (r.status === "verified" || r.status === "unverified") return false;
   if (r.status === "outcome_unknown") return true;
   return !(r.error && NOT_DISPATCHED.has(r.error.code));
@@ -41,7 +42,7 @@ export class RepeatGuard {
 
   /** A refusal message, or undefined when the step may run. */
   refuses(spec: ActionSpec): string | undefined {
-    if (!spec.mutating) return undefined;
+    // Keys are only stored for steps that may have had an effect, so no flag check is needed here.
     for (const k of this.keys(spec)) {
       const earlier = this.open.get(k);
       if (earlier)

@@ -208,7 +208,19 @@ describe("read-back inference", () => {
       a.net.push(write("POST", ORDERS, { requestJson: { name: "Ada" } }));
       a.api.set("/api/orders", []);
     };
-    expect((await run(drop, { mutating: false })).r.status).toBe("verified");
+    // An unmarked step that actually sent a write is treated as mutating (models often forget the flag).
+    const unmarked = await run(drop, { mutating: false });
+    expect(unmarked.r.error?.code).toBe("readback_contradiction");
+    expect(unmarked.r.wroteData).toBe(true);
+    // An unmarked step that only read is left alone.
+    const reads = await run(
+      (a) => a.net.push(write("GET", "http://app.test/api/items", { status: 200 })),
+      {
+        mutating: false,
+      },
+    );
+    expect(reads.r.status).toBe("verified");
+    expect(reads.r.wroteData).toBeUndefined();
     expect((await run(drop, {}, { readback: "off" })).r.status).toBe("verified");
     expect((await run(drop, { healthIgnore: ["/api/orders"] })).r.status).toBe("verified");
     // A declared 2xx network check validates the response, not persistence: read-back still runs.
