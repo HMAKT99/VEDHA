@@ -1,10 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import {
-  PlaywrightAdapter,
-  runGeneratedSpec,
-  runGeneratedSpecRepeated,
-} from "@vedha/adapter-playwright";
+import { PlaywrightAdapter, runGeneratedSpecRepeated } from "@vedha/adapter-playwright";
 import {
   RuleActor,
   Session,
