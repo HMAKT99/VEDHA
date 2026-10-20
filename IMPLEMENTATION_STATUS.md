@@ -15,7 +15,7 @@ Held-out widgets full declarations: Vedha ties expert Playwright and Selenium. M
 
 ## Honest limits
 
-Scenarios are author-built except the TodoMVC track; one model family on the free tier; Selenium baselines are the author's reconstruction of an expert setup (Chromium only); overhead measured (B5) but only on tiny scenarios; no external agent benchmark yet (MiniWoB++ needs a model budget); read-back needs a conventional REST convention and missed the pre-registered silent drops; idle-aware classification keeps "unknown" for pages with long-lived requests; REA MCP tools: one call attempted and failed on an overloaded machine (E-092); nothing published to npm; no commit pushed since PR #4.
+Scenarios are author-built except the TodoMVC track; one model family on the free tier; Selenium baselines are the author's reconstruction of an expert setup (Chromium only); overhead measured (B5, median 1.06x expert Playwright after adaptive polling) but only on tiny scenarios; a rare healthy false pass (~2%) on backbone_marionette M2 exists before and after the latest changes, cause not found; no external agent benchmark yet (MiniWoB++ needs a model budget); read-back needs a conventional REST convention and missed the pre-registered silent drops; idle-aware classification keeps "unknown" for pages with long-lived requests; REA MCP tools: one call attempted and failed on an overloaded machine (E-092); nothing published to npm; no commit pushed since PR #4.
 
 ## Next (see the super plan in the repository history of this session)
 
