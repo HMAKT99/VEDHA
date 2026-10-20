@@ -12,6 +12,7 @@ import {
   readBundle,
   replayBundle,
   resolveInside,
+  toJUnit,
   writeBundle,
 } from "@vedha/core";
 import type { Policy, RunVerdict, TestProposal } from "@vedha/core";
@@ -29,7 +30,7 @@ export const EXIT: Record<RunVerdict, number> = {
 const HELP = `vedha - verified, agent-friendly browser testing
 
 Usage:
-  vedha run <spec.json> [--base-url URL] [--allow-domain HOST]... [--out DIR] [--headed]
+  vedha run <spec.json> [--base-url URL] [--allow-domain HOST]... [--out DIR] [--junit FILE.xml] [--headed]
   vedha observe <url> [--allow-domain HOST]... [--max-chars N]
   vedha explore <goal.json> --start-url URL [--promote FILE.spec.ts] [--check BASE_URL] [--out DIR]
   vedha promote <proposal.json> --out FILE.spec.ts [--check BASE_URL]
@@ -77,6 +78,9 @@ async function cmdRun(p: Parsed): Promise<number> {
       await writeBundle(outDir, bundle, await adapter.screenshot());
       process.stderr.write(`failure bundle written to ${path.resolve(outDir)}\n`);
     }
+    const junit = flag(p, "junit");
+    if (junit)
+      fs.writeFileSync(path.resolve(junit), toJUnit(report, spec.goal ?? path.basename(file)));
     out(report);
     return EXIT[report.verdict];
   } finally {

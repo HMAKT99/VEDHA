@@ -49,7 +49,7 @@ export function controlsOf(outline: string): Control[] {
     .map((e) => ({ ref: e.ref, role: e.role, ...(e.name !== undefined ? { name: e.name } : {}) }));
 }
 
-function renderControls(cs: Control[]): string {
+export function renderControls(cs: Control[]): string {
   return cs
     .map((c) => `- ${c.role}${c.name !== undefined ? ` "${c.name}"` : ""} [ref=${c.ref}]`)
     .join("\n");
@@ -89,6 +89,8 @@ export async function observeWithBasis(
     untrusted: true,
     chars: view.text.length,
   };
+  const header = await adapter.pageHeader?.().catch(() => undefined);
+  if (header) obs.header = header;
   const full: Observation = { ...obs };
   if (opts.previous && opts.previous.url === raw.url && opts.previous.level === level) {
     const prev = new Set(opts.previous.text.split("\n"));

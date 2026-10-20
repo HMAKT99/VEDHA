@@ -1,5 +1,9 @@
 import { AdapterError } from "./adapter.js";
 import type { BrowserAdapter } from "./adapter.js";
+import { healthApplies, healthFindings, healthWindow, requestSummary } from "./health.js";
+import { readBack } from "./readback.js";
+import type { HealthWindow } from "./health.js";
+import { hintForFailure, postconditionHint, preflightHint, roleOf } from "./hints.js";
 import { urlAllowed } from "./policy.js";
 import type { Trace } from "./trace.js";
 import { SCHEMAS } from "./types.js";
@@ -25,6 +29,16 @@ export interface RunnerContext {
   maxAttempts?: number;
   defaultTimeoutMs?: number;
 }
+
+/** Ops that cannot be checked in general; they exist to make a later step possible. */
+const ENABLING_OPS: ReadonlySet<string> = new Set([
+  "hover",
+  "scroll",
+  "wait",
+  "switch_tab",
+  "back",
+  "reload",
+]);
 
 const DEFAULT_TIMEOUT_MS = 5000;
 const RECOVERY_CLICK_TIMEOUT_MS = 1200;
@@ -96,13 +110,72 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     mutating: !!spec.mutating,
   });
 
+  let health: HealthWindow | undefined;
+
   const finish = (
-    status: ActionStatus,
-    extra: { error?: ErrorInfo; note?: string } = {},
+    declared: ActionStatus,
+    declaredExtra: {
+      error?: ErrorInfo;
+      note?: string;
+      readback?: string[];
+      readbackProbes?: Array<{ get: string; matchesAny: Record<string, unknown> }>;
+    } = {},
   ): ActionResult => {
+    let status = declared;
+    let extra = declaredExtra;
+    // Page-health check: a step whose declared checks passed still fails if the page reported a
+    // server error or uncaught exception while it ran (the UI can say "success" while the server says 500).
+    if (
+      (status === "verified" || status === "unverified" || status === "outcome_unknown") &&
+      health &&
+      healthApplies(spec, policy)
+    ) {
+      const found = healthFindings(adapter, health, spec);
+      if (found.length) {
+        status = "failed";
+        extra = {
+          error: {
+            code: "health_check_failed",
+            message: `${
+              declared === "verified"
+                ? "declared checks passed"
+                : declared === "outcome_unknown"
+                  ? "the outcome could not be observed"
+                  : "no check was declared"
+            }, but the page reported: ${found.join("; ")}`,
+            hint: "treat this action as failed: the server or page reported an error even if the page looks fine",
+          },
+          note: "page-health check",
+        };
+      }
+    }
+    if (status === "outcome_unknown" && extra.error) {
+      const repeat = `do not repeat this action. Check the page, or confirm the effect with a non-mutating step that declares an expectation and sets confirms: "${spec.id}"`;
+      extra = {
+        ...extra,
+        error: {
+          ...extra.error,
+          hint: extra.error.hint ? `${extra.error.hint}. Also: ${repeat}` : repeat,
+        },
+      };
+    }
     const recovered =
       (status === "verified" || status === "unverified") &&
       recoveries.some((r) => r.outcome === "succeeded");
+    const seen = health
+      ? (adapter.pageEvents?.().slice(health.events) ?? [])
+          .flatMap((e) =>
+            e.kind === "dialog"
+              ? [`dialog ${e.text}`]
+              : e.kind === "popup"
+                ? ["a new tab opened (switch_tab to use it)"]
+                : e.kind === "pageerror"
+                  ? [`page error: ${e.text.slice(0, 100)}`]
+                  : [],
+          )
+          .slice(0, 5)
+      : [];
+    const requests = health ? requestSummary(adapter, health) : [];
     const result: ActionResult = {
       schema: SCHEMAS.actionResult,
       actionId: spec.id,
@@ -113,6 +186,9 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       attempts,
       usedTarget,
       durationMs: Date.now() - started,
+      ...((spec.enabling ?? ENABLING_OPS.has(spec.op)) ? { enabling: true } : {}),
+      ...(seen.length ? { observed: seen } : {}),
+      ...(requests.length ? { requests } : {}),
       ...extra,
     };
     trace.emit("step_finished", {
@@ -124,6 +200,42 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       note: extra.note,
     });
     return result;
+  };
+
+  /** Like finish(), but a step that would verify first gets a convention-based read-back of its writes. */
+  const finishChecked = async (
+    declared: ActionStatus,
+    extra: {
+      error?: ErrorInfo;
+      note?: string;
+      readback?: string[];
+      readbackProbes?: Array<{ get: string; matchesAny: Record<string, unknown> }>;
+    } = {},
+  ): Promise<ActionResult> => {
+    if (
+      (declared === "verified" || declared === "unverified") &&
+      health &&
+      healthApplies(spec, policy)
+    ) {
+      const rb = await readBack(adapter, health, spec, policy);
+      if (rb.contradiction) {
+        return finish("failed", {
+          error: {
+            code: "readback_contradiction",
+            message: rb.contradiction,
+            hint: "the server accepted the write but the data is not there. If this endpoint legitimately does not list what was written, disable the check with policy.readback: off or list the endpoint in the step's healthIgnore",
+          },
+          note: "read-back inference",
+        });
+      }
+      if (rb.confirmed.length)
+        extra = {
+          ...extra,
+          readback: rb.confirmed,
+          ...(rb.probes.length ? { readbackProbes: rb.probes } : {}),
+        };
+    }
+    return finish(declared, extra);
   };
 
   // 1. Policy gates.
@@ -143,6 +255,19 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     }
   }
 
+  // 1b. Pre-flight: an op that cannot work on the stated role is reported before anything is sent.
+  const mismatch = spec.op === "goto" ? undefined : preflightHint(spec);
+  if (mismatch) {
+    trace.emit("preflight_reject", { id: spec.id, op: spec.op, role: roleOf(spec.target) });
+    return finish("failed", {
+      error: {
+        code: "invalid_action",
+        message: `${spec.op} does not fit a ${roleOf(spec.target)} element`,
+        hint: mismatch,
+      },
+    });
+  }
+
   // 2. Preconditions (no recovery: they describe the world the action assumes).
   if (spec.preconditions?.length) {
     const pre = await runVerifiers(spec.preconditions, {
@@ -160,6 +285,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   }
 
   const sinceIndex = adapter.networkLog().length;
+  health = healthWindow(adapter);
 
   const attempt = async (
     target: Target | undefined,
@@ -168,7 +294,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     attempts++;
     trace.emit("action", { id: spec.id, op: spec.op, target, attempt: attempts });
     try {
-      await adapter.perform(spec.op, target, spec.value, t);
+      await adapter.perform(spec.op, target, spec.value, t, { to: spec.to });
       return undefined;
     } catch (e) {
       return toAdapterError(e);
@@ -252,7 +378,9 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   }
 
   if (err && !(err.dispatched && spec.mutating)) {
-    return finish("failed", { error: originalError ?? info(err) });
+    const failure = originalError ?? info(err);
+    const hint = await hintForFailure(spec, failure.code, adapter);
+    return finish("failed", { error: hint ? { ...failure, hint } : failure });
   }
 
   // 4. Independent verification.
@@ -272,14 +400,34 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   });
 
   if (!dispatchedUncertain) {
-    if (post.length === 0) return finish("unverified", { note: "no postconditions declared" });
-    if (verdicts.every((v) => v.status === "pass")) return finish("verified");
+    if (post.length === 0)
+      return finishChecked("unverified", { note: "no postconditions declared" });
+    if (verdicts.every((v) => v.status === "pass")) return finishChecked("verified");
     if (!spec.mutating) {
       const bad = verdicts.find((v) => v.status !== "pass")!;
       return finish("failed", {
-        error: { code: "other", message: `postcondition failed: ${bad.detail}` },
+        error: {
+          code: "other",
+          message: `postcondition failed: ${bad.detail}`,
+          hint: postconditionHint(spec, bad),
+        },
       });
     }
+  }
+
+  // 4b. Declared synchronous: an unmet check is a failure, not an unknown outcome (still never repeated:
+  // the RepeatGuard keys on the possible effect, not on this label).
+  if (spec.synchronous && !dispatchedUncertain && spec.mutating) {
+    const bad = verdicts.find((v) => v.status !== "pass");
+    if (bad)
+      return finish("failed", {
+        error: {
+          code: "other",
+          message: `postcondition failed: ${bad.detail}`,
+          hint: postconditionHint(spec, bad),
+        },
+        note: "step declared synchronous: an unmet check is a failure",
+      });
   }
 
   // 5. Mutating action with failed/unobserved postconditions or possibly-dispatched failure.
@@ -288,7 +436,11 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     const failing = verdicts.find((v) => v.status !== "pass");
     const cause: ErrorInfo = err
       ? info(err)
-      : { code: "other", message: `postcondition failed: ${failing?.detail ?? "unobserved"}` };
+      : {
+          code: "other",
+          message: `postcondition failed: ${failing?.detail ?? "unobserved"}`,
+          hint: failing ? postconditionHint(spec, failing) : undefined,
+        };
 
     // The server accepted the request (2xx) but the result is wrong: the effect likely happened, so never re-issue.
     if (
@@ -307,6 +459,19 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     }
     if (!spec.reconcile) {
       if (verdicts.some((v) => v.definitive)) return finish("failed", { error: cause });
+      // The action completed and nothing is in flight: a late effect would need a pending request, so
+      // the unmet check is a failure. Still never repeated (RepeatGuard) and clearable by `confirms`
+      // if the check itself was wrong.
+      if (!err && adapter.pendingRequests?.() === 0) {
+        return finish("failed", {
+          error: {
+            code: "expectation_not_met",
+            message: cause.message,
+            hint: `the page is idle, so the effect is not still arriving. If the page shows it happened, your check was wrong: do not repeat the action, confirm with a non-mutating step that declares an expectation and sets confirms: "${spec.id}"`,
+          },
+          note: "page idle: no request in flight; not re-issued",
+        });
+      }
       return finish("outcome_unknown", {
         error: cause,
         note: "mutating action with unobserved outcome and no reconcile probe; not re-issued",
@@ -345,6 +510,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     }
     attemptsLeft--;
     const beforeRetry = adapter.networkLog().length;
+    health = healthWindow(adapter);
     const next = await attempt(usedTarget, timeout);
     if (next) {
       record(
@@ -363,7 +529,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       "reconcile showed no effect; action re-issued once safely",
       ok,
     );
-    if (ok) return finish("verified");
+    if (ok) return finishChecked("verified");
     err = undefined;
   }
 }

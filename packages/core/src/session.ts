@@ -13,12 +13,24 @@ import type {
   RunVerdict,
 } from "./types.js";
 
-export function summarize(results: ActionResult[]): RunVerdict {
+export function summarize(all: ActionResult[]): RunVerdict {
+  // A refused repeat never ran; it stays visible in the steps but does not decide the verdict.
+  const results = all.filter((r) => r.error?.code !== "repeat_refused");
   if (results.some((r) => r.status === "blocked")) return "blocked";
-  if (results.some((r) => r.status === "failed")) return "failed";
-  if (results.some((r) => r.status === "outcome_unknown")) return "outcome_unknown";
-  if (results.some((r) => r.status === "unverified")) return "unverified";
-  if (results.some((r) => r.recovered)) return "passed_with_recovery";
+  if (results.some((r) => r.status === "failed" && !r.confirmedBy)) return "failed";
+  // An unknown outcome later confirmed by an independent check no longer makes the run unknown.
+  if (results.some((r) => r.status === "outcome_unknown" && !r.confirmedBy))
+    return "outcome_unknown";
+  // An unchecked enabling step is vouched for by any later verified step.
+  if (
+    results.some(
+      (r, i) =>
+        r.status === "unverified" &&
+        !(r.enabling && results.slice(i + 1).some((x) => x.status === "verified")),
+    )
+  )
+    return "unverified";
+  if (results.some((r) => r.recovered || r.confirmedBy)) return "passed_with_recovery";
   return "passed";
 }
 
@@ -66,6 +78,46 @@ export class Session {
         trace: this.trace,
       });
     }
+    this.specs.push(spec);
+    this.results.push(result);
+    this.applyConfirmation(spec, result);
+    return result;
+  }
+
+  /** A verified step with a declared check can confirm an earlier unresolved step (unknown outcome, or a check that was not met while the page was idle). */
+  private applyConfirmation(spec: ActionSpec, result: ActionResult): void {
+    if (!spec.confirms || result.status !== "verified") return;
+    if (!spec.postconditions?.length) return;
+    const earlier = this.results.find((r) => r.actionId === spec.confirms);
+    const unresolved =
+      earlier?.status === "outcome_unknown" ||
+      (earlier?.status === "failed" && earlier.error?.code === "expectation_not_met");
+    if (!earlier || !unresolved || earlier.confirmedBy) return;
+    earlier.confirmedBy = spec.id;
+    this.trace.emit("recovery", {
+      id: earlier.actionId,
+      strategy: "confirmed_later",
+      detail: `effect confirmed afterwards by ${spec.id}`,
+    });
+  }
+
+  /**
+   * Records a step that was not run (for example a refused repeat) as a blocked result, so the
+   * refusal appears in the report and the actor is told why.
+   */
+  reject(spec: ActionSpec, message: string, hint?: string): ActionResult {
+    this.trace.emit("policy_block", { id: spec.id, reason: message });
+    const result: ActionResult = {
+      schema: SCHEMAS.actionResult,
+      actionId: spec.id,
+      status: "blocked",
+      recovered: false,
+      verdicts: [],
+      recoveries: [],
+      error: { code: "repeat_refused", message, ...(hint ? { hint } : {}) },
+      attempts: 0,
+      durationMs: 0,
+    };
     this.specs.push(spec);
     this.results.push(result);
     return result;

@@ -161,12 +161,15 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
       }
       case "api": {
         let detail = "no matching item";
+        // The probe itself answered 2xx but the effect was never there: a contradiction, not an unknown.
+        let answered = false;
         const ok = await pollUntil(async () => {
           const res = await adapter.fetchJson(v.get);
           if (res.status < 200 || res.status >= 300) {
             detail = `GET ${v.get} returned ${res.status}`;
             return undefined;
           }
+          answered = true;
           const items = Array.isArray(res.body) ? res.body : [res.body];
           if (items.some((it) => matchesFields(it, v.matchesAny))) return true;
           detail = `no item in GET ${v.get} matched ${JSON.stringify(v.matchesAny)} (${items.length} items)`;
@@ -174,7 +177,7 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
         }, timeoutMs);
         return ok
           ? { verifier: v, status: "pass", detail: `GET ${v.get} contains matching item` }
-          : { verifier: v, status: "fail", detail };
+          : { verifier: v, status: "fail", detail, definitive: answered };
       }
     }
   } catch (e) {

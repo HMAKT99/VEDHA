@@ -1,6 +1,15 @@
+import { renderFeedback } from "./feedback.js";
+import { REFUSED_HINT, RepeatGuard } from "./repeatGuard.js";
 import { proposalFromSession } from "./promote.js";
 import type { Session } from "./session.js";
-import type { ActionResult, ActionSpec, Observation, TestProposal, Verifier } from "./types.js";
+import type {
+  ActionResult,
+  ActionSpec,
+  Observation,
+  ObservationLevel,
+  TestProposal,
+  Verifier,
+} from "./types.js";
 
 export type ActorDecision = { kind: "act"; spec: ActionSpec } | { kind: "done"; summary: string };
 
@@ -12,6 +21,10 @@ export interface Actor {
     observation: Observation;
     history: ActionResult[];
     step: number;
+    /** Ready-to-show text: the previous step's outcome (failed checks, hints, recoveries) and the page. */
+    feedback: string;
+    /** True on the single last call after the failure limit: only `done` is accepted (browser-use does the same). */
+    final?: boolean;
   }): Promise<ActorDecision>;
 }
 
@@ -21,11 +34,25 @@ export interface ExploreOptions {
   startUrl: string;
   maxSteps?: number;
   finalAssertions?: Verifier[];
+  /**
+   * What to do when a step does not verify. `feed_back` (default) shows the failure to the actor and
+   * continues (a RepeatGuard still refuses to run a mutating action again while its earlier outcome
+   * is unresolved); `stop` ends at the first failure.
+   */
+  onStepFailure?: "feed_back" | "stop";
+  /** Consecutive failed steps after which exploration ends (default 3). */
+  maxConsecutiveFailures?: number;
+  /** Observation requested each step; `delta` shows only changes (default: full view). */
+  observation?: { level?: ObservationLevel; delta?: boolean };
 }
 
 export interface ExploreResult {
   summary: string;
   stoppedBecause: "actor_done" | "max_steps" | "step_failed";
+  /** The actor's last-chance report after the failure limit, when it gave one. */
+  finalReport?: string;
+  /** Steps that did not verify, including ones the actor later worked around. Never hidden. */
+  failedSteps: number;
   proposal: TestProposal;
 }
 
@@ -39,6 +66,9 @@ export async function explore(
   opts: ExploreOptions,
 ): Promise<ExploreResult> {
   const maxSteps = opts.maxSteps ?? 15;
+  const maxConsecutive = opts.maxConsecutiveFailures ?? 3;
+  const mode = opts.onStepFailure ?? "feed_back";
+  const delta = opts.observation?.delta ?? false;
   await session.step({
     id: "open",
     intent: "open the start page",
@@ -48,23 +78,61 @@ export async function explore(
   });
   let stopped: ExploreResult["stoppedBecause"] = "max_steps";
   let summary = "";
+  let failedSteps = 0;
+  let finalReport: string | undefined;
+  let consecutive = 0;
+  const guard = new RepeatGuard();
   for (let i = 0; i < maxSteps; i++) {
-    const observation = await session.observe({ level: "controls", delta: i > 0 });
+    const observation = await session.observe({
+      level: opts.observation?.level ?? "outline",
+      delta: delta && i > 0,
+    });
     const decision = await actor.decide({
       goal: opts.goal,
       observation,
       history: session.results,
       step: i,
+      feedback: renderFeedback(i > 0 ? session.results.at(-1) : undefined, observation, {
+        mode: delta ? "text" : "auto",
+      }),
     });
     if (decision.kind === "done") {
       stopped = "actor_done";
       summary = decision.summary;
       break;
     }
-    const r = await session.step(decision.spec);
-    if (r.status !== "verified" && r.status !== "unverified") {
+    const refusal = guard.refuses(decision.spec);
+    const r = refusal
+      ? session.reject(decision.spec, refusal, REFUSED_HINT)
+      : await session.step(decision.spec);
+    if (!refusal) {
+      guard.record(decision.spec, r);
+      const confirmed = decision.spec.confirms;
+      if (confirmed && session.results.find((x) => x.actionId === confirmed)?.confirmedBy)
+        guard.resolve(confirmed);
+    }
+    if (r.status === "verified" || r.status === "unverified") {
+      consecutive = 0;
+      continue;
+    }
+    failedSteps++;
+    consecutive++;
+    if (mode === "stop" || consecutive >= maxConsecutive) {
       stopped = "step_failed";
       summary = `step ${decision.spec.id} ended ${r.status}`;
+      if (mode !== "stop") {
+        // One last turn that may only report: an honest end state beats a silent stop.
+        const obs = await session.observe({ level: opts.observation?.level ?? "outline" });
+        const last = await actor.decide({
+          goal: opts.goal,
+          observation: obs,
+          history: session.results,
+          step: i + 1,
+          final: true,
+          feedback: `${renderFeedback(session.results.at(-1), obs)}\n\nThe run is ending after ${consecutive} consecutive failed steps. Report what you found; say whether the task was completed.`,
+        });
+        if (last.kind === "done") finalReport = last.summary;
+      }
       break;
     }
   }
@@ -73,7 +141,13 @@ export async function explore(
     goal: opts.goal,
     finalAssertions: opts.finalAssertions,
   });
-  return { summary, stoppedBecause: stopped, proposal };
+  return {
+    summary,
+    stoppedBecause: stopped,
+    failedSteps,
+    proposal,
+    ...(finalReport ? { finalReport } : {}),
+  };
 }
 
 export interface RuleGoal {
@@ -94,7 +168,11 @@ export class RuleActor implements Actor {
     observation: Observation;
     history: ActionResult[];
   }): Promise<ActorDecision> {
-    const done = new Set(input.history.map((h) => h.actionId));
+    const done = new Set(
+      input.history
+        .filter((h) => h.status === "verified" || h.status === "unverified")
+        .map((h) => h.actionId),
+    );
     // Use the last full outline when the observation is a delta of nothing.
     const entries = input.observation.controls;
     for (const f of this.rule.fields) {

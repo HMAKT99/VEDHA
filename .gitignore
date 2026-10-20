@@ -12,3 +12,7 @@ research/rea-evidence/queries/p2-*-out.json
 research/rea-evidence/slices/
 research/experiments/pw-runtime/test-results/
 research/experiments/pw-runtime/tz/
+benchmarks/test-results/
+benchmarks/.pw-fixture/
+.playwright-mcp/
+benchmarks/results/redteam/.pw-mcp/
