@@ -9,18 +9,25 @@ export function isRegexLiteral(s: string): boolean {
 
 export const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-/** Polls `fn` until it returns a non-undefined value or the deadline passes. */
+/**
+ * Polls `fn` until it returns a non-undefined value or the deadline passes. The first check is
+ * immediate; waits then grow 4, 6, 9, 14 ... ms up to `intervalMs`, so a result that lands a few
+ * milliseconds after the action is noticed promptly instead of up to a fixed interval late, while a long
+ * wait still settles at `intervalMs` (cheap for in-memory checks, bounded RPC rate for browser checks).
+ */
 export async function pollUntil<T>(
   fn: () => Promise<T | undefined>,
   timeoutMs: number,
   intervalMs = 50,
 ): Promise<T | undefined> {
   const deadline = Date.now() + timeoutMs;
+  let wait = Math.min(4, intervalMs);
   for (;;) {
     const v = await fn();
     if (v !== undefined) return v;
     if (Date.now() >= deadline) return undefined;
-    await sleep(Math.min(intervalMs, Math.max(0, deadline - Date.now())));
+    await sleep(Math.min(wait, Math.max(0, deadline - Date.now())));
+    wait = Math.min(intervalMs, Math.ceil(wait * 1.5));
   }
 }
 
@@ -120,36 +127,40 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
         let detail = "no matching response observed";
         let contradiction = false;
         let observedStatus: number | undefined;
-        const hit = await pollUntil(async () => {
-          const entries = adapter.networkLog().slice(ctx.sinceIndex);
-          const candidates = entries.filter(
-            (e: NetworkEntry) =>
-              (!v.method || e.method.toUpperCase() === v.method.toUpperCase()) &&
-              e.url.includes(v.urlPattern),
-          );
-          if (candidates.length === 0) return undefined;
-          const statusOk = candidates.filter((e) => statusMatches(v.status, e.status));
-          if (statusOk.length === 0) {
-            const last = candidates[candidates.length - 1]!;
-            detail = `response ${last.method} ${last.url} had status ${last.status}, expected ${String(v.status)}`;
+        const hit = await pollUntil(
+          async () => {
+            const entries = adapter.networkLog().slice(ctx.sinceIndex);
+            const candidates = entries.filter(
+              (e: NetworkEntry) =>
+                (!v.method || e.method.toUpperCase() === v.method.toUpperCase()) &&
+                e.url.includes(v.urlPattern),
+            );
+            if (candidates.length === 0) return undefined;
+            const statusOk = candidates.filter((e) => statusMatches(v.status, e.status));
+            if (statusOk.length === 0) {
+              const last = candidates[candidates.length - 1]!;
+              detail = `response ${last.method} ${last.url} had status ${last.status}, expected ${String(v.status)}`;
+              contradiction = true;
+              observedStatus = last.status;
+              return { mismatch: true } as unknown as NetworkEntry;
+            }
+            if (!v.json) return statusOk[statusOk.length - 1]!;
+            const withJson = statusOk.find((e) => e.json !== undefined);
+            if (!withJson) {
+              detail = "matching response had no JSON body yet";
+              return undefined;
+            }
+            const actual = jsonPath(withJson.json, v.json.path);
+            if (actual === v.json.equals) return withJson;
             contradiction = true;
-            observedStatus = last.status;
+            observedStatus = withJson.status;
+            detail = `json ${v.json.path} was ${JSON.stringify(actual)}, expected ${JSON.stringify(v.json.equals)}`;
+            // A definitive mismatch will not change; fail fast.
             return { mismatch: true } as unknown as NetworkEntry;
-          }
-          if (!v.json) return statusOk[statusOk.length - 1]!;
-          const withJson = statusOk.find((e) => e.json !== undefined);
-          if (!withJson) {
-            detail = "matching response had no JSON body yet";
-            return undefined;
-          }
-          const actual = jsonPath(withJson.json, v.json.path);
-          if (actual === v.json.equals) return withJson;
-          contradiction = true;
-          observedStatus = withJson.status;
-          detail = `json ${v.json.path} was ${JSON.stringify(actual)}, expected ${JSON.stringify(v.json.equals)}`;
-          // A definitive mismatch will not change; fail fast.
-          return { mismatch: true } as unknown as NetworkEntry;
-        }, timeoutMs);
+          },
+          timeoutMs,
+          8,
+        );
         if (hit && !("mismatch" in (hit as object))) {
           return {
             verifier: v,
