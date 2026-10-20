@@ -1137,6 +1137,117 @@
         "Root cause of CD-004 earlier failures",
         "bidi, mobile, Firefox/WebKit runner specs not run"
       ]
+    },
+    {
+      "target": "microsoft/playwright@b335271c (1.65.0-next)",
+      "rea_tool": null,
+      "status": "verified_static",
+      "confidence": "high",
+      "id": "E-091",
+      "question": "What does Playwright MCP's tool backend put in every tool result, and what does Vedha's feedback lack?",
+      "method": "direct reading of packages/playwright-core/src/tools/backend/response.ts (REA MCP analyze_javascript_application was attempted first and failed, see E-092)",
+      "source_path": "packages/playwright-core/src/tools/backend/response.ts",
+      "lines": "174-345, 351-368",
+      "evidence": "Result sections: Error (:276), Result (:279), 'Ran Playwright code' (:285), 'Open tabs' when more than one tab (:297), 'Page' with URL, title, crashed, non-2xx main-document HTTP status and console error/warning counts (:298, :351-368), 'Modal state' for open dialogs and file choosers (:303), Snapshot (inline or file), Events for downloads (:340). All output goes through redactSecrets (:225) and an output-size budget (:174, :236).",
+      "interpretation": "Vedha's renderFeedback shows outcome, hint, recoveries, URL and page view, but no tab list, no main-document HTTP status, no console counts, no modal state, no downloads, no equivalent code, no output budget, and (checked in packages/mcp/src and core/feedback.ts) no secret redaction on tool results.",
+      "remaining_questions": [
+        "Which of these measurably change model success (needs a run)",
+        "Playwright MCP behaviour not visible in source (runtime)"
+      ]
+    },
+    {
+      "target": "microsoft/playwright@b335271c (1.65.0-next)",
+      "rea_tool": "analyze_javascript_application",
+      "status": "unverified",
+      "confidence": "high",
+      "id": "E-092",
+      "question": "Can the REA MCP tools analyze the Playwright MCP backend in this session?",
+      "method": "mcp__rea__analyze_javascript_application on tools/backend as a directory, detail=summary",
+      "source_path": "research/rea-investigation-log.md",
+      "evidence": "First REA MCP call in this project. It failed after 120 s: 'macOS process ownership helper compilation failed via xcrun (compiler result: timed out after 120000 ms)'. Machine load average was about 20 (three benchmark runs). Partial evidence id ev_e338dc6f5695cca798799ee459b98c63334a26d0d7c6dec8d180bdd673a6e328.",
+      "interpretation": "Environmental failure, not a statement about the code. To be retried on a quiet machine; until then no REA-MCP finding is claimed.",
+      "remaining_questions": [
+        "Retry when the machine is idle",
+        "Q10 call-edge gap unchanged"
+      ]
+    },
+    {
+      "id": "E-093",
+      "question": "Are the REA MCP tools useful on the Playwright MCP backend source (TypeScript directory) on an idle machine?",
+      "method": "mcp__rea__analyze_javascript_application (summary), then trace_application_feature (string seed 'redactSecrets') and trace_javascript_semantics (property seed 'redactSecrets', callers)",
+      "rea_tool": "analyze_javascript_application, trace_application_feature, trace_javascript_semantics",
+      "target": "microsoft/playwright@b335271c tools/backend",
+      "source_path": "research/rea-investigation-log.md",
+      "lines": null,
+      "evidence": "Analysis succeeded: 41 files, 29,152 AST nodes, 0 parse failures, partial coverage (6,736 semantic unknowns; call-flow 1,953 unknown), modules 0 (evidence ev_d4fac013...). Both targeted traces returned no match (string literal seed and property seed): 'No graph entity matched the literal seed; this is not evidence that the feature is absent'.",
+      "interpretation": "REA MCP works when the machine is idle and gives size/coverage statistics, but its application graph did not resolve modules for this TypeScript source directory, so identifier-level traces found nothing. Direct reading remained the productive method; REA findings are not claimed for this target. Retry on the built JS bundle (lib/) is an open option.",
+      "confidence": "high",
+      "status": "verified_runtime",
+      "remaining_questions": [
+        "Does REA resolve modules on the built lib/ bundle?",
+        "Q10 call-edge gap unchanged"
+      ]
+    },
+    {
+      "id": "E-094",
+      "question": "What does agent-browser's outcome_unknown cover?",
+      "method": "direct reading of cli/src/connection.rs",
+      "rea_tool": null,
+      "target": "vercel-labs/agent-browser@dac13bb",
+      "source_path": "cli/src/connection.rs",
+      "lines": "1052-1100, 1140-1160",
+      "evidence": "send_with_retry retries read-only commands up to 5 times; a mutating command whose request was written but got no response is NOT retried and returns code outcome_unknown (\"it may or may not have run, so it was not retried\").",
+      "interpretation": "Transport-level uncertainty only. Vedha's outcome_unknown also covers unmet declared checks; the shared principle (never re-send a mutating command after a possible delivery) is already implemented (dispatched flag, RepeatGuard). Decision: skip.",
+      "confidence": "high",
+      "status": "verified_static",
+      "remaining_questions": []
+    },
+    {
+      "id": "E-095",
+      "question": "How does browser-use bound failure loops and end them?",
+      "method": "direct reading of browser_use/beta/service.py",
+      "rea_tool": null,
+      "target": "browser-use/browser-use@aa093a8",
+      "source_path": "browser_use/beta/service.py",
+      "lines": "4261, 5848-5873, 5935-5945",
+      "evidence": "max_failures=5 consecutive failures; with final_response_after_failure=True (default) _force_done_after_failure restricts the agent to the done tool and prompts it to report success=false and everything it found.",
+      "interpretation": "A forced final report after the failure limit gives an honest end state instead of silent termination. Vedha's explore() stops at 3 consecutive failures without asking the actor for a final report. Decision: adopt (final-turn in explore; failure counters in MCP results).",
+      "confidence": "high",
+      "status": "verified_static",
+      "remaining_questions": [
+        "Effect on model completion/claims (needs a run)"
+      ]
+    },
+    {
+      "id": "E-096",
+      "question": "Does Stagehand heal by default, and how is healing evaluated?",
+      "method": "grep of packages/evals and extension tests",
+      "rea_tool": null,
+      "target": "browserbase/stagehand@10418f9",
+      "source_path": "packages/evals/initStagehand.ts; packages/evals/tasks/bench/act/heal_*.ts",
+      "lines": "initStagehand.ts:141-143",
+      "evidence": "selfHeal defaults off on the server; the heal_* benchmark tasks (heal_scroll_50, heal_custom_dropdown, heal_simple_google_search) require selfHeal: true at init.",
+      "interpretation": "Healing is opt-in and has its own eval family. Vedha's recovery ladder is on by default but bounded and recorded. Benchmark idea: add heal-style UI-change scenarios (S04/S05 already cover rename/banner).",
+      "confidence": "medium",
+      "status": "verified_static",
+      "remaining_questions": []
+    },
+    {
+      "id": "E-097",
+      "question": "Does Selenium's documented WebDriver BiDi surface support a verification layer (network, console, script)?",
+      "method": "WebFetch of https://www.selenium.dev/documentation/webdriver/bidi/ (documentation page, not source)",
+      "rea_tool": null,
+      "target": "Selenium documentation (fetched 2026-10-20)",
+      "source_path": "https://www.selenium.dev/documentation/webdriver/bidi/",
+      "lines": null,
+      "evidence": "The page lists Network, Logging and Script feature areas under BiDi namespaces but gives no detail; it states that low-level BiDi components 'will not be documented', that Selenium is still migrating from Classic to BiDi, and that its CDP section is temporary.",
+      "interpretation": "The hooks Vedha needs (network responses, console errors, script evaluation) exist in BiDi in principle, but the documentation neither confirms binding coverage nor stability. A Selenium/BiDi BrowserAdapter (P9) is plausible and unproven; decision: defer until spec and binding source can be read (REA or direct), do not claim it.",
+      "confidence": "low",
+      "status": "unverified",
+      "remaining_questions": [
+        "Binding coverage of BiDi network events in selenium-webdriver 4.51",
+        "Whether response bodies are available through BiDi"
+      ]
     }
   ]
 }
