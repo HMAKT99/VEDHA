@@ -81,6 +81,57 @@ const PAGES: Record<string, string> = {
     `document.getElementById("pay").addEventListener("click", async () => {
        const v = document.getElementById("card").value; await report("paid:" + v); say("Paid with " + v); });`,
   ),
+  "/tabs": page(
+    "Account tabs",
+    `<div role="tablist"><button role="tab" id="t1" aria-selected="true">Overview</button><button role="tab" id="t2" aria-selected="false">Billing</button></div>
+     <div role="tabpanel" id="panel">Overview content</div>`,
+    `const tabs = [...document.querySelectorAll("[role=tab]")];
+     tabs.forEach((t) => t.addEventListener("click", async () => {
+       tabs.forEach((x) => x.setAttribute("aria-selected", String(x === t)));
+       document.getElementById("panel").textContent = t.textContent + " content";
+       await report(t.id === "t2" ? "billing-tab" : "overview-tab"); say(t.textContent + " shown"); }));`,
+  ),
+  "/plan": page(
+    "Choose a plan",
+    `<label for="plan">Plan</label> <select id="plan"><option>Free</option><option>Pro</option></select>`,
+    `document.getElementById("plan").addEventListener("change", async (e) => {
+       await report("plan:" + e.target.value.toLowerCase()); say("Plan " + e.target.value); });`,
+  ),
+  "/toggle": page(
+    "Appearance",
+    `<button role="switch" id="dark" aria-checked="false">Dark mode</button>`,
+    `const d = document.getElementById("dark");
+     d.addEventListener("click", async () => {
+       const on = d.getAttribute("aria-checked") !== "true"; d.setAttribute("aria-checked", String(on));
+       await report(on ? "dark:on" : "dark:off"); say(on ? "Dark mode on" : "Dark mode off"); });`,
+  ),
+  "/accordion": page(
+    "Checkout details",
+    `<button id="acc" aria-expanded="false">Shipping details</button>
+     <div id="body" hidden><label>Address <input id="addr"></label><button id="save">Save address</button></div>`,
+    `const acc = document.getElementById("acc"), body = document.getElementById("body");
+     acc.addEventListener("click", () => { const open = acc.getAttribute("aria-expanded") === "true";
+       acc.setAttribute("aria-expanded", String(!open)); body.hidden = open; });
+     document.getElementById("save").addEventListener("click", async () => {
+       const v = document.getElementById("addr").value; await report("address:" + v); say("Saved " + v); });`,
+  ),
+  "/reorder": page(
+    "Priorities",
+    `<ol id="list"><li>Alpha <button>Move Alpha up</button></li><li>Beta <button>Move Beta up</button></li></ol>`,
+    `const list = document.getElementById("list");
+     list.addEventListener("click", async (e) => {
+       const b = e.target.closest("button"); if (!b) return;
+       const li = b.parentElement; const prev = li.previousElementSibling;
+       if (prev) list.insertBefore(li, prev);
+       const name = li.firstChild.textContent.trim(); await report("moved:" + name); say(name + " moved up"); });`,
+  ),
+  "/keys": page(
+    "Help",
+    `<div id="help" role="dialog" aria-label="Help panel">Press Escape to close this panel.</div>`,
+    `document.addEventListener("keydown", async (e) => {
+       if (e.key !== "Escape") return;
+       document.getElementById("help").hidden = true; await report("help-closed"); say("Panel closed"); });`,
+  ),
   "/nav": page("Start", `<a href="/nav2">Next page</a>`, `report("nav-loaded");`),
   "/nav2": page("Second page", `<p>You are on page two</p>`, `report("nav2-loaded");`),
 };

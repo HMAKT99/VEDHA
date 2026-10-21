@@ -261,6 +261,136 @@ const DEFS: Def[] = [
   },
 ];
 
+/**
+ * Second held-out family (W11-W16), written before the changes of improvement round 4 and never viewed or run
+ * before them (the freeze commit is recorded in the pilot 6 results README).
+ */
+const DEFS_V2: Def[] = [
+  {
+    id: "W11-tabs",
+    goal: `Open the Billing tab.`,
+    title: "Switch to the Billing tab",
+    startPath: "/tabs",
+    type: "billing-tab",
+    steps: [
+      open("open", "/tabs", "Account tabs"),
+      {
+        id: "tab",
+        intent: "open Billing",
+        op: "click",
+        target: { role: "tab", name: "Billing" },
+        mutating: true,
+        postconditions: post("Billing shown", "billing-tab"),
+      },
+    ],
+  },
+  {
+    id: "W12-select-plan",
+    goal: `Choose the Pro plan.`,
+    title: "Choose a plan from a select",
+    startPath: "/plan",
+    type: "plan:pro",
+    steps: [
+      open("open", "/plan", "Choose a plan"),
+      {
+        id: "pick",
+        intent: "choose Pro",
+        op: "select",
+        target: { label: "Plan", exact: true },
+        value: "Pro",
+        mutating: true,
+        postconditions: post("Plan Pro", "plan:pro"),
+      },
+    ],
+  },
+  {
+    id: "W13-toggle",
+    goal: `Turn Dark mode on.`,
+    title: "Turn on a switch",
+    startPath: "/toggle",
+    type: "dark:on",
+    steps: [
+      open("open", "/toggle", "Appearance"),
+      {
+        id: "on",
+        intent: "turn dark mode on",
+        op: "click",
+        target: { role: "switch", name: "Dark mode" },
+        mutating: true,
+        postconditions: post("Dark mode on", "dark:on"),
+      },
+    ],
+  },
+  {
+    id: "W14-accordion-form",
+    goal: `Open Shipping details, enter the address 12 Main St and save it.`,
+    title: "Expand a section, fill and save",
+    startPath: "/accordion",
+    type: "address:12 Main St",
+    steps: [
+      open("open", "/accordion", "Checkout details"),
+      {
+        id: "expand",
+        intent: "open Shipping details",
+        op: "click",
+        target: { role: "button", name: "Shipping details" },
+        enabling: true,
+      },
+      {
+        id: "addr",
+        intent: "enter the address",
+        op: "fill",
+        target: { label: "Address", exact: true },
+        value: "12 Main St",
+      },
+      {
+        id: "save",
+        intent: "save the address",
+        op: "click",
+        target: { role: "button", name: "Save address" },
+        mutating: true,
+        postconditions: post("Saved 12 Main St", "address:12 Main St"),
+      },
+    ],
+  },
+  {
+    id: "W15-reorder",
+    goal: `Move Beta above Alpha in the list.`,
+    title: "Reorder a list",
+    startPath: "/reorder",
+    type: "moved:Beta",
+    steps: [
+      open("open", "/reorder", "Priorities"),
+      {
+        id: "up",
+        intent: "move Beta up",
+        op: "click",
+        target: { role: "button", name: "Move Beta up" },
+        mutating: true,
+        postconditions: post("Beta moved up", "moved:Beta"),
+      },
+    ],
+  },
+  {
+    id: "W16-escape-key",
+    goal: `Close the help panel with the keyboard.`,
+    title: "Close a panel with Escape",
+    startPath: "/keys",
+    type: "help-closed",
+    steps: [
+      open("open", "/keys", "Help"),
+      {
+        id: "esc",
+        intent: "press Escape",
+        op: "press",
+        value: "Escape",
+        mutating: true,
+        postconditions: post("Panel closed", "help-closed"),
+      },
+    ],
+  },
+];
+
 const base = (d: Def): Omit<Scenario, "id" | "title" | "kind" | "category" | "effectAchieved"> => ({
   variant: {},
   app: "widgets",
@@ -305,6 +435,39 @@ const defects: Scenario[] = DEFECTS.map(([id, bug]) => {
 });
 
 export const WIDGET_SCENARIOS: Scenario[] = [...healthy, ...defects];
+
+const healthyV2: Scenario[] = DEFS_V2.map((d) => ({
+  ...base(d),
+  id: d.id,
+  title: d.title,
+  category: "baseline" as const,
+  kind: "effect" as const,
+  effectAchieved: (s) => (s.events ?? []).filter((e) => e === d.type).length >= (d.min ?? 1),
+}));
+
+const DEFECTS_V2: Array<[string, "silent" | "error"]> = [
+  ["W11-tabs", "silent"],
+  ["W12-select-plan", "error"],
+  ["W13-toggle", "silent"],
+  ["W15-reorder", "error"],
+  ["W16-escape-key", "silent"],
+];
+
+const defectsV2: Scenario[] = DEFECTS_V2.map(([id, bug]) => {
+  const d = DEFS_V2.find((x) => x.id === id)!;
+  return {
+    ...base(d),
+    id: `${id}-DEFECT-${bug}`,
+    title: `DEFECT (${bug}): ${d.title}`,
+    category: "seeded-defect" as const,
+    kind: "defect" as const,
+    widgets: { bug },
+    effectAchieved: () => false,
+  };
+});
+
+/** Held-out set 2 (see DEFS_V2). Kept out of WIDGET_SCENARIOS so earlier tracks keep their membership. */
+export const WIDGET_SCENARIOS_V2: Scenario[] = [...healthyV2, ...defectsV2];
 
 /**
  * Same scenarios with only the declarations a typical author or LLM writes: what the page shows
