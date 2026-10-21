@@ -1,0 +1,3 @@
+Pilot 6 development run: Vedha MCP arm only, dev cells W01-W10 (plus the defect twins that ran), 2 trials, new build (a81326d / 7a5b51f), forced final-report turn. NOT hold-out: the round-3 product changes were tuned against transcripts of these cells in pilot 5. Do not compare with the Playwright arm (not run on this build).
+
+Effect: 20 of 20 completed, median prompt tokens 30,520, 1 forced final turn. Defects: 11 detected, 2 missed (13 trials, 10 forced-final). Both misses were model errors against correct evidence: W01-silent t1 (Vedha returned `readback_contradiction`, the model's own `vedha_probe` of /api/events showed `[]`, it still said success) and W04-upload-DEFECT-error t1 (the report showed the step failed). Transcripts are not committed.
