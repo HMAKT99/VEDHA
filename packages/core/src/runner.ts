@@ -459,8 +459,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   });
 
   if (!dispatchedUncertain) {
-    if (post.length === 0)
+    if (post.length === 0) {
+      // Nothing declared to wait for: give requests the step triggered a moment to start and finish, so the
+      // result can report them (and the health check and read-back can see them).
+      await sleep(40);
+      for (let i = 0; i < 10 && (adapter.pendingRequests?.() ?? 0) > 0; i++) await sleep(25);
       return finishChecked("unverified", { note: "no postconditions declared" });
+    }
     if (verdicts.every((v) => v.status === "pass")) return finishChecked("verified");
     if (!spec.mutating) {
       const bad = verdicts.find((v) => v.status !== "pass")!;

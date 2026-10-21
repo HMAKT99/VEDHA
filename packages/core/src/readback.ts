@@ -14,7 +14,7 @@ export interface ReadBack {
 
 const WRITES = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 /** Authentication and similar endpoints never list what was posted to them; probing them is wasted work. */
-const NEVER_PROBE =
+export const NEVER_PROBE =
   /\/(login|logout|signin|signout|sign-in|sign-out|session|sessions|auth|oauth|token|tokens|csrf|password|otp|verify|graphql|beacon|collect|track|log|analytics)(\/|$|\?)/i;
 const MAX_ITEMS = 100;
 const SETTLE_MS = 1200;

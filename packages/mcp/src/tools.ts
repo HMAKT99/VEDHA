@@ -3,6 +3,7 @@ import path from "node:path";
 import { z } from "zod";
 import { PlaywrightAdapter } from "@vedha/adapter-playwright";
 import {
+  NEVER_PROBE,
   REFUSED_HINT,
   RepeatGuard,
   Session,
@@ -43,19 +44,51 @@ const targetLite = z
   .describe("role(+name), label or text");
 type TargetInput = z.infer<typeof targetInput>;
 
+/**
+ * Several selectors at once (models often send ref and role together) resolve by durability: test id, role,
+ * label, text, and the ref last because refs expire when the page re-renders. Nothing at all is an error.
+ */
 export function toTarget(t: TargetInput): Target {
   const exact = t.exact ?? true;
-  const found: Target[] = [];
-  if (t.role)
-    found.push({ role: t.role, ...(t.name !== undefined ? { name: t.name } : {}), exact });
-  if (t.label) found.push({ label: t.label, exact });
-  if (t.text) found.push({ text: t.text, exact });
-  if (t.test_id) found.push({ testId: t.test_id });
-  if (t.ref) found.push({ ref: t.ref });
-  if (found.length !== 1)
-    throw new Error("a target needs exactly one of: role (with name), label, text, test_id, ref");
-  const base = found[0]!;
+  const base: Target | undefined = t.test_id
+    ? { testId: t.test_id }
+    : t.role
+      ? { role: t.role, ...(t.name !== undefined ? { name: t.name } : {}), exact }
+      : t.label
+        ? { label: t.label, exact }
+        : t.text
+          ? { text: t.text, exact }
+          : t.ref
+            ? { ref: t.ref }
+            : undefined;
+  if (!base) throw new Error("a target needs one of: role (with name), label, text, test_id, ref");
   return t.frame ? { inFrame: t.frame, target: base } : base;
+}
+
+/** Ops that act on the page as a whole: a stray or empty target is ignored instead of failing the call. */
+/** Ops whose effect Vedha reports on a line of its own when no check was declared. */
+const EFFECT_OPS = new Set([
+  "click",
+  "dblclick",
+  "fill",
+  "select",
+  "check",
+  "uncheck",
+  "press",
+  "upload",
+  "drag",
+]);
+
+const PAGE_OPS = new Set(["goto", "scroll", "wait", "back", "reload", "press", "switch_tab"]);
+
+function targetFor(op: string, t: TargetInput | undefined): Target | undefined {
+  if (!t) return undefined;
+  try {
+    return toTarget(t);
+  } catch (e) {
+    if (PAGE_OPS.has(op)) return undefined;
+    throw e;
+  }
 }
 
 export const expectInput = z
@@ -227,8 +260,8 @@ export class VedhaTools {
         id: `step-${++this.n}`,
         intent: a.intent,
         op: a.op,
-        target: a.target ? toTarget(a.target) : undefined,
-        to: a.to ? toTarget(a.to) : undefined,
+        target: targetFor(a.op, a.target),
+        to: targetFor(a.op, a.to),
         value: a.value,
         mutating: a.mutating,
         destructive: a.destructive,
@@ -260,15 +293,41 @@ export class VedhaTools {
         ? `\nWARNING: ${this.consecutiveFailures} steps in a row did not verify (${this.steps} steps used). If the task cannot be completed, stop and report what you found, including whether it took effect.`
         : "";
     return this.text(
-      renderFeedback(r, obs, { changes: true }) + counters,
+      renderFeedback(r, obs, { changes: true, effect: EFFECT_OPS.has(a.op) }) + counters,
       r.status === "failed" || r.status === "blocked",
     );
   }
 
   async observe(level: ObservationLevel = "outline", ref?: string): Promise<ToolResult> {
     const session = await this.ensure();
-    const obs = await session.observe({ level, ref });
-    return this.text(renderFeedback(undefined, obs));
+    try {
+      const obs = await session.observe({ level, ref });
+      return this.text(renderFeedback(undefined, obs));
+    } catch (e) {
+      if (!ref) throw e;
+      // A ref from before a navigation or re-render no longer exists: show the current page instead of an error.
+      const obs = await session.observe({ level: "outline" });
+      return this.text(
+        `ref ${ref} is no longer on the page (it changed since that observation); current page:\n${renderFeedback(undefined, obs)}`,
+      );
+    }
+  }
+
+  /** Read-only GET of a same-origin JSON path, so state can be checked without navigating away from the page. */
+  async probe(pathname: string): Promise<ToolResult> {
+    const session = await this.ensure();
+    if (!pathname.startsWith("/") || NEVER_PROBE.test(pathname))
+      return this.text(
+        `probe refused: use a same-origin path such as /api/items (not ${pathname})`,
+        true,
+      );
+    try {
+      const res = await session.adapter.fetchJson(pathname);
+      const body = typeof res.body === "string" ? res.body : JSON.stringify(res.body);
+      return this.text(`GET ${pathname} -> ${res.status}\n${body.slice(0, 3000)}`);
+    } catch (e) {
+      return this.text(`probe failed: ${e instanceof Error ? e.message : String(e)}`, true);
+    }
   }
 
   async report(): Promise<ToolResult> {

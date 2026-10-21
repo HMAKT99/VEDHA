@@ -53,9 +53,29 @@ export function describeHeader(h: PageHeader | undefined): string[] {
   return out;
 }
 
+/**
+ * What Vedha itself saw for a step that declared no check: a confirmation from a read-back, other observed
+ * effects (writes, dialogs, page changes), or nothing at all. The model gets evidence to decide with instead of
+ * a statement that the effect is unchecked. Enabling steps (hover, scroll, wait) have no effect to report.
+ */
+export function effectLine(r: ActionResult, changed = false): string | undefined {
+  if (r.status !== "unverified" || r.enabling) return undefined;
+  if (r.readback?.length)
+    return `effect: confirmed (${[...(r.observed ?? []), ...r.readback].join("; ")})`;
+  const seen = [
+    ...(r.requests?.length ? [`requests ${r.requests.join(", ")}`] : []),
+    ...(r.observed ?? []),
+    ...(changed ? ["the page changed (see below)"] : []),
+  ];
+  return seen.length
+    ? `effect: observed (${seen.join("; ")})`
+    : "effect: none observed (no request, dialog or page change)";
+}
+
 /** One line per fact; failed checks, hints and recoveries are never omitted. */
-export function describeResult(r: ActionResult): string[] {
-  const lines = [`result: ${r.status}${r.error ? ` (${r.error.code}): ${r.error.message}` : ""}`];
+export function describeResult(r: ActionResult, changed = false, effect = true): string[] {
+  const label = r.status === "unverified" ? "done (no expectation declared)" : r.status;
+  const lines = [`result: ${label}${r.error ? ` (${r.error.code}): ${r.error.message}` : ""}`];
   if (r.error?.hint) lines.push(`hint: ${r.error.hint}`);
   for (const v of r.verdicts)
     if (v.status !== "pass" && !v.implicit) lines.push(`check ${v.status}: ${v.detail}`);
@@ -65,12 +85,15 @@ export function describeResult(r: ActionResult): string[] {
     lines.push(
       `recovery ${rec.strategy} ${rec.outcome} (original: ${rec.originalError.code}: ${rec.originalError.message})`,
     );
-  if (r.status === "unverified")
-    lines.push("no postcondition was declared, so the effect is unchecked");
-  if (r.requests?.length) lines.push(`requests: ${r.requests.join(", ")}`);
-  for (const rb of r.readback ?? []) lines.push(rb);
-  for (const o of r.observed ?? []) lines.push(`observed: ${o}`);
-  if (r.note) lines.push(`note: ${r.note}`);
+  const eff = effect ? effectLine(r, changed) : undefined;
+  if (eff) lines.push(eff);
+  else {
+    if (r.requests?.length) lines.push(`requests: ${r.requests.join(", ")}`);
+    for (const rb of r.readback ?? []) lines.push(rb);
+    for (const o of r.observed ?? []) lines.push(`observed: ${o}`);
+  }
+  if (r.note && !(r.status === "unverified" && r.note === "no postconditions declared"))
+    lines.push(`note: ${r.note}`);
   return lines;
 }
 
@@ -78,9 +101,11 @@ export function describeResult(r: ActionResult): string[] {
 export function renderFeedback(
   last: ActionResult | undefined,
   obs: Observation,
-  opts: { mode?: "auto" | "text"; changes?: boolean } = {},
+  opts: { mode?: "auto" | "text"; changes?: boolean; effect?: boolean } = {},
 ): string {
-  const head = last ? describeResult(last) : [];
+  const head = last
+    ? describeResult(last, describeChanges(obs).length > 0, opts.effect ?? true)
+    : [];
   return [
     ...head,
     `url: ${obs.url}`,
