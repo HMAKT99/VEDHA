@@ -67,6 +67,7 @@ describe("vedha-mcp (stdio, real client)", () => {
       "vedha_bundle",
       "vedha_close",
       "vedha_observe",
+      "vedha_probe",
       "vedha_promote",
       "vedha_report",
     ]);
