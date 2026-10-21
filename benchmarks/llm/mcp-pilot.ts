@@ -47,6 +47,8 @@ const scenarioIds = arg(
     : POOLS[setName]!.map((s) => s.id).join(","),
 ).split(",");
 // Re-run only these trials ("SCENARIO:TRIAL,..."), e.g. cells that ended in driver_error; seeds stay trial+1.
+// Run a single arm ("mcp-vedha" or "mcp-playwright"), e.g. while developing against one arm.
+const onlyArm = arg("arm", "");
 const only = new Set(arg("only", "").split(",").filter(Boolean));
 const runId = arg("run-id", `llm-mcp-${new Date().toISOString().slice(0, 10)}`);
 const outDir = path.resolve(`benchmarks/results/${runId}`);
@@ -265,7 +267,7 @@ async function main() {
   let stopped = "";
   outer: for (let t = 0; t < trials; t++) {
     for (const sc of scenarios) {
-      for (const arm of armsFor(sc)) {
+      for (const arm of armsFor(sc).filter((x) => !onlyArm || x.id === onlyArm)) {
         if (only.size && !only.has(`${sc.id}:${t}`)) continue;
         const server = makeServer(sc, t + 1);
         const url = await server.start();
