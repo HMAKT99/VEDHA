@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { PlaywrightAdapter, runGeneratedSpec } from "@vedha/adapter-playwright";
+import { PlaywrightAdapter, runGeneratedSpecRepeated } from "@vedha/adapter-playwright";
 import {
   RuleActor,
   Session,
@@ -32,8 +32,8 @@ const HELP = `vedha - verified, agent-friendly browser testing
 Usage:
   vedha run <spec.json> [--base-url URL] [--allow-domain HOST]... [--out DIR] [--junit FILE.xml] [--headed]
   vedha observe <url> [--allow-domain HOST]... [--max-chars N]
-  vedha explore <goal.json> --start-url URL [--promote FILE.spec.ts] [--check BASE_URL] [--out DIR]
-  vedha promote <proposal.json> --out FILE.spec.ts [--check BASE_URL]
+  vedha explore <goal.json> --start-url URL [--promote FILE.spec.ts] [--check BASE_URL [--repeat N]] [--out DIR]
+  vedha promote <proposal.json> --out FILE.spec.ts [--check BASE_URL [--repeat N]]
   vedha replay <bundle-dir> [--base-url URL]
   vedha schemas [--out DIR]
   vedha doctor
@@ -161,10 +161,11 @@ async function cmdExplore(p: Parsed): Promise<number> {
       fs.writeFileSync(path.resolve(specFile), code);
       const check = flag(p, "check");
       if (check)
-        res.proposal.replayCheck = await runGeneratedSpec(
+        res.proposal.replayCheck = await runGeneratedSpecRepeated(
           code,
           check,
           path.resolve(".vedha", "replay-check"),
+          Math.max(1, Number(flag(p, "repeat") ?? "1")),
         );
     }
     out(res);
@@ -187,7 +188,12 @@ async function cmdPromote(p: Parsed): Promise<number> {
   fs.writeFileSync(path.resolve(dest), code);
   const check = flag(p, "check");
   if (check) {
-    const res = await runGeneratedSpec(code, check, path.resolve(".vedha", "replay-check"));
+    const res = await runGeneratedSpecRepeated(
+      code,
+      check,
+      path.resolve(".vedha", "replay-check"),
+      Math.max(1, Number(flag(p, "repeat") ?? "1")),
+    );
     out(res);
     return res.passed ? 0 : 1;
   }

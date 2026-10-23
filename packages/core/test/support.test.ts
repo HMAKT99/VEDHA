@@ -7,7 +7,7 @@ import { observe, parseOutline } from "../src/observation.js";
 import { hostAllowed, redact, resolveInside, urlAllowed } from "../src/policy.js";
 import { promote, proposalFromSession } from "../src/promote.js";
 import { Session } from "../src/session.js";
-import { jsonPath, matchesFields } from "../src/verifiers.js";
+import { jsonPath, matchesFields, pollStable } from "../src/verifiers.js";
 import { AdapterError } from "../src/adapter.js";
 import { FakeAdapter, key } from "./fakeAdapter.js";
 
@@ -201,5 +201,20 @@ describe("bundle, replay, promotion", () => {
       steps: [{ id: "a", intent: "i", op: "click" as const, target: { ref: "e5" } }],
     };
     expect(() => promote(p)).toThrow(/ref targets/);
+  });
+});
+
+describe("pollStable", () => {
+  it("does not pass on a match that is rendered away", async () => {
+    // Matches on the first read only, then the page re-renders it away.
+    let reads = 0;
+    const r = await pollStable(async () => (++reads === 1 ? true : undefined), 120, 20, 10);
+    expect(r).toBeUndefined();
+  });
+
+  it("passes on a match that holds", async () => {
+    let reads = 0;
+    const r = await pollStable(async () => (++reads >= 3 ? true : undefined), 500, 20, 10);
+    expect(r).toBe(true);
   });
 });

@@ -15,7 +15,7 @@ import type {
   Target,
 } from "@vedha/core";
 
-export { runGeneratedSpec } from "./replayCheck.js";
+export { runGeneratedSpec, runGeneratedSpecRepeated } from "./replayCheck.js";
 
 const ANSI = /\u001b\[[0-9;]*m/g;
 const MAX_JSON_BYTES = 200_000;
@@ -118,8 +118,12 @@ export class PlaywrightAdapter implements BrowserAdapter {
         else if (m.type() === "warning") info.warnings++;
       });
       p.on("dialog", (d) => {
-        this.events.push({ kind: "dialog", text: `${d.type()}: ${d.message()}`.slice(0, 200) });
-        const handled = this.policy.dialogs === "accept" ? d.accept() : d.dismiss();
+        const accept = this.policy.dialogs === "accept";
+        this.events.push({
+          kind: "dialog",
+          text: `${d.type()} "${d.message().slice(0, 120)}" ${accept ? "accepted" : "dismissed"} (policy)`,
+        });
+        const handled = accept ? d.accept() : d.dismiss();
         // Another handler (e.g. the caller's own test) may have settled it first.
         handled.catch(() => undefined);
       });

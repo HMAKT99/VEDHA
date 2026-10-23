@@ -7,7 +7,13 @@ import type { Driver } from "../drivers/types.js";
 import { SCENARIOS } from "../scenarios/index.js";
 import { INDEPENDENT_SCENARIOS } from "../scenarios/independent.js";
 import { MULTI_SCENARIOS } from "../scenarios/multi.js";
-import { WIDGET_SCENARIOS, WIDGET_SCENARIOS_MINIMAL } from "../scenarios/widgets.js";
+import {
+  WIDGET_SCENARIOS,
+  WIDGET_SCENARIOS_MINIMAL,
+  WIDGET_SCENARIOS_V2,
+  WIDGET_SCENARIOS_V3,
+  WIDGET_SCENARIOS_V4,
+} from "../scenarios/widgets.js";
 import { classify, oracleSummary, type TrialRecord } from "./classify.js";
 import { makeServer } from "./servers.js";
 
@@ -28,6 +34,9 @@ const TRIAL_TIMEOUT_MS = 90_000;
 const SETS = {
   seen: SCENARIOS,
   "held-out": WIDGET_SCENARIOS,
+  "held-out-2": WIDGET_SCENARIOS_V2,
+  "held-out-3": WIDGET_SCENARIOS_V3,
+  "held-out-4": WIDGET_SCENARIOS_V4,
   "held-out-minimal": WIDGET_SCENARIOS_MINIMAL,
   independent: INDEPENDENT_SCENARIOS,
   multi: MULTI_SCENARIOS,

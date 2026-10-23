@@ -14,7 +14,13 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import { classify, oracleSummary } from "../harness/classify.js";
 import { makeServer } from "../harness/servers.js";
 import { SCENARIOS, type Scenario } from "../scenarios/index.js";
-import { WIDGET_SCENARIOS, WIDGET_SCENARIOS_MINIMAL } from "../scenarios/widgets.js";
+import {
+  WIDGET_SCENARIOS,
+  WIDGET_SCENARIOS_V2,
+  WIDGET_SCENARIOS_V3,
+  WIDGET_SCENARIOS_V4,
+  WIDGET_SCENARIOS_MINIMAL,
+} from "../scenarios/widgets.js";
 import { CostGuardError, Gateway, type ChatMessage, type ToolDef } from "./gateway.js";
 
 function arg(name: string, def: string): string {
@@ -31,6 +37,9 @@ const setName = arg("set", "seen");
 const POOLS: Record<string, Scenario[]> = {
   seen: SCENARIOS,
   "held-out": WIDGET_SCENARIOS,
+  "held-out-2": WIDGET_SCENARIOS_V2,
+  "held-out-3": WIDGET_SCENARIOS_V3,
+  "held-out-4": WIDGET_SCENARIOS_V4,
   "held-out-minimal": WIDGET_SCENARIOS_MINIMAL,
 };
 if (!POOLS[setName])
@@ -41,6 +50,10 @@ const scenarioIds = arg(
     ? "S01,S02,S03,S04,S06,S07,S09,S10"
     : POOLS[setName]!.map((s) => s.id).join(","),
 ).split(",");
+// Re-run only these trials ("SCENARIO:TRIAL,..."), e.g. cells that ended in driver_error; seeds stay trial+1.
+// Run a single arm ("mcp-vedha" or "mcp-playwright"), e.g. while developing against one arm.
+const onlyArm = arg("arm", "");
+const only = new Set(arg("only", "").split(",").filter(Boolean));
 const runId = arg("run-id", `llm-mcp-${new Date().toISOString().slice(0, 10)}`);
 const outDir = path.resolve(`benchmarks/results/${runId}`);
 const TOOL_RESULT_CAP = 12_000;
@@ -102,8 +115,21 @@ const toolDefs = (
     },
   }));
 
+/** Asked of both arms when the model stops without a RESULT line (blank reply, or the turn cap was reached). */
+const FINAL_PROMPT =
+  'Stop using tools now. From what you have observed, reply with one line: "RESULT: success" if the task really took effect, otherwise "RESULT: failure", then one sentence of explanation.';
+
+const claimOf = (text: string): "pass" | "fail" | "uncertain" => {
+  const m = /RESULT:\s*(success|failure)/i.exec(text);
+  return m ? (m[1]!.toLowerCase() === "success" ? "pass" : "fail") : "uncertain";
+};
+
 interface Outcome {
+  /** After the forced final turn, when one was needed. */
   claim: "pass" | "fail" | "uncertain";
+  /** What the model said on its own, before any forced final turn (the pilot 1-5 definition). */
+  rawClaim: "pass" | "fail" | "uncertain";
+  forcedFinal: boolean;
   turns: number;
   toolCalls: number;
   toolResultChars: number;
@@ -157,8 +183,20 @@ async function runArm(arm: Arm, gw: Gateway, baseUrl: string, sc: Scenario): Pro
         messages.push({ role: "tool", tool_call_id: call.id, content: out });
       }
     }
-    const m = /RESULT:\s*(success|failure)/i.exec(finalText);
-    const claim = m ? (m[1]!.toLowerCase() === "success" ? "pass" : "fail") : "uncertain";
+    const rawClaim = claimOf(finalText);
+    let forcedFinal = false;
+    if (rawClaim === "uncertain") {
+      forcedFinal = true;
+      messages.push({ role: "user", content: FINAL_PROMPT });
+      try {
+        const { message } = await gw.chat(messages, defs, "none");
+        messages.push({ ...message, content: message.content ?? "" });
+        finalText = message.content ?? "";
+      } catch {
+        /* the raw claim stands */
+      }
+    }
+    const claim = claimOf(finalText);
     let vedhaVerdict: string | undefined;
     if (arm.id === "mcp-vedha") {
       try {
@@ -171,6 +209,8 @@ async function runArm(arm: Arm, gw: Gateway, baseUrl: string, sc: Scenario): Pro
     }
     return {
       claim,
+      rawClaim,
+      forcedFinal,
       turns,
       toolCalls,
       toolResultChars,
@@ -231,7 +271,8 @@ async function main() {
   let stopped = "";
   outer: for (let t = 0; t < trials; t++) {
     for (const sc of scenarios) {
-      for (const arm of armsFor(sc)) {
+      for (const arm of armsFor(sc).filter((x) => !onlyArm || x.id === onlyArm)) {
+        if (only.size && !only.has(`${sc.id}:${t}`)) continue;
         const server = makeServer(sc, t + 1);
         const url = await server.start();
         const t0 = Date.now();
@@ -258,6 +299,8 @@ async function main() {
           driver: arm.id,
           trial: t,
           claim: out?.claim ?? "error",
+          rawClaim: out?.rawClaim ?? "error",
+          forcedFinal: out?.forcedFinal ?? false,
           outcome: out ? label(sc, classify(sc, out.claim, o.effect), o.postCount) : "driver_error",
           effect: o.effect,
           duplicates: o.duplicates,

@@ -398,4 +398,17 @@ SCENARIOS.push(
     effectAchieved: ORDER_OK,
     duplicates: ORDER_DUPES,
   },
+  // ---- Added with fail-fast waiting: measures time-to-verdict, not detection (every expert driver detects it eventually). ----
+  {
+    id: "S17-defect-honest-500",
+    title:
+      "DEFECT (latency control): POST /api/orders answers 500 and the page honestly shows the error",
+    category: "seeded-defect",
+    kind: "defect",
+    variant: { bug: "honest500" },
+    startPath: "/",
+    steps: orderSteps(),
+    effectAchieved: ORDER_OK,
+    duplicates: ORDER_DUPES,
+  },
 );

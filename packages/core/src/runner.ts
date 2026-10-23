@@ -1,6 +1,12 @@
 import { AdapterError } from "./adapter.js";
 import type { BrowserAdapter } from "./adapter.js";
-import { healthApplies, healthFindings, healthWindow, requestSummary } from "./health.js";
+import {
+  healthApplies,
+  healthFindings,
+  healthWindow,
+  requestSummary,
+  wroteData,
+} from "./health.js";
 import { readBack } from "./readback.js";
 import type { HealthWindow } from "./health.js";
 import { hintForFailure, postconditionHint, preflightHint, roleOf } from "./hints.js";
@@ -20,6 +26,7 @@ import type {
   Verifier,
 } from "./types.js";
 import { runVerifier, runVerifiers, sleep } from "./verifiers.js";
+import { contradictions, failFast } from "./failfast.js";
 
 export interface RunnerContext {
   adapter: BrowserAdapter;
@@ -40,7 +47,22 @@ const ENABLING_OPS: ReadonlySet<string> = new Set([
   "reload",
 ]);
 
+/** Ops whose handler may send a write after the visible change (so a passed UI check is not yet the whole story). */
+const WRITE_TRIGGERS: ReadonlySet<string> = new Set([
+  "click",
+  "dblclick",
+  "press",
+  "select",
+  "check",
+  "uncheck",
+  "drag",
+  "upload",
+]);
+/** A handler that hides the panel and then sends its write has the request out within a few ms. */
+const WRITE_SETTLE_MS = 12;
 const DEFAULT_TIMEOUT_MS = 5000;
+/** First-attempt budget when alternates exist (see executeAction). */
+const FAST_FIRST_MS = 2000;
 const RECOVERY_CLICK_TIMEOUT_MS = 1200;
 const ALT_TARGET_TIMEOUT_MS = 1500;
 
@@ -128,7 +150,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     if (
       (status === "verified" || status === "unverified" || status === "outcome_unknown") &&
       health &&
-      healthApplies(spec, policy)
+      (healthApplies(spec, policy) || (policy.health !== "off" && wroteData(adapter, health)))
     ) {
       const found = healthFindings(adapter, health, spec);
       if (found.length) {
@@ -148,6 +170,25 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
           note: "page-health check",
         };
       }
+    }
+    // A failed step says what the page saw, not only which check was unmet.
+    if (
+      status === "failed" &&
+      extra.error &&
+      extra.error.code !== "health_check_failed" &&
+      health &&
+      policy.health !== "off" &&
+      (healthApplies(spec, policy) || wroteData(adapter, health))
+    ) {
+      const found = contradictions(adapter, health, spec);
+      if (found.length)
+        extra = {
+          ...extra,
+          error: {
+            ...extra.error,
+            message: `${extra.error.message} (page reported: ${found.join("; ")})`,
+          },
+        };
     }
     if (status === "outcome_unknown" && extra.error) {
       const repeat = `do not repeat this action. Check the page, or confirm the effect with a non-mutating step that declares an expectation and sets confirms: "${spec.id}"`;
@@ -176,6 +217,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
           .slice(0, 5)
       : [];
     const requests = health ? requestSummary(adapter, health) : [];
+    const wrote = !!health && wroteData(adapter, health);
     const result: ActionResult = {
       schema: SCHEMAS.actionResult,
       actionId: spec.id,
@@ -189,6 +231,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       ...((spec.enabling ?? ENABLING_OPS.has(spec.op)) ? { enabling: true } : {}),
       ...(seen.length ? { observed: seen } : {}),
       ...(requests.length ? { requests } : {}),
+      ...(wrote ? { wroteData: true } : {}),
       ...extra,
     };
     trace.emit("step_finished", {
@@ -215,7 +258,7 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     if (
       (declared === "verified" || declared === "unverified") &&
       health &&
-      healthApplies(spec, policy)
+      (healthApplies(spec, policy) || (policy.health !== "off" && wroteData(adapter, health)))
     ) {
       const rb = await readBack(adapter, health, spec, policy);
       if (rb.contradiction) {
@@ -272,7 +315,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   if (spec.preconditions?.length) {
     const pre = await runVerifiers(spec.preconditions, {
       adapter,
-      timeoutMs: Math.min(timeout, 2000),
+      // A server error with nothing in flight leaves little to wait for: one short look is enough.
+      timeoutMs: Math.min(
+        timeout,
+        health && !adapter.pendingRequests?.() && contradictions(adapter, health, spec).length
+          ? 300
+          : 2000,
+      ),
       sinceIndex: adapter.networkLog().length,
     });
     verdicts = pre;
@@ -318,12 +367,18 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   };
 
   // 3. Perform with ladder.
-  let err = await attempt(spec.target, timeout);
-  const originalError = err ? info(err) : undefined;
+  // With author-supplied alternates, do not wait out the whole timeout for a target that is not there:
+  // try it briefly, then the alternates, then give the primary the rest of its time (so a merely slow
+  // page still gets the full wait). Recovery after a rename drops from timeout + alt to about 2 s + alt.
+  const fastFirst = !!spec.altTargets?.length && spec.op !== "goto" && timeout > FAST_FIRST_MS;
+  const firstBudget = fastFirst ? FAST_FIRST_MS : timeout;
+  let topUp = fastFirst;
+  let err = await attempt(spec.target, firstBudget);
+  let originalError = err ? info(err) : undefined;
   let dismissRounds = 0;
   let transient = 0;
   let altIndex = 0;
-  while (err && attempts < maxAttempts + (spec.altTargets?.length ?? 0)) {
+  while (err && attempts < maxAttempts + (spec.altTargets?.length ?? 0) + (fastFirst ? 1 : 0)) {
     if (err.code === "policy_blocked") return finish("blocked", { error: info(err) });
     if (err.dispatched && spec.mutating) break; // input may have landed: handled by reconcile below
 
@@ -362,6 +417,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       err = next;
       continue;
     }
+    if (topUp && !altRemaining && (err.code === "not_found" || err.code === "timeout")) {
+      topUp = false;
+      const next = await attempt(spec.target, timeout - firstBudget);
+      if (next) originalError = info(next); // report the failure after the full wait, not the short probe
+      err = next;
+      continue;
+    }
     if (
       !spec.mutating &&
       transient < 1 &&
@@ -389,10 +451,20 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   // most common input steps do not leave the whole run "unverified". Values are never echoed.
   const implicit = declared.length === 0 ? implicitPostconditions(spec) : [];
   const post = declared.length ? declared : implicit;
+  // Fail fast only where the final health check would also apply (mutating or write-sending steps).
+  const failFastUnlessRead = (h: HealthWindow): (() => boolean) => {
+    const ff = failFast(adapter, h, spec);
+    return () => (healthApplies(spec, policy) || wroteData(adapter, h)) && ff();
+  };
   const dispatchedUncertain = !!err; // only true here for mutating+dispatched
   verdicts = dispatchedUncertain
     ? []
-    : await runVerifiers(post, { adapter, timeoutMs: timeout, sinceIndex });
+    : await runVerifiers(post, {
+        adapter,
+        timeoutMs: timeout,
+        sinceIndex,
+        ...(health && policy.health !== "off" ? { abort: failFastUnlessRead(health) } : {}),
+      });
   if (implicit.length) verdicts = verdicts.map(hideImplicit);
   trace.emit("verdict", {
     id: spec.id,
@@ -400,9 +472,22 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
   });
 
   if (!dispatchedUncertain) {
-    if (post.length === 0)
+    if (post.length === 0) {
+      // Nothing declared to wait for: give requests the step triggered a moment to start and finish, so the
+      // result can report them (and the health check and read-back can see them).
+      await sleep(40);
+      for (let i = 0; i < 10 && (adapter.pendingRequests?.() ?? 0) > 0; i++) await sleep(25);
       return finishChecked("unverified", { note: "no postconditions declared" });
-    if (verdicts.every((v) => v.status === "pass")) return finishChecked("verified");
+    }
+    if (verdicts.every((v) => v.status === "pass")) {
+      // A UI check can pass before the handler's write is even sent (hide the panel, then POST). Let a request
+      // the step triggered start and finish, so the health check and read-back judge the stored result too.
+      if (WRITE_TRIGGERS.has(spec.op) && health && !wroteData(adapter, health)) {
+        await sleep(WRITE_SETTLE_MS);
+        for (let i = 0; i < 50 && (adapter.pendingRequests?.() ?? 0) > 0; i++) await sleep(5);
+      }
+      return finishChecked("verified");
+    }
     if (!spec.mutating) {
       const bad = verdicts.find((v) => v.status !== "pass")!;
       return finish("failed", {
@@ -479,7 +564,13 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
     }
     const probe = await runVerifier(spec.reconcile, {
       adapter,
-      timeoutMs: Math.min(timeout, 2000),
+      // A server error with nothing in flight leaves little to wait for: one short look is enough.
+      timeoutMs: Math.min(
+        timeout,
+        health && !adapter.pendingRequests?.() && contradictions(adapter, health, spec).length
+          ? 300
+          : 2000,
+      ),
       sinceIndex: adapter.networkLog().length,
     });
     if (probe.status === "pass" && !verdicts.some((v) => v.definitive)) {
@@ -521,7 +612,12 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       );
       return finish("failed", { error: cause });
     }
-    verdicts = await runVerifiers(post, { adapter, timeoutMs: timeout, sinceIndex: beforeRetry });
+    verdicts = await runVerifiers(post, {
+      adapter,
+      timeoutMs: timeout,
+      sinceIndex: beforeRetry,
+      ...(policy.health !== "off" ? { abort: failFastUnlessRead(health) } : {}),
+    });
     const ok = verdicts.length > 0 && verdicts.every((v) => v.status === "pass");
     record(
       "retry_transient",

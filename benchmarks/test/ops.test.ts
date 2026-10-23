@@ -228,3 +228,38 @@ describe("extended ops (real browser)", () => {
     });
   }, 60_000);
 });
+
+describe("a passed UI check does not hide a write the server did not keep (real browser)", () => {
+  async function pressEscape(bug?: "silent") {
+    const srv = new WidgetsServer(bug ? { bug } : {});
+    const url = await srv.start();
+    const adapter = await PlaywrightAdapter.launch();
+    const s = await Session.create(adapter, {});
+    try {
+      await s.step({ id: "open", intent: "open", op: "goto", value: url + "/keys" });
+      return await s.step(
+        step("close", {
+          op: "press",
+          value: "Escape",
+          postconditions: [
+            { type: "state", target: { role: "dialog", name: "Help panel" }, state: "hidden" },
+          ],
+        }),
+      );
+    } finally {
+      await s.close();
+      await srv.stop();
+    }
+  }
+
+  it("fails with a read-back contradiction when the server stored nothing", async () => {
+    const r = await pressEscape("silent");
+    expect(r.status).toBe("failed");
+    expect(r.error?.code).toBe("readback_contradiction");
+  }, 60_000);
+
+  it("stays verified when the server stored the event", async () => {
+    const r = await pressEscape();
+    expect(r.status).toBe("verified");
+  }, 60_000);
+});

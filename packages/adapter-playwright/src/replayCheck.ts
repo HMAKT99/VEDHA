@@ -55,3 +55,32 @@ export async function runGeneratedSpec(
   }
   return { passed: false, detail: `runner exited ${out.code}: ${out.stderr.slice(0, 300)}` };
 }
+
+/**
+ * Runs the generated spec `runs` times against fresh state and reports flakiness: a test that passes some
+ * runs and fails others is flaky and must not be committed as a regression test. `prepare` is called before
+ * each run to return a fresh base URL (for example a freshly started app).
+ */
+export async function runGeneratedSpecRepeated(
+  specSource: string,
+  baseURL: string | (() => Promise<string>),
+  workDir: string,
+  runs: number,
+): Promise<{ passed: boolean; detail: string; runs: number; passes: number; flaky: boolean }> {
+  let passes = 0;
+  let lastDetail = "";
+  for (let i = 0; i < runs; i++) {
+    const url = typeof baseURL === "string" ? baseURL : await baseURL();
+    const r = await runGeneratedSpec(specSource, url, `${workDir}-${i}`);
+    if (r.passed) passes++;
+    lastDetail = r.detail;
+  }
+  const flaky = passes > 0 && passes < runs;
+  return {
+    passed: passes === runs,
+    detail: `${passes}/${runs} runs passed${flaky ? " (FLAKY)" : ""}; last: ${lastDetail}`,
+    runs,
+    passes,
+    flaky,
+  };
+}

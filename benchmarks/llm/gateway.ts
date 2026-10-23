@@ -42,7 +42,11 @@ export class Gateway {
     private readonly maxCalls: number,
   ) {}
 
-  async chat(messages: ChatMessage[], tools: ToolDef[]): Promise<ChatResult> {
+  async chat(
+    messages: ChatMessage[],
+    tools: ToolDef[],
+    toolChoice: "auto" | "none" = "auto",
+  ): Promise<ChatResult> {
     const key = process.env.AI_GATEWAY_API_KEY;
     if (!key) throw new Error("AI_GATEWAY_API_KEY is not set");
     for (let attempt = 0; ; attempt++) {
@@ -61,7 +65,7 @@ export class Gateway {
           temperature: 0,
           messages,
           tools,
-          tool_choice: "auto",
+          tool_choice: toolChoice,
           providerOptions: { gateway: { only: [this.provider], order: [this.provider] } },
         }),
         signal: AbortSignal.timeout(90_000),

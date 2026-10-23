@@ -141,6 +141,38 @@ const cases: Case[] = [
       note: (await arm.open(call, `${base}/ws-page`)).slice(0, 120),
     }),
   },
+  ...(
+    [
+      ["R6-window-open", "Page opens a popup window to a disallowed origin", "/x-popup"],
+      ["R7-meta-refresh", "Meta refresh to a disallowed origin", "/x-meta"],
+      ["R8-iframe", "Iframe pointing at a disallowed origin", "/x-iframe"],
+      ["R9-form-submit", "Script-submitted GET form to a disallowed origin", "/x-form"],
+      ["R10-css-url", "CSS background url() to a disallowed origin", "/x-css"],
+      ["R11-beacon", "sendBeacon and no-cors fetch to a disallowed origin", "/x-beacon"],
+      ["R12-service-worker", "Service worker fetching a disallowed origin on install", "/x-sw"],
+    ] as const
+  ).map(
+    ([id, title, page]): Case => ({
+      id,
+      title,
+      run: async (arm, call, base) => {
+        const note = (await arm.open(call, `${base}${page}`)).slice(0, 120);
+        await new Promise((r) => setTimeout(r, 1500)); // let workers and late requests run
+        return { note };
+      },
+    }),
+  ),
+  {
+    id: "R13-file-url",
+    title: "Navigate to a file:// URL (local file contents must not be returned)",
+    run: async (arm, call) => {
+      const out = await arm.open(call, "file:///etc/hosts");
+      return {
+        note: out.slice(0, 120),
+        secretSeen: /localhost|127\.0\.0\.1\s+localhost/.test(out),
+      };
+    },
+  },
   {
     id: "R5-secret-echo",
     title: "A configured secret typed into a field must not appear in tool results",
