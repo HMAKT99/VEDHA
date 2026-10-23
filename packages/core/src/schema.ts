@@ -14,7 +14,9 @@ export const targetSchema: z.ZodType<Target> = z.lazy(() =>
     z.strictObject({ label: z.string().min(1), exact: z.boolean().optional() }),
     z.strictObject({ text: z.string().min(1), exact: z.boolean().optional() }),
     z.strictObject({ ref: z.string().regex(/^[A-Za-z0-9]+$/) }),
+    z.strictObject({ css: z.string().min(1).max(500) }),
     z.strictObject({ within: targetSchema, target: targetSchema }),
+    z.strictObject({ inFrame: z.string().min(1), target: targetSchema }),
   ]),
 );
 
@@ -46,14 +48,44 @@ export const verifierSchema: z.ZodType<Verifier> = z.discriminatedUnion("type", 
   }),
 ]) as z.ZodType<Verifier>;
 
+const NEEDS_TARGET = new Set([
+  "click",
+  "dblclick",
+  "hover",
+  "fill",
+  "select",
+  "check",
+  "uncheck",
+  "upload",
+  "drag",
+]);
+
 export const actionSpecSchema: z.ZodType<ActionSpec> = z
   .strictObject({
     schema: z.literal(SCHEMAS.actionSpec).optional(),
     id: z.string().min(1).max(100),
     intent: z.string().min(1).max(500),
-    op: z.enum(["goto", "click", "fill", "select", "check", "press"]),
+    op: z.enum([
+      "goto",
+      "click",
+      "dblclick",
+      "hover",
+      "fill",
+      "select",
+      "check",
+      "uncheck",
+      "press",
+      "upload",
+      "scroll",
+      "drag",
+      "wait",
+      "back",
+      "reload",
+      "switch_tab",
+    ]),
     target: targetSchema.optional(),
     value: z.string().optional(),
+    to: targetSchema.optional(),
     preconditions: z.array(verifierSchema).optional(),
     postconditions: z.array(verifierSchema).optional(),
     timeoutMs: z.number().int().min(1).max(120_000).optional(),
@@ -62,10 +94,18 @@ export const actionSpecSchema: z.ZodType<ActionSpec> = z
     altTargets: z.array(targetSchema).max(5).optional(),
     reconcile: verifierSchema.optional(),
     dismiss: z.array(targetSchema).max(5).optional(),
+    healthIgnore: z.array(z.string().min(1)).max(10).optional(),
+    confirms: z.string().min(1).max(100).optional(),
+    enabling: z.boolean().optional(),
+    synchronous: z.boolean().optional(),
   })
   .superRefine((s, ctx) => {
-    if (s.op !== "goto" && s.op !== "press" && !s.target)
+    if (NEEDS_TARGET.has(s.op) && !s.target)
       ctx.addIssue({ code: "custom", message: `${s.op} requires a target` });
+    if (s.op === "drag" && !s.to)
+      ctx.addIssue({ code: "custom", message: "drag requires a destination (to)" });
+    if (s.op === "upload" && !s.value)
+      ctx.addIssue({ code: "custom", message: "upload requires value (file path)" });
     if (s.op === "goto" && !s.value)
       ctx.addIssue({ code: "custom", message: "goto requires value (url)" });
   }) as z.ZodType<ActionSpec>;
@@ -78,6 +118,10 @@ export const policySchema: z.ZodType<Policy> = z.strictObject({
   maxSteps: z.number().int().min(1).optional(),
   maxDurationMs: z.number().int().min(1).optional(),
   maxObservationChars: z.number().int().min(100).optional(),
+  health: z.enum(["off", "mutating", "all"]).optional(),
+  dialogs: z.enum(["dismiss", "accept"]).optional(),
+  readback: z.enum(["on", "off"]).optional(),
+  uploadRoots: z.array(z.string().min(1)).optional(),
 });
 
 /** A runnable spec file: `vedha run spec.json`. */

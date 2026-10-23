@@ -12,7 +12,7 @@ import {
   replayBundle,
   writeBundle,
 } from "@vedha/core";
-import type { ActionSpec } from "@vedha/core";
+import type { ActionSpec, Actor, ActorDecision } from "@vedha/core";
 import { ShopServer, type Variant } from "../fixtures/shop.js";
 import { SCENARIOS } from "../scenarios/index.js";
 
@@ -305,4 +305,71 @@ describe("explore -> promote -> replay check", () => {
       expect(replay.divergences).toEqual([]); // same failure reproduced
     });
   }, 120_000);
+});
+
+describe("agent mistakes get advice and the actor can recover (real browser)", () => {
+  class Scripted implements Actor {
+    readonly name = "scripted";
+    seen: string[] = [];
+    private i = 0;
+    constructor(private readonly plan: ActorDecision[]) {}
+    async decide(input: { feedback: string }): Promise<ActorDecision> {
+      this.seen.push(input.feedback);
+      return this.plan[this.i++] ?? { kind: "done", summary: "end" };
+    }
+  }
+  const act = (spec: ActionSpec): ActorDecision => ({ kind: "act", spec });
+
+  it("fill on the Product dropdown fails with a select hint, then the order is placed", async () => {
+    await withApp({}, async (_url, server, adapter) => {
+      const s = await Session.create(adapter, {});
+      const actor = new Scripted([
+        act({
+          id: "bad",
+          intent: "pick product",
+          op: "fill",
+          target: { role: "combobox", name: "Product" },
+          value: "Widget",
+          timeoutMs: 2000,
+        }),
+        act({
+          id: "name",
+          intent: "name",
+          op: "fill",
+          target: { label: "Name", exact: true },
+          value: "Ada",
+        }),
+        act({
+          id: "qty",
+          intent: "qty",
+          op: "fill",
+          target: { label: "Quantity", exact: true },
+          value: "3",
+        }),
+        act({
+          id: "submit",
+          intent: "place",
+          op: "click",
+          target: { role: "button", name: "Place order" },
+          mutating: true,
+          postconditions: [{ type: "text", target: { role: "status" }, contains: "Order placed" }],
+        }),
+        { kind: "done", summary: "placed" },
+      ]);
+      const res = await explore(s, actor, {
+        goal: "place an order for Ada, quantity 3",
+        startUrl: `${_url}/`,
+        maxSteps: 8,
+      });
+      const bad = s.results.find((r) => r.actionId === "bad")!;
+      expect(bad.status).toBe("failed");
+      expect(bad.error?.code).toBe("invalid_action");
+      expect(bad.error?.hint).toContain("select");
+      expect(actor.seen[1]).toContain("hint:");
+      expect(res.stoppedBecause).toBe("actor_done");
+      expect(res.failedSteps).toBe(1);
+      expect(s.results.find((r) => r.actionId === "submit")?.status).toBe("verified");
+      expect((await server.oracle()).orders).toHaveLength(1);
+    });
+  }, 60_000);
 });

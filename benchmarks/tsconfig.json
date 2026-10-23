@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": { "outDir": "dist", "rootDir": ".", "noEmit": false, "composite": true },
-  "include": ["fixtures", "scenarios", "drivers", "harness", "analysis", "test"],
+  "include": ["fixtures", "scenarios", "drivers", "harness", "analysis", "test", "llm"],
   "references": [{ "path": "../packages/core" }, { "path": "../packages/adapter-playwright" }]
 }

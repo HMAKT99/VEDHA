@@ -2,11 +2,14 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { ALL_DRIVERS } from "../drivers/index.js";
+import { ALL_DRIVERS, SELENIUM_DRIVERS } from "../drivers/index.js";
 import type { Driver } from "../drivers/types.js";
-import { ShopServer } from "../fixtures/shop.js";
 import { SCENARIOS } from "../scenarios/index.js";
+import { INDEPENDENT_SCENARIOS } from "../scenarios/independent.js";
+import { MULTI_SCENARIOS } from "../scenarios/multi.js";
+import { WIDGET_SCENARIOS, WIDGET_SCENARIOS_MINIMAL } from "../scenarios/widgets.js";
 import { classify, oracleSummary, type TrialRecord } from "./classify.js";
+import { makeServer } from "./servers.js";
 
 function arg(name: string, def?: string): string | undefined {
   const i = process.argv.indexOf(`--${name}`);
@@ -21,10 +24,26 @@ const runId = arg("run-id", new Date().toISOString().replace(/[:.]/g, "-"))!;
 const outDir = path.resolve(arg("out", `benchmarks/results/${runId}`)!);
 const TRIAL_TIMEOUT_MS = 90_000;
 
-const scenarios = SCENARIOS.filter(
+// --set seen (default): S01-S15. held-out: widget families. held-out-minimal: the same with only text/url checks (see preregistration.md).
+const SETS = {
+  seen: SCENARIOS,
+  "held-out": WIDGET_SCENARIOS,
+  "held-out-minimal": WIDGET_SCENARIOS_MINIMAL,
+  independent: INDEPENDENT_SCENARIOS,
+  multi: MULTI_SCENARIOS,
+} as const;
+const setName = arg("set", "seen") as keyof typeof SETS;
+if (!(setName in SETS))
+  throw new Error(`unknown --set ${setName}; use ${Object.keys(SETS).join(" | ")}`);
+const pool = SETS[setName];
+const scenarios = pool.filter(
   (s) => !scenarioFilter || scenarioFilter.some((f) => s.id.startsWith(f)),
 );
-const driverFactories = ALL_DRIVERS.filter((f) => !driverFilter || driverFilter.includes(f().id));
+const driverFactories = [...ALL_DRIVERS, ...SELENIUM_DRIVERS].filter((f) => {
+  const id = f().id;
+  // Selenium drivers run only when asked for by name.
+  return driverFilter ? driverFilter.includes(id) : !id.startsWith("sel-");
+});
 
 interface Task {
   scenarioIdx: number;
@@ -111,7 +130,7 @@ async function main() {
         drivers.set(task.driverIdx, driver);
       }
       const seed = task.trial + 1;
-      const server = new ShopServer({ ...sc.variant, seed });
+      const server = makeServer(sc, seed);
       const url = await server.start();
       const t0 = Date.now();
       let rec: TrialRecord;

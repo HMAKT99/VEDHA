@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 import type { ActionSpec, Verifier } from "@vedha/core";
 import type { Scenario } from "../scenarios/index.js";
 import type { Driver, DriverOutcome } from "./types.js";
-import { DEFAULT_TIMEOUT, doAction, launchBrowser, locateTarget } from "./common.js";
+import { DEFAULT_TIMEOUT, acceptDialogs, doAction, launchBrowser, locateTarget } from "./common.js";
 
 abstract class PlaywrightBase implements Driver {
   abstract id: string;
@@ -28,12 +28,12 @@ export class PwTrust extends PlaywrightBase {
     "Playwright actions only; success = no exception (semantics of an agent tool that reports the action result).";
   async run(sc: Scenario, baseUrl: string): Promise<DriverOutcome> {
     const ctx = await this.browser.newContext({ viewport: { width: 1000, height: 800 } });
-    const page = await ctx.newPage();
+    let page = await ctx.newPage();
     let actions = 0;
     try {
       for (const s of sc.steps) {
         actions++;
-        await doAction(page, s, baseUrl);
+        page = await doAction(page, s, baseUrl);
       }
       return {
         claim: "pass",
@@ -98,6 +98,32 @@ async function assertUi(page: Page, v: UiVerifier, timeout: number): Promise<voi
   }
 }
 
+/** Read-only state probe, as an expert author writes with expect.poll and the request fixture. */
+async function assertApi(
+  page: Page,
+  v: Extract<Verifier, { type: "api" }>,
+  baseUrl: string,
+  timeout: number,
+): Promise<void> {
+  const url = new URL(v.get, baseUrl).toString();
+  await expect
+    .poll(
+      async () => {
+        const r = await page.request.get(url);
+        if (!r.ok()) return false;
+        const body = (await r.json()) as unknown;
+        const items = Array.isArray(body) ? body : [body];
+        return items.some((it) =>
+          Object.entries(v.matchesAny).every(
+            ([k, val]) => (it as Record<string, unknown> | null)?.[k] === val,
+          ),
+        );
+      },
+      { timeout },
+    )
+    .toBe(true);
+}
+
 /**
  * pw-test: a conventional Playwright Test with web-first UI assertions and `retries: 1`
  * (the whole test is re-run in a fresh context on failure; server state persists).
@@ -114,6 +140,8 @@ export class PwTest extends PlaywrightBase {
     for (let attempt = 0; attempt < 2; attempt++) {
       const ctx = await this.browser.newContext({ viewport: { width: 1000, height: 800 } });
       const page = await ctx.newPage();
+      let cur = page;
+      if (sc.policy?.dialogs === "accept") acceptDialogs(page);
       try {
         if (this.useLocatorHandler) {
           const dismiss = sc.steps.flatMap((s) => s.dismiss ?? []);
@@ -131,7 +159,7 @@ export class PwTest extends PlaywrightBase {
               )
             : [];
           const waits = nets.map((n) =>
-            page.waitForResponse(
+            cur.waitForResponse(
               (r) =>
                 r.url().includes(n.urlPattern) &&
                 (!n.method || r.request().method() === n.method.toUpperCase()),
@@ -140,7 +168,7 @@ export class PwTest extends PlaywrightBase {
           );
           waits.forEach((w) => w.catch(() => undefined));
           actions++;
-          await doAction(page, s, baseUrl);
+          cur = await doAction(cur, s, baseUrl);
           for (let i = 0; i < nets.length; i++) {
             const n = nets[i]!;
             const r = await waits[i]!;
@@ -158,7 +186,10 @@ export class PwTest extends PlaywrightBase {
                 );
             }
           }
-          for (const v of s.postconditions ?? []) if (isUi(v)) await assertUi(page, v, timeout);
+          for (const v of s.postconditions ?? []) {
+            if (isUi(v)) await assertUi(cur, v, timeout);
+            else if (v.type === "api" && this.useNetwork) await assertApi(cur, v, baseUrl, timeout);
+          }
         }
         return {
           claim: "pass",
@@ -207,19 +238,19 @@ export class PwHealNaive extends PlaywrightBase {
   description = "Reference policy: trust-return + on action failure retry once with force:true.";
   async run(sc: Scenario, baseUrl: string): Promise<DriverOutcome> {
     const ctx = await this.browser.newContext({ viewport: { width: 1000, height: 800 } });
-    const page = await ctx.newPage();
+    let page = await ctx.newPage();
     let actions = 0;
     let recoveries = 0;
     try {
       for (const s of sc.steps) {
         actions++;
         try {
-          await doAction(page, s, baseUrl);
+          page = await doAction(page, s, baseUrl);
         } catch (e) {
           if (s.op === "goto") throw e;
           recoveries++;
           actions++;
-          await doAction(page, { ...s, timeoutMs: 1500 }, baseUrl, { force: true });
+          page = await doAction(page, { ...s, timeoutMs: 1500 }, baseUrl, { force: true });
         }
       }
       return {

@@ -363,3 +363,124 @@ describe("implicit read-back verification", () => {
     expect(r.status).toBe("failed"); // declared url check applies; implicit check is not added on top
   });
 });
+
+describe("api postcondition", () => {
+  it("is a definitive failure when the probe answers but the effect is absent", async () => {
+    const a = new FakeAdapter();
+    a.api.set("/api/events", [{ type: "other" }]);
+    a.texts.set(key(status), "Saved");
+    const s = await sess(a);
+    const r = await s.step(
+      click({
+        mutating: true,
+        postconditions: [
+          { type: "text", target: status, contains: "Saved" },
+          { type: "api", get: "/api/events", matchesAny: { type: "saved" } },
+        ],
+      }),
+    );
+    // UI says saved, the server state says no: failed, not outcome_unknown.
+    expect(r.status).toBe("failed");
+    expect(r.verdicts.find((v) => v.verifier.type === "api")?.definitive).toBe(true);
+  });
+});
+
+describe("synchronous steps", () => {
+  const spec = (synchronous: boolean) =>
+    click({
+      mutating: true,
+      synchronous,
+      postconditions: [{ type: "text", target: status, contains: "Done" }],
+    });
+
+  it("fail (not outcome_unknown) when the declared check does not hold", async () => {
+    const a = new FakeAdapter();
+    a.texts.set(key(status), "Not yet");
+    const s = await sess(a);
+    const r = await s.step(spec(true));
+    expect(r.status).toBe("failed");
+    expect(r.note).toContain("synchronous");
+  });
+
+  it("default to outcome_unknown for the same unmet check", async () => {
+    const a = new FakeAdapter();
+    a.texts.set(key(status), "Not yet");
+    const s = await sess(a);
+    expect((await s.step(spec(false))).status).toBe("outcome_unknown");
+  });
+});
+
+describe("idle-aware classification", () => {
+  const unmet = (extra: Partial<ActionSpec> = {}): ActionSpec =>
+    click({
+      mutating: true,
+      postconditions: [{ type: "text", target: status, contains: "Done" }],
+      ...extra,
+    });
+
+  it("an unmet check on an idle page is a failure, not an unknown outcome", async () => {
+    const a = new FakeAdapter();
+    a.pending = 0;
+    a.texts.set(key(status), "Not yet");
+    const s = await sess(a);
+    const r = await s.step(unmet());
+    expect(r.status).toBe("failed");
+    expect(r.error?.code).toBe("expectation_not_met");
+    expect(r.error?.hint).toContain("confirms");
+  });
+
+  it("stays outcome_unknown while a request is still in flight", async () => {
+    const a = new FakeAdapter();
+    a.pending = 1;
+    a.texts.set(key(status), "Not yet");
+    const s = await sess(a);
+    expect((await s.step(unmet())).status).toBe("outcome_unknown");
+  });
+
+  it("stays outcome_unknown when the adapter cannot report in-flight requests", async () => {
+    const a = new FakeAdapter();
+    a.texts.set(key(status), "Not yet");
+    const s = await sess(a);
+    expect((await s.step(unmet())).status).toBe("outcome_unknown");
+  });
+
+  it("a later independent check clears it, and the repeat is still refused until then", async () => {
+    const a = new FakeAdapter();
+    a.pending = 0;
+    a.texts.set(key(status), "Not yet");
+    const s = await sess(a);
+    await s.step(unmet({ id: "go" }));
+    expect(s.report().verdict).toBe("failed");
+    a.texts.set(key(status), "Actually saved");
+    await s.step({
+      id: "check",
+      intent: "confirm",
+      op: "wait",
+      confirms: "go",
+      timeoutMs: 100,
+      postconditions: [{ type: "text", target: status, contains: "saved" }],
+    });
+    expect(s.results[0]?.confirmedBy).toBe("check");
+    expect(s.report().verdict).toBe("passed_with_recovery");
+  });
+
+  it("a health-check failure is never clearable by confirms", async () => {
+    const a = new FakeAdapter();
+    a.pending = 0;
+    a.texts.set(key(status), "Done");
+    a.queue(btn, () => a.net.push({ method: "POST", url: "http://app.test/api/x", status: 500 }));
+    const s = await sess(a);
+    await s.step(unmet({ id: "go" }));
+    expect(s.results[0]?.error?.code).toBe("health_check_failed");
+    await s.step({
+      id: "check",
+      intent: "confirm",
+      op: "wait",
+      confirms: "go",
+      timeoutMs: 100,
+      postconditions: [{ type: "text", target: status, contains: "Done" }],
+    });
+    expect(s.results[0]?.confirmedBy).toBeUndefined();
+    expect(s.report().verdict).toBe("failed");
+  });
+});

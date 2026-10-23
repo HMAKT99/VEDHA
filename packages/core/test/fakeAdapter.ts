@@ -1,6 +1,13 @@
 import { AdapterError } from "../src/adapter.js";
 import type { BrowserAdapter, ElementStateName, RawObservation } from "../src/adapter.js";
-import type { ActionOp, NetworkEntry, ObservationLevel, Policy, Target } from "../src/types.js";
+import type {
+  ActionOp,
+  NetworkEntry,
+  ObservationLevel,
+  PageEvent,
+  Policy,
+  Target,
+} from "../src/types.js";
 
 export const key = (t: Target | undefined): string => JSON.stringify(t ?? null);
 
@@ -9,6 +16,7 @@ export class FakeAdapter implements BrowserAdapter {
   readonly name = "fake";
   url = "http://app.test/";
   net: NetworkEntry[] = [];
+  events: PageEvent[] = [];
   performed: Array<{ op: ActionOp; target?: Target; value?: string }> = [];
   /** target key -> queue of outcomes (Error to throw, undefined to succeed, function to run a side effect). */
   script = new Map<string, Array<AdapterError | undefined | (() => void)>>();
@@ -58,8 +66,18 @@ export class FakeAdapter implements BrowserAdapter {
   networkLog() {
     return this.net;
   }
+  pageEvents() {
+    return this.events;
+  }
+  /** Set to a number to make the fake report in-flight requests; undefined = capability absent. */
+  pending: number | undefined = undefined;
+  pendingRequests() {
+    return this.pending as number;
+  }
+  /** path -> status for fetchJson (default 200). */
+  apiStatus = new Map<string, number>();
   async fetchJson(p: string) {
-    return { status: 200, body: this.api.get(p) ?? [] };
+    return { status: this.apiStatus.get(p) ?? 200, body: this.api.get(p) ?? [] };
   }
   async screenshot() {
     return undefined;

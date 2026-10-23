@@ -180,6 +180,7 @@ async function afTrial(
       goal: "place an order for Ada, quantity 3",
       startUrl: `${base}${page}`,
       maxSteps: 8,
+      observation: { delta: mode.delta },
     });
     const report = session.report();
     const resultChars = report.steps.reduce(

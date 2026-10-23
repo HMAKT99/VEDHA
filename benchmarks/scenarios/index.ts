@@ -1,5 +1,7 @@
-import type { ActionSpec } from "@vedha/core";
+import type { ActionSpec, Policy } from "@vedha/core";
 import type { OracleState, Variant } from "../fixtures/shop.js";
+import type { Mutant } from "../fixtures/todomvc.js";
+import type { WidgetsVariant } from "../fixtures/widgets.js";
 
 /**
  * Neutral task definition shared by every driver. Each driver may use only the parts its own
@@ -26,7 +28,17 @@ export interface Scenario {
    */
   kind: "effect" | "defect";
   variant: Variant;
+  /** Fixture app serving the scenario (default: the shop). */
+  app?: "shop" | "widgets" | "todomvc" | "todomvc-multi";
+  /** Which TodoMVC implementation (`todomvc-multi` only). */
+  example?: string;
+  widgets?: WidgetsVariant;
+  todomvc?: { mutant: Mutant };
+  /** Policy for drivers that have one (dialogs, uploadRoots); baselines honour `dialogs: "accept"`. */
+  policy?: Policy;
   startPath: string;
+  /** Plain-language task for LLM-driven tracks (the scripted tracks use `steps`). */
+  goal?: string;
   steps: ActionSpec[];
   /** True iff the intended real-world effect happened (server-side truth). */
   effectAchieved(s: OracleState): boolean;
@@ -372,5 +384,18 @@ SCENARIOS.push(
     ],
     effectAchieved: (s) => s.deletedRows.length === 1 && s.deletedRows[0] === 2,
     duplicates: (s) => s.deletedRows.filter((id) => id !== 2).length,
+  },
+  // ---- Added after read-back inference (P1) was built: a POSITIVE CONTROL, not a held-out result. ----
+  {
+    id: "S16-defect-dropped-write",
+    title:
+      "DEFECT (post-hoc control): POST /api/orders answers 201 with the order but never stores it",
+    category: "seeded-defect",
+    kind: "defect",
+    variant: { bug: "dropped" },
+    startPath: "/",
+    steps: orderSteps(),
+    effectAchieved: ORDER_OK,
+    duplicates: ORDER_DUPES,
   },
 );

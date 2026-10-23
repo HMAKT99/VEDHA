@@ -14,7 +14,7 @@ export interface Variant {
   /** Submit button is permanently disabled (real defect: feature unusable). */
   disabledSubmit?: boolean;
   /** "silent": server answers 500 but UI shows success. "wrongqty": server stores qty+1. */
-  bug?: "silent" | "wrongqty";
+  bug?: "silent" | "wrongqty" | "dropped";
   /** Server commits the order, then answers after `commitDelayMs` (response arrives too late). */
   commitDelayMs?: number;
   /** First POST /api/orders returns 503 without committing. */
@@ -48,6 +48,10 @@ export interface OracleState {
   leaks: number;
   /** WebSocket upgrade attempts that reached the server. */
   upgrades: number;
+  /** Effect events recorded by the widgets fixture (unused by the shop). */
+  events?: string[];
+  /** Persisted todo list reported by the independent TodoMVC fixture (unused by the shop). */
+  todos?: Array<{ title: string; completed: boolean }>;
 }
 
 function mulberry32(a: number) {
@@ -218,6 +222,21 @@ export class ShopServer {
         res.writeHead(302, { location: u.searchParams.get("to") ?? "/" });
         return res.end();
       }
+      if (req.method === "GET" && u.pathname === "/subres") {
+        const port = (this.server!.address() as AddressInfo).port;
+        const evil = `http://localhost:${port}/leak`;
+        return send(
+          200,
+          `<!doctype html><title>Subres</title><h1>Subresources</h1><img src="${evil}?img"><script>fetch("${evil}?fetch").catch(()=>{}); new Image().src="${evil}?pixel";</script>`,
+        );
+      }
+      if (req.method === "GET" && u.pathname === "/ws-page") {
+        const port = (this.server!.address() as AddressInfo).port;
+        return send(
+          200,
+          `<!doctype html><title>WS</title><h1>WebSocket</h1><script>try{const w=new WebSocket("ws://localhost:${port}/ws");w.onerror=()=>{};}catch(e){}</script>`,
+        );
+      }
       if (req.method === "GET" && u.pathname === "/hostile") {
         return send(
           200,
@@ -258,7 +277,13 @@ export class ShopServer {
           if (v.requireAuth && !this.sessionValid(req.headers.cookie)) {
             return send(401, JSON.stringify({ error: "unauthorized" }), "application/json");
           }
-          const body = JSON.parse(raw || "{}") as { name: string; qty: number; product: string };
+          let body: { name: string; qty: number; product: string };
+          try {
+            body = JSON.parse(raw || "{}") as typeof body;
+          } catch {
+            // Agents probe APIs with malformed input; a bad body is a client error, never a crash.
+            return send(400, JSON.stringify({ error: "invalid json" }), "application/json");
+          }
           if (v.transient503 && this.state.postCount === 1) {
             return send(503, JSON.stringify({ error: "unavailable" }), "application/json");
           }
@@ -266,7 +291,8 @@ export class ShopServer {
             return send(500, JSON.stringify({ error: "boom" }), "application/json");
           const qty = v.bug === "wrongqty" ? body.qty + 1 : body.qty;
           const order: Order = { id: this.nextId++, name: body.name, qty, product: body.product };
-          this.state.orders.push(order);
+          // "dropped": answers 201 with the created order but never stores it (a conventional-REST silent drop).
+          if (v.bug !== "dropped") this.state.orders.push(order);
           const reply = () => send(201, JSON.stringify(order), "application/json");
           if (v.commitDelayMs) setTimeout(reply, v.commitDelayMs);
           else reply();

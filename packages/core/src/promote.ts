@@ -8,6 +8,7 @@ const q = (s: string) => JSON.stringify(s);
 /** Playwright locator source for a Target. Refs are per-snapshot and cannot be promoted. */
 export function locatorCode(t: Target, base = "page"): string {
   if ("within" in t) return locatorCode(t.target, locatorCode(t.within, base));
+  if ("inFrame" in t) return locatorCode(t.target, `${base}.frameLocator(${q(t.inFrame)})`);
   if ("role" in t) {
     const opts = [
       t.name !== undefined ? `name: ${q(t.name)}` : "",
@@ -16,6 +17,7 @@ export function locatorCode(t: Target, base = "page"): string {
     return `${base}.getByRole(${q(t.role)}${opts.length ? `, { ${opts.join(", ")} }` : ""})`;
   }
   if ("testId" in t) return `${base}.getByTestId(${q(t.testId)})`;
+  if ("css" in t) return `${base}.locator(${q(t.css)})`;
   if ("label" in t) return `${base}.getByLabel(${q(t.label)}${t.exact ? ", { exact: true }" : ""})`;
   if ("text" in t) return `${base}.getByText(${q(t.text)}${t.exact ? ", { exact: true }" : ""})`;
   throw new Error("ref targets are valid for one snapshot only and cannot be promoted to a test");
@@ -24,6 +26,7 @@ export function locatorCode(t: Target, base = "page"): string {
 function hasRef(t: Target | undefined): boolean {
   if (!t) return false;
   if ("within" in t) return hasRef(t.within) || hasRef(t.target);
+  if ("inFrame" in t) return hasRef(t.target);
   return "ref" in t;
 }
 
@@ -51,11 +54,31 @@ export function proposalFromSession(
       return;
     }
     const used: ActionSpec = { ...spec, target: r.usedTarget ?? spec.target };
+    // Keep what the framework found out on its own: a read-back that confirmed a write becomes an assertion.
+    const have = new Set(
+      (used.postconditions ?? [])
+        .filter((v) => v.type === "api")
+        .map((v) => (v as { get: string }).get),
+    );
+    const added = (r.readbackProbes ?? []).filter((p) => !have.has(p.get));
+    if (added.length) {
+      used.postconditions = [
+        ...(used.postconditions ?? []),
+        ...added.map((p) => ({ type: "api" as const, get: p.get, matchesAny: p.matchesAny })),
+      ];
+      assumptions.push(
+        `step ${spec.id}: added a read-back assertion (GET ${added.map((p) => p.get).join(", ")} shows the written fields) from what the framework observed`,
+      );
+    }
     if (hasRef(used.target)) {
       assumptions.push(
         `step ${spec.id} used a snapshot ref; replace with a durable locator before promoting`,
       );
     }
+    if (used.op === "upload" || used.op === "switch_tab" || used.op === "wait")
+      assumptions.push(
+        `step ${spec.id} (${used.op}) needs manual review before it is a stable test (file paths, tab handling or timing)`,
+      );
     if (r.status === "unverified")
       assumptions.push(`step ${spec.id} had no postcondition (unverified)`);
     if (r.recovered) {
@@ -144,6 +167,28 @@ function actionLine(s: ActionSpec, indent: string, origin?: string): string {
       return `${indent}await ${loc}.check();`;
     case "press":
       return `${indent}await ${loc ? loc + "." : "page.keyboard."}press(${q(s.value ?? "")});`;
+    case "dblclick":
+      return `${indent}await ${loc}.dblclick();`;
+    case "hover":
+      return `${indent}await ${loc}.hover();`;
+    case "uncheck":
+      return `${indent}await ${loc}.uncheck();`;
+    case "upload":
+      return `${indent}await ${loc}.setInputFiles(${JSON.stringify((s.value ?? "").split(",").map((f) => f.trim()))});`;
+    case "scroll":
+      return loc
+        ? `${indent}await ${loc}.scrollIntoViewIfNeeded();`
+        : `${indent}await page.mouse.wheel(0, ${s.value === "up" ? -600 : s.value === "top" ? -100000 : s.value === "bottom" ? 100000 : 600});`;
+    case "drag":
+      return `${indent}await ${loc}.dragTo(${s.to ? locatorCode(s.to) : "undefined as never"});`;
+    case "wait":
+      return `${indent}// wait: rely on the web-first assertions below instead of a fixed delay`;
+    case "back":
+      return `${indent}await page.goBack();`;
+    case "reload":
+      return `${indent}await page.reload();`;
+    case "switch_tab":
+      return `${indent}// switch_tab: use the popup event (const popup = await page.waitForEvent("popup")) in a reviewed test`;
   }
 }
 

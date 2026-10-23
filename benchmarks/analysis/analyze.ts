@@ -15,7 +15,15 @@ const env = JSON.parse(fs.readFileSync(path.join(runDir, "env.json"), "utf8")) a
 >;
 
 const drivers = [...new Set(trials.map((t) => t.driver))];
-const order = ["pw-trust", "pw-test", "pw-strong", "pw-heal-naive", "vedha"];
+const order = [
+  "pw-trust",
+  "pw-test",
+  "pw-strong",
+  "pw-heal-naive",
+  "sel-trust",
+  "sel-strong",
+  "vedha",
+];
 drivers.sort((a, b) => order.indexOf(a) - order.indexOf(b));
 const scenarios = [...new Set(trials.map((t) => t.scenario))].sort();
 const kindOf = (s: string) => trials.find((t) => t.scenario === s)!.kind;

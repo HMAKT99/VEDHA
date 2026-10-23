@@ -23,6 +23,7 @@ export class VedhaDriver implements Driver {
     const page = await ctx.newPage();
     const session = await Session.create(PlaywrightAdapter.fromPage(page), {
       allowedDomains: [new URL(baseUrl).hostname],
+      ...sc.policy,
     });
     try {
       const specs: ActionSpec[] = sc.steps.map((s) =>

@@ -3,6 +3,8 @@ import type {
   AdapterErrorCode,
   NetworkEntry,
   ObservationLevel,
+  PageEvent,
+  PageHeader,
   Policy,
   Target,
 } from "./types.js";
@@ -48,6 +50,7 @@ export interface BrowserAdapter {
     target: Target | undefined,
     value: string | undefined,
     timeoutMs: number,
+    extra?: { to?: Target },
   ): Promise<void>;
   /** Poll until the element reaches the state or timeout; resolves false on timeout. */
   elementState(target: Target, state: ElementStateName, timeoutMs: number): Promise<boolean>;
@@ -57,6 +60,12 @@ export interface BrowserAdapter {
   value(target: Target, timeoutMs: number): Promise<string | null>;
   /** Responses seen since the adapter was created, newest last. */
   networkLog(): NetworkEntry[];
+  /** Uncaught page exceptions and failed requests since the adapter was created (optional capability). */
+  pageEvents?(): PageEvent[];
+  /** Requests started but not yet finished or failed (optional). 0 means the network is idle. */
+  pendingRequests?(): number;
+  /** Tabs, main-document status and console counts (optional). */
+  pageHeader?(): Promise<PageHeader>;
   /** Read-only GET relative to the page origin, sharing the browser session. */
   fetchJson(path: string): Promise<{ status: number; body: unknown }>;
   screenshot(): Promise<Uint8Array | undefined>;
