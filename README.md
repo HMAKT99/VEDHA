@@ -188,7 +188,7 @@ Everything below is from raw `trials.jsonl` files under `benchmarks/results/`; p
 
 What this does **not** show: that Vedha beats expert Playwright or expert Selenium when the author declares everything (it ties); anything about models beyond one free model family; anything about real production apps; Chromium-only for Selenium. Several results are mechanism-specific by design (read-back needs a conventional REST convention; the page-health check needs a request that returned an error).
 
-Reproduce a scripted track: `pnpm bench -- --set held-out --trials 20 --concurrency 3 --run-id my-run` (sets: `seen`, `held-out`, `held-out-minimal`, `independent`, `multi`; the last two need `VEDHA_TODOMVC_DIR` pointing at a clone of tastejs/todomvc; Selenium drivers are opt-in via `--drivers sel-trust,sel-strong`). Merge valid parts of several runs with `benchmarks/analysis/merge.ts`.
+Reproduce a scripted track: `pnpm bench -- --set held-out --trials 20 --concurrency 3 --run-id my-run` (sets: `seen`, `held-out`, `held-out-minimal`, `independent`, `multi`; the last two need `VEDHA_TODOMVC_DIR` pointing at a clone of tastejs/todomvc checked out at `ff43b02`; Selenium drivers are opt-in via `--drivers sel-trust,sel-strong`). Merge valid parts of several runs with `benchmarks/analysis/merge.ts`.
 
 ## Repository map
 
