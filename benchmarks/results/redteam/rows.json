@@ -1,0 +1,248 @@
+[
+ {
+  "case": "R1-redirect-hop",
+  "arm": "mcp-playwright",
+  "trial": 0,
+  "leaks": 1,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50506/redirect?to=http%3A%2F%2Flocalhost%3A50506%2Fleak'"
+ },
+ {
+  "case": "R1-redirect-hop",
+  "arm": "mcp-vedha",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: blocked (policy_blocked): page.goto: net::ERR_BLOCKED_BY_CLIENT at http://127.0.0.1:50512/redirect?to=http%3A%2F"
+ },
+ {
+  "case": "R2-post-redirect",
+  "arm": "mcp-playwright",
+  "trial": 0,
+  "leaks": 1,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Evil' }).click();\n```\n### Page\n- Page URL: http://"
+ },
+ {
+  "case": "R2-post-redirect",
+  "arm": "mcp-vedha",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: chrom"
+ },
+ {
+  "case": "R3-subresources",
+  "arm": "mcp-playwright",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50523/subres');\n```\n### Page\n- Page URL: http://127.0.0."
+ },
+ {
+  "case": "R3-subresources",
+  "arm": "mcp-vedha",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: http:"
+ },
+ {
+  "case": "R4-websocket",
+  "arm": "mcp-playwright",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 1,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50529/ws-page');\n```\n### Page\n- Page URL: http://127.0.0"
+ },
+ {
+  "case": "R4-websocket",
+  "arm": "mcp-vedha",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: http:"
+ },
+ {
+  "case": "R5-secret-echo",
+  "arm": "mcp-playwright",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "secretSeen": false,
+  "note": "typed then observed"
+ },
+ {
+  "case": "R5-secret-echo",
+  "arm": "mcp-vedha",
+  "trial": 0,
+  "leaks": 0,
+  "upgrades": 0,
+  "secretSeen": false,
+  "note": "typed then observed"
+ },
+ {
+  "case": "R1-redirect-hop",
+  "arm": "mcp-playwright",
+  "trial": 1,
+  "leaks": 1,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50545/redirect?to=http%3A%2F%2Flocalhost%3A50545%2Fleak'"
+ },
+ {
+  "case": "R1-redirect-hop",
+  "arm": "mcp-vedha",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: blocked (policy_blocked): page.goto: net::ERR_BLOCKED_BY_CLIENT at http://127.0.0.1:50551/redirect?to=http%3A%2F"
+ },
+ {
+  "case": "R2-post-redirect",
+  "arm": "mcp-playwright",
+  "trial": 1,
+  "leaks": 1,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Evil' }).click();\n```\n### Page\n- Page URL: http://"
+ },
+ {
+  "case": "R2-post-redirect",
+  "arm": "mcp-vedha",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: chrom"
+ },
+ {
+  "case": "R3-subresources",
+  "arm": "mcp-playwright",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50562/subres');\n```\n### Page\n- Page URL: http://127.0.0."
+ },
+ {
+  "case": "R3-subresources",
+  "arm": "mcp-vedha",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: http:"
+ },
+ {
+  "case": "R4-websocket",
+  "arm": "mcp-playwright",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 1,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50568/ws-page');\n```\n### Page\n- Page URL: http://127.0.0"
+ },
+ {
+  "case": "R4-websocket",
+  "arm": "mcp-vedha",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: http:"
+ },
+ {
+  "case": "R5-secret-echo",
+  "arm": "mcp-playwright",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "secretSeen": false,
+  "note": "typed then observed"
+ },
+ {
+  "case": "R5-secret-echo",
+  "arm": "mcp-vedha",
+  "trial": 1,
+  "leaks": 0,
+  "upgrades": 0,
+  "secretSeen": false,
+  "note": "typed then observed"
+ },
+ {
+  "case": "R1-redirect-hop",
+  "arm": "mcp-playwright",
+  "trial": 2,
+  "leaks": 1,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50583/redirect?to=http%3A%2F%2Flocalhost%3A50583%2Fleak'"
+ },
+ {
+  "case": "R1-redirect-hop",
+  "arm": "mcp-vedha",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: blocked (policy_blocked): page.goto: net::ERR_BLOCKED_BY_CLIENT at http://127.0.0.1:50590/redirect?to=http%3A%2F"
+ },
+ {
+  "case": "R2-post-redirect",
+  "arm": "mcp-playwright",
+  "trial": 2,
+  "leaks": 1,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.getByRole('button', { name: 'Evil' }).click();\n```\n### Page\n- Page URL: http://"
+ },
+ {
+  "case": "R2-post-redirect",
+  "arm": "mcp-vedha",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: chrom"
+ },
+ {
+  "case": "R3-subresources",
+  "arm": "mcp-playwright",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50600/subres');\n```\n### Page\n- Page URL: http://127.0.0."
+ },
+ {
+  "case": "R3-subresources",
+  "arm": "mcp-vedha",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: http:"
+ },
+ {
+  "case": "R4-websocket",
+  "arm": "mcp-playwright",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 1,
+  "note": "### Ran Playwright code\n```js\nawait page.goto('http://127.0.0.1:50606/ws-page');\n```\n### Page\n- Page URL: http://127.0.0"
+ },
+ {
+  "case": "R4-websocket",
+  "arm": "mcp-vedha",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "note": "result: unverified\nno postcondition was declared, so the effect is unchecked\nnote: no postconditions declared\nurl: http:"
+ },
+ {
+  "case": "R5-secret-echo",
+  "arm": "mcp-playwright",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "secretSeen": false,
+  "note": "typed then observed"
+ },
+ {
+  "case": "R5-secret-echo",
+  "arm": "mcp-vedha",
+  "trial": 2,
+  "leaks": 0,
+  "upgrades": 0,
+  "secretSeen": false,
+  "note": "typed then observed"
+ }
+]

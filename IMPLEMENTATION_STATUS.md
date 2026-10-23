@@ -1,55 +1,22 @@
-# Implementation status (updated 2026-10-19)
+# Implementation status (updated 2026-10-20, after super-plan Phases 0-2)
 
-Project name: **Vedha** (renamed from the working name AgentFirst; packages `@vedha/*`, CLI `vedha`, schema ids `vedha.*/v1`).
+Project name: **Vedha**. Packages: `@vedha/core`, `@vedha/adapter-playwright`, `@vedha/cli`, `@vedha/mcp`, `@vedha/playwright-test`. Framework freeze tag: `prereg-v1` (see `benchmarks/preregistration.md`, amendments A1-A4).
 
-## Phase summary
+## What exists
 
-| Phase                | Status                          | Evidence                                                                                                                                                    |
-| -------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Environment + REA  | **Done, one gap**               | `research/environment.md`; REA 6.7.0 CLI used; MCP registered but **MCP tools not invoked in-session** (needs a Claude Code restart; Q14)                   |
-| 1 Playwright via REA | **Done**                        | 10 deliverables in `research/`; ledger `research/evidence-ledger.json` (72 findings); 6 traced scenarios with runtime confirmation                          |
-| 2 Ecosystem          | **Done** (depth varies)         | `research/competitive-landscape.md`, `architecture-comparison.md`, `agent-testing-gaps.md`; Skyvern/Magnitude only metadata + README                        |
-| 3 Gap matrix         | **Done**                        | `research/playwright-gap-matrix.md`                                                                                                                         |
-| 4 Design             | **Done**                        | `design/` (3 proposals, selection, migration, 6 ADRs)                                                                                                       |
-| 5 Benchmark          | **Done (scripted-actor scope)** | 15 scenarios, 5 drivers, frozen + post-fix runs (1,500 trials each), cross-browser track, observation track; LLM agents and competitor products **not run** |
-| 6 MVP                | **Done**                        | `packages/{core,adapter-playwright,cli}`                                                                                                                    |
-| 7 Security           | **Done within stated limits**   | `SECURITY.md`: redirect hops, POST redirects, WebSockets, service workers (launched sessions) all tested in a real browser                                  |
-| 8 DX                 | **Done**                        | `README.md`, `CONTRIBUTING.md`, `examples/`, migration doc, CI workflow (never executed)                                                                    |
+- Core: verified actions, bounded recovery with recorded failures, reconcile, repeat guard with `confirms`, page-health check, hints, shared feedback rendering, observation levels, policy (domains incl. redirect hops, WebSockets, service workers, uploads fail-closed, dialogs, secret redaction), failure bundles and replay, promotion to Playwright specs, JUnit output.
+- Actions: goto, click, dblclick, hover, fill, select, check, uncheck, press, upload, scroll, drag, wait, back, reload, switch_tab; targets by role, label, text, test id, ref, css, within, inFrame.
+- Surfaces: CLI, SDK, MCP server (`vedha-mcp`), Playwright Test fixture.
+- Evidence: 115 tests passing; scripted regression gate unchanged (75/75 vs the post-fix run); CI on the PR branches.
 
-## Tests executed (final state)
+## Measured results (raw data in `benchmarks/results/`; summary and limits in the README)
 
-- `pnpm build` clean; `eslint .` 0 problems; `prettier --check .` clean.
-- `vitest run`: **61 tests passed** (core unit incl. runner decisions with a fake adapter, implicit read-back, exact targets, verifiers, policy/redaction/path guards, observation levels/deltas, bundle/replay/promotion, schema validation; real-browser integration; CLI end to end).
-- Integration suite re-run with `VEDHA_BROWSER=firefox` and `=webkit`: 15/15 pass on each.
-- Benchmarks: `vedha-n20-frozen` and `vedha-n20-postfix` (1,500 trials each, 0 harness errors); `xb-firefox`, `xb-webkit` (150 each); observation track (n=10). See `benchmarks/analysis/vedha-n20-interpretation.md`.
-- Upstream Playwright's own tests, run in an isolated build of the pinned commit: full `tests/page` on Chromium 2,617 passed / 17 skipped / 0 unexpected; the nine traced-scenario page specs also pass on Firefox (264) and WebKit (265); 196 runner specs (timeout, retry, shard, fixtures, expect, trace) pass on Chromium (E-085, E-087). Full upstream `tests/library` on Chromium (161 spec files): 2,607 passed, 79 skipped; each of two runs had one failure - one caused by my own `--output` flag, one nondeterministic CDP test (CD-004) that failed 2 of 3 solo re-runs and passed in its full file; no deterministic failure found (E-088). My runtime experiment re-run on 1.65.0-next matched 1.64.1 apart from a timing-dependent repeat count (E-086).
-- Remaining upstream suites (E-089): runner suite on Chromium with the stable runner: 1732 passed / 209 failed at 4 workers, nearly all 30 s timeouts under load; `reporter-html`+`reporter-blob` pass with 1 worker and a 120 s timeout (256 passed). Deterministic failures on this machine, cause not diagnosed: `loader.spec` CSS-in-ESM (Node 22.20 and 24.9), Firefox `CO-054`/`CO-058` (Partitioned cookies). One `ui-mode-test-setup` SIGINT failure not re-checked solo. Firefox library 2403 passed / 3 failed; WebKit library 2425 passed / 0 failed.
-- Diagnosis of those failures (E-090): the loader CSS-in-ESM failure is caused by Playwright's synchronous `registerHooks` loader combined with a user async `register()` loader on Node 22.20/24.9 (passes with `PLAYWRIGHT_FORCE_ASYNC_LOADER=1`); Firefox CO-054/CO-058 fail because the partitioned cookie is not delivered to the third-party iframe on Firefox 157.0 (deeper cause unknown); the SIGINT teardown test is flaky (1 of 3 solo runs failed); CD-004 passed 5 of 5 solo runs and its earlier failures stay unexplained. Whether upstream CI passes these was not tested.
-- GitHub Actions CI: passes on a clean Ubuntu runner (build, lint, format, 61 tests).
+Held-out widgets full declarations: Vedha ties expert Playwright and Selenium. Minimal declarations: Vedha detects 60/140, every baseline 0/140. Cross-implementation (16 third-party TodoMVC): Vedha 189/192 vs 182-184 for the others, intervals overlap. Independent TodoMVC mutants: Vedha 50/50 at n=5 after idle-aware classification. Read-back inference: 10/10 on a conventional-REST silent drop (positive control), 0/20 on the pre-registered widget silent drops (target missed). B8: promoted test kills 12/12 defects vs 3/12 for recorder-style references. B7: Playwright MCP's origin allowlist leaked 9/9 on redirect and WebSocket cases, Vedha 0/15. B5: +10-110 ms per scenario, planned <=15% relative target not met. LLM pilot 3b: completion tie, Vedha about 18% fewer tokens; pilot 4 (held-out widgets, MCP vs MCP) running.
 
-## Honest results summary
+## Honest limits
 
-- Seeded-defect false passes (post-fix, 100 trials per driver): pw-trust 40%, pw-test 40%, pw-strong 0%, pw-heal-naive 60%, vedha 0%.
-- Hold-out caveat: on the first, frozen run Vedha scored 0/20 on S12 (input step without postcondition ⇒ `uncertain`) and its label matching was too loose (S13). Both fixed afterwards; post-fix S12/S13 are not hold-out.
-- S13, S14 and S15 do not separate the drivers (all pass); they confirm absence of collateral damage.
+Scenarios are author-built except the TodoMVC track; one model family on the free tier; Selenium baselines are the author's reconstruction of an expert setup (Chromium only); overhead measured (B5, median 1.06x expert Playwright after adaptive polling) but only on tiny scenarios; a rare healthy false pass (~2%) on backbone_marionette M2 exists before and after the latest changes, cause not found; no external agent benchmark yet (MiniWoB++ needs a model budget); read-back needs a conventional REST convention and missed the pre-registered silent drops; idle-aware classification keeps "unknown" for pages with long-lived requests; REA MCP tools: one call attempted and failed on an overloaded machine (E-092); nothing published to npm; no commit pushed since PR #4.
 
-## Outstanding gaps / blockers
+## Next (see the super plan in the repository history of this session)
 
-- **No LLM provider key**: no LLM-driven comparison (browser-use, Stagehand, agent-browser, Midscene, Playwright MCP agents); observation track reports characters, not tokens.
-- Scenarios and framework share an author; no independent hold-out set. Not built: multi-tab, responsive/visual, long-horizon, unfamiliar apps, real third-party sites.
-- REA MCP server not exercised in-session; REA could not resolve `this.method()` call edges (E-060).
-- Policy limits: after an allowed POST redirect the page URL stays at the POST URL; `fromPage` sessions cannot block service workers; DNS rebinding / IP-literal tricks beyond hostname matching not handled.
-- Package not published to npm.
-
-## Unverified assumptions
-
-- Ref stability beyond DOM insertion (Q8 partial).
-- `pw-strong` as an "expert" baseline is the author's reconstruction.
-
-## Next highest-value tasks
-
-1. Model key/budget → LLM `Actor` adapter outside core; same scenarios, same model and prompt across Playwright MCP, browser-use, Stagehand, agent-browser, Vedha.
-2. Independently authored hold-out scenarios and a trial on a real app.
-3. Run the bidi/mobile projects and Firefox/WebKit runner specs; check the loader and Firefox cookie failures against upstream's CI environment.
-4. Restart Claude Code and re-run key Phase 1 queries via REA's MCP tools.
-5. Publish packages when ready.
+Phase 1: RE round 2 on an idle machine; P3 observed-change feedback, P4 result parity, P5 idle-aware classification. Phase 2: P1 read-back inference, P2 witnesses, P6 locator robustness on TodoMVC x8. Phase 3: multi-model LLM track, MiniWoB++ subset, overhead, stress, red-team, test-generation quality. Phase 4: `prereg-v2` freeze and final runs.

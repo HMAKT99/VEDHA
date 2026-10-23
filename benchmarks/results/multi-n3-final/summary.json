@@ -1,0 +1,3086 @@
+{
+  "pw-trust": {
+    "M1-add-two@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@jsblocks": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M1-add-two@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@mithril": {
+      "n": 3,
+      "correct": 1,
+      "wilsonLo": 0.061490315276160515,
+      "wilsonHi": 0.7923450448735121,
+      "falsePass": 2,
+      "duplicates": 0
+    },
+    "M1-add-two@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@backbone_marionette": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs_require": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@closure": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@dijon": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@exoskeleton": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@javascript-es5": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@jsblocks": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockback": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockoutjs": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@ractive": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@riotjs": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-backbone": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-react": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M3-delete@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@jsblocks": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M3-delete@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@jsblocks": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-test": {
+    "M1-add-two@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@dijon": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@exoskeleton": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-backbone": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "pw-strong": {
+    "M1-add-two@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@polymer": {
+      "n": 3,
+      "correct": 2,
+      "wilsonLo": 0.20765495512648788,
+      "wilsonHi": 0.9385096847238393,
+      "falsePass": 1,
+      "duplicates": 0
+    },
+    "M1-add-two@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@dijon": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@exoskeleton": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-backbone": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "sel-trust": {
+    "M1-add-two@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@dijon": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@javascript-es5": {
+      "n": 3,
+      "correct": 1,
+      "wilsonLo": 0.061490315276160515,
+      "wilsonHi": 0.7923450448735121,
+      "falsePass": 2,
+      "duplicates": 0
+    },
+    "M2-complete-filter@jsblocks": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 3,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "sel-strong": {
+    "M1-add-two@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@closure": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@dijon": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@closure": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  },
+  "vedha": {
+    "M1-add-two@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M1-add-two@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@dijon": {
+      "n": 3,
+      "correct": 0,
+      "wilsonLo": 0,
+      "wilsonHi": 0.5615060804490177,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M2-complete-filter@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M3-delete@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@backbone_marionette": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@canjs_require": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@closure": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@dijon": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@exoskeleton": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@javascript-es5": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@jsblocks": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockback": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@knockoutjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@mithril": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@polymer": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@ractive": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@riotjs": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-backbone": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    },
+    "M4-clear-completed@typescript-react": {
+      "n": 3,
+      "correct": 3,
+      "wilsonLo": 0.4384939195509822,
+      "wilsonHi": 1,
+      "falsePass": 0,
+      "duplicates": 0
+    }
+  }
+}

@@ -1,0 +1,506 @@
+[
+ {
+  "spec": "vedha-promoted",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 0,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 0,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 0,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 0,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 0,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 0,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 0,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 1,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 1,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 1,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 1,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 1,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 1,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 1,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "healthy",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "slow-ui (benign)",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "cookie-banner (benign)",
+  "kind": "healthy",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 2,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "silent-500",
+  "kind": "defect",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 2,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "wrong-quantity",
+  "kind": "defect",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 2,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "dropped-write",
+  "kind": "defect",
+  "run": 2,
+  "passed": true,
+  "detail": "expected=1 unexpected=0 flaky=0"
+ },
+ {
+  "spec": "vedha-promoted",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 2,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder (actions only)",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 2,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ },
+ {
+  "spec": "recorder + visible text",
+  "variant": "disabled-submit",
+  "kind": "defect",
+  "run": 2,
+  "passed": false,
+  "detail": "expected=0 unexpected=1 flaky=0"
+ }
+]
