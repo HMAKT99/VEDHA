@@ -29,10 +29,10 @@ export const targetInput = z
     text: z.string().optional(),
     test_id: z.string().optional(),
     ref: z.string().optional().describe("ref from the latest observation"),
-    frame: z.string().optional().describe("CSS selector of the containing iframe"),
-    exact: z.boolean().optional().describe("exact match (default true)"),
+    frame: z.string().optional().describe("iframe CSS selector"),
+    exact: z.boolean().optional().describe("default true"),
   })
-  .describe("ONE of: role(+name), label, text, test_id, ref");
+  .describe("one of: role(+name), label, text, test_id, ref");
 /** Shorter form for secondary targets (drag destination, expectations). */
 const targetLite = z
   .object({
@@ -104,11 +104,11 @@ export const expectInput = z
         status_2xx: z.boolean().optional(),
       })
       .optional()
-      .describe("a request this action must send, and that it succeeds"),
+      .describe("a request the action must send"),
   })
-  .describe("Checks Vedha runs itself afterwards: declare what success looks like");
+  .describe("checks Vedha runs after the action");
 
-export const actInput = {
+const stepFields = {
   op: z.enum([
     "goto",
     "click",
@@ -127,52 +127,42 @@ export const actInput = {
     "reload",
     "switch_tab",
   ]),
-  intent: z.string().min(1).max(200).describe("what this step is for"),
+  intent: z.string().min(1).max(200).describe("why"),
   target: targetInput.optional(),
-  to: targetLite.optional().describe("drag destination"),
-  value: z
-    .string()
-    .optional()
-    .describe("url | text | option label | key | file path | scroll direction | tab index"),
-  mutating: z
-    .boolean()
-    .optional()
-    .describe(
-      "true if it changes data (submit, delete, pay); never repeated after an unknown outcome",
-    ),
-  destructive: z
-    .boolean()
-    .optional()
-    .describe("irreversible; blocked unless the operator allows it"),
+  to: targetLite.optional().describe("drag target"),
+  value: z.string().optional().describe("url, text, option, key, path, direction or tab"),
+  mutating: z.boolean().optional().describe("changes data; not repeated after an unknown outcome"),
+  destructive: z.boolean().optional().describe("irreversible; needs operator approval"),
   expect: expectInput.optional(),
   reconcile: z
     .object({ get: z.string().startsWith("/"), matches: z.record(z.string(), z.unknown()) })
     .optional()
-    .describe(
-      "read-only GET returning JSON with an item matching `matches` iff the effect happened",
-    ),
-  synchronous: z
-    .boolean()
+    .describe("GET returning an item matching `matches` iff the effect happened"),
+  synchronous: z.boolean().optional().describe("client-side effect: unmet expect is a failure"),
+  enabling: z.boolean().optional().describe("only prepares a later step"),
+  confirms: z.string().optional().describe("id of an unresolved step this one confirms"),
+  repeat: z.boolean().optional().describe("repeat a mutating action of unknown outcome"),
+};
+
+type StepInput = z.infer<z.ZodObject<typeof stepFields>>;
+
+/** A follow-up step carries only the common fields, so the tool definition stays small. */
+const thenStep = z.object({
+  op: stepFields.op,
+  intent: stepFields.intent,
+  target: stepFields.target,
+  value: stepFields.value,
+  mutating: stepFields.mutating,
+  expect: stepFields.expect,
+});
+
+export const actInput = {
+  ...stepFields,
+  then: z
+    .array(thenStep)
+    .max(4)
     .optional()
-    .describe(
-      "effect is immediate (client-side): an unmet expectation is then a failure, not unknown",
-    ),
-  enabling: z
-    .boolean()
-    .optional()
-    .describe(
-      "only makes a later step possible; hover, scroll, wait, switch_tab, back, reload default true",
-    ),
-  confirms: z
-    .string()
-    .optional()
-    .describe(
-      "id of an earlier unresolved step; if this step verifies (use wait with an expect) its effect is confirmed",
-    ),
-  repeat: z
-    .boolean()
-    .optional()
-    .describe("deliberately repeat a mutating action whose outcome was unknown"),
+    .describe("steps to run next; stops at the first that fails"),
 };
 
 function verifiersOf(e: z.infer<typeof expectInput> | undefined): Verifier[] {
@@ -239,21 +229,22 @@ export class VedhaTools {
     return this.session;
   }
 
-  async act(a: {
-    op: ActionSpec["op"];
-    intent: string;
-    target?: TargetInput;
-    to?: TargetInput;
-    value?: string;
-    mutating?: boolean;
-    destructive?: boolean;
-    expect?: z.infer<typeof expectInput>;
-    reconcile?: { get: string; matches: Record<string, unknown> };
-    confirms?: string;
-    enabling?: boolean;
-    synchronous?: boolean;
-    repeat?: boolean;
-  }): Promise<ToolResult> {
+  /** What the model must not lose sight of: a write the page or server rejected and nothing has fixed since. */
+  private open?: { intent: string; message: string };
+
+  private tail(): string {
+    return this.open
+      ? `\nopen failure: "${this.open.intent}" - ${this.open.message}. Do not report success unless a later step fixed it.`
+      : "";
+  }
+
+  private async one(a: StepInput): Promise<
+    | { error: string }
+    | {
+        r: Awaited<ReturnType<Session["step"]>>;
+        obs: Awaited<ReturnType<Session["observe"]>>;
+      }
+  > {
     let spec: ActionSpec;
     try {
       spec = {
@@ -274,7 +265,7 @@ export class VedhaTools {
           : undefined,
       };
     } catch (e) {
-      return this.text(`invalid action: ${(e as Error).message}`, true);
+      return { error: `invalid action: ${(e as Error).message}` };
     }
     const session = await this.ensure();
     const refusal = a.repeat ? undefined : this.guard.refuses(spec);
@@ -288,12 +279,38 @@ export class VedhaTools {
     this.steps++;
     this.consecutiveFailures =
       r.status === "verified" || r.status === "unverified" ? 0 : this.consecutiveFailures + 1;
+    const code = r.error?.code;
+    if (
+      r.status === "failed" &&
+      (code === "health_check_failed" || code === "readback_contradiction")
+    )
+      this.open = { intent: a.intent, message: r.error!.message };
+    else if (this.open && r.status === "verified" && a.intent === this.open.intent)
+      this.open = undefined;
+    return { r, obs };
+  }
+
+  async act(a: StepInput & { then?: StepInput[] }): Promise<ToolResult> {
+    const { then, ...first } = a;
+    const done: string[] = [];
+    let out = await this.one(first);
+    for (const next of then ?? []) {
+      if ("error" in out || (out.r.status !== "verified" && out.r.status !== "unverified")) break;
+      done.push(`step ${done.length + 1} (${out.r.actionId}): ${out.r.status}`);
+      out = await this.one(next);
+    }
+    if ("error" in out) return this.text(out.error, true);
+    const { r, obs } = out;
     const counters =
       this.consecutiveFailures >= 3
         ? `\nWARNING: ${this.consecutiveFailures} steps in a row did not verify (${this.steps} steps used). If the task cannot be completed, stop and report what you found, including whether it took effect.`
         : "";
+    const head = done.length ? `${done.join("\n")}\n` : "";
     return this.text(
-      renderFeedback(r, obs, { changes: true, effect: EFFECT_OPS.has(a.op) }) + counters,
+      head +
+        renderFeedback(r, obs, { changes: true, effect: EFFECT_OPS.has(a.op), compact: true }) +
+        counters +
+        this.tail(),
       r.status === "failed" || r.status === "blocked",
     );
   }
@@ -302,7 +319,7 @@ export class VedhaTools {
     const session = await this.ensure();
     try {
       const obs = await session.observe({ level, ref });
-      return this.text(renderFeedback(undefined, obs));
+      return this.text(renderFeedback(undefined, obs) + this.tail());
     } catch (e) {
       if (!ref) throw e;
       // A ref from before a navigation or re-render no longer exists: show the current page instead of an error.

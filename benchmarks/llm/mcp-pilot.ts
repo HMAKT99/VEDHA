@@ -17,6 +17,8 @@ import { SCENARIOS, type Scenario } from "../scenarios/index.js";
 import {
   WIDGET_SCENARIOS,
   WIDGET_SCENARIOS_V2,
+  WIDGET_SCENARIOS_V3,
+  WIDGET_SCENARIOS_V4,
   WIDGET_SCENARIOS_MINIMAL,
 } from "../scenarios/widgets.js";
 import { CostGuardError, Gateway, type ChatMessage, type ToolDef } from "./gateway.js";
@@ -36,6 +38,8 @@ const POOLS: Record<string, Scenario[]> = {
   seen: SCENARIOS,
   "held-out": WIDGET_SCENARIOS,
   "held-out-2": WIDGET_SCENARIOS_V2,
+  "held-out-3": WIDGET_SCENARIOS_V3,
+  "held-out-4": WIDGET_SCENARIOS_V4,
   "held-out-minimal": WIDGET_SCENARIOS_MINIMAL,
 };
 if (!POOLS[setName])

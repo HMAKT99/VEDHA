@@ -132,6 +132,97 @@ const PAGES: Record<string, string> = {
        if (e.key !== "Escape") return;
        document.getElementById("help").hidden = true; await report("help-closed"); say("Panel closed"); });`,
   ),
+  "/date": page(
+    "Trip dates",
+    `<label for="start">Start date</label> <input type="date" id="start">`,
+    `document.getElementById("start").addEventListener("change", async (e) => {
+       await report("start:" + e.target.value); say("Start date " + e.target.value); });`,
+  ),
+  "/archive": page(
+    "Projects",
+    `<button id="arch">Archive project</button>
+     <div id="modal" role="dialog" aria-label="Confirm archive" hidden><p>Archive this project?</p><button id="yes">Yes, archive</button><button id="no">Cancel</button></div>`,
+    `const m = document.getElementById("modal");
+     document.getElementById("arch").addEventListener("click", () => { m.hidden = false; });
+     document.getElementById("no").addEventListener("click", () => { m.hidden = true; });
+     document.getElementById("yes").addEventListener("click", async () => { m.hidden = true; await report("archived"); say("Project archived"); });`,
+  ),
+  "/signup": page(
+    "Sign up",
+    `<div id="s1"><label>Name <input id="nm"></label><button id="next">Next</button></div>
+     <div id="s2" hidden><label>Email <input id="em"></label><button id="go">Create account</button></div>`,
+    `document.getElementById("next").addEventListener("click", () => { document.getElementById("s1").hidden = true; document.getElementById("s2").hidden = false; });
+     document.getElementById("go").addEventListener("click", async () => {
+       const v = document.getElementById("nm").value + "/" + document.getElementById("em").value;
+       await report("signup:" + v); say("Account created for " + v); });`,
+  ),
+  "/search": page(
+    "Catalog",
+    `<label>Search <input id="q" type="search"></label><ul id="res"><li>Pen</li><li>Pencil</li><li>Notebook</li></ul>`,
+    `document.getElementById("q").addEventListener("keydown", async (e) => {
+       if (e.key !== "Enter") return; const q = e.target.value.toLowerCase();
+       [...document.querySelectorAll("#res li")].forEach((li) => { li.hidden = !li.textContent.toLowerCase().includes(q); });
+       await report("search:" + q); say("Filtered by " + q); });`,
+  ),
+  "/rename": page(
+    "Project name",
+    `<span id="name">Untitled</span> <button id="edit">Edit name</button>
+     <span id="form" hidden><label>New name <input id="nn"></label><button id="sv">Save name</button></span>`,
+    `document.getElementById("edit").addEventListener("click", () => { document.getElementById("form").hidden = false; });
+     document.getElementById("sv").addEventListener("click", async () => {
+       const v = document.getElementById("nn").value; document.getElementById("name").textContent = v;
+       document.getElementById("form").hidden = true; await report("rename:" + v); say("Renamed to " + v); });`,
+  ),
+  "/bulk": page(
+    "Messages",
+    `<ul style="list-style:none;padding:0"><li><label><input type="checkbox" class="m"> Invoice</label></li><li><label><input type="checkbox" class="m"> Receipt</label></li><li><label><input type="checkbox" class="m"> Newsletter</label></li></ul>
+     <button id="del">Delete selected</button>`,
+    `document.getElementById("del").addEventListener("click", async () => {
+       const n = document.querySelectorAll(".m:checked").length; if (!n) return;
+       await report("bulk-delete:" + n); say(n + " deleted"); });`,
+  ),
+  "/rating": page(
+    "Rate us",
+    `<div role="radiogroup" aria-label="Rating">${[1, 2, 3, 4, 5].map((n) => `<button role="radio" aria-checked="false" data-n="${n}" aria-label="${n} stars">${n}</button>`).join("")}</div>`,
+    `const rs = [...document.querySelectorAll("[role=radio]")];
+     rs.forEach((b) => b.addEventListener("click", async () => {
+       rs.forEach((x) => x.setAttribute("aria-checked", String(x === b)));
+       await report("rate:" + b.dataset.n); say("Rated " + b.dataset.n + " stars"); }));`,
+  ),
+  "/tags": page(
+    "Tags",
+    `<label>New tag <input id="t"></label><ul id="list"></ul>`,
+    `document.getElementById("t").addEventListener("keydown", async (e) => {
+       if (e.key !== "Enter") return; const v = e.target.value.trim(); if (!v) return;
+       const li = document.createElement("li"); li.textContent = v; document.getElementById("list").appendChild(li);
+       e.target.value = ""; await report("tag:" + v); say("Tag " + v + " added"); });`,
+  ),
+  "/password": page(
+    "Change password",
+    `<label>New password <input id="p1" type="password"></label><label>Repeat password <input id="p2" type="password"></label><button id="go">Change password</button>`,
+    `document.getElementById("go").addEventListener("click", async () => {
+       if (document.getElementById("p1").value !== document.getElementById("p2").value) { say("Passwords differ"); return; }
+       await report("pw-changed"); say("Password changed"); });`,
+  ),
+  "/carousel": page(
+    "Gallery",
+    `<div id="slide" aria-live="polite">Slide 1</div><button id="nx">Next slide</button>`,
+    `let n = 1; document.getElementById("nx").addEventListener("click", async () => {
+       n++; document.getElementById("slide").textContent = "Slide " + n; await report("slide:" + n); say("Showing slide " + n); });`,
+  ),
+  "/volume": page(
+    "Sound",
+    `<label for="vol">Volume</label> <input id="vol" type="range" min="0" max="100" value="20">`,
+    `document.getElementById("vol").addEventListener("change", async (e) => {
+       await report("volume:" + e.target.value); say("Volume " + e.target.value); });`,
+  ),
+  "/inbox": page(
+    "Inbox",
+    `<p>Message 42 from Ada</p><button id="mr">Mark as read</button><div id="toast" role="alert" hidden></div>`,
+    `document.getElementById("mr").addEventListener("click", async () => {
+       const t = document.getElementById("toast"); t.hidden = false; t.textContent = "Marked as read";
+       await report("read:42"); say("Message 42 read"); });`,
+  ),
   "/nav": page("Start", `<a href="/nav2">Next page</a>`, `report("nav-loaded");`),
   "/nav2": page("Second page", `<p>You are on page two</p>`, `report("nav2-loaded");`),
 };

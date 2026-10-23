@@ -391,6 +391,330 @@ const DEFS_V2: Def[] = [
   },
 ];
 
+/**
+ * Third held-out family (W17-W22), written before the round-4 product changes beyond the write-settle fix and
+ * never run by any arm before the pilot-7 run.
+ */
+const DEFS_V3: Def[] = [
+  {
+    id: "W17-date-picker",
+    goal: `Set the start date to 2026-03-15.`,
+    title: "Set a date input",
+    startPath: "/date",
+    type: "start:2026-03-15",
+    steps: [
+      open("open", "/date", "Trip dates"),
+      {
+        id: "date",
+        intent: "set the start date",
+        op: "fill",
+        target: { label: "Start date", exact: true },
+        value: "2026-03-15",
+        mutating: true,
+        postconditions: post("Start date 2026-03-15", "start:2026-03-15"),
+      },
+    ],
+  },
+  {
+    id: "W18-modal-confirm",
+    goal: `Archive the project and confirm in the dialog.`,
+    title: "Confirm in a custom modal",
+    startPath: "/archive",
+    type: "archived",
+    steps: [
+      open("open", "/archive", "Projects"),
+      {
+        id: "arch",
+        intent: "start archiving",
+        op: "click",
+        target: { role: "button", name: "Archive project" },
+        enabling: true,
+      },
+      {
+        id: "yes",
+        intent: "confirm",
+        op: "click",
+        target: { role: "button", name: "Yes, archive" },
+        mutating: true,
+        postconditions: post("Project archived", "archived"),
+      },
+    ],
+  },
+  {
+    id: "W19-two-step-form",
+    goal: `Sign up as Ada with the email ada@example.com using the two-step form.`,
+    title: "Two-step sign-up form",
+    startPath: "/signup",
+    type: "signup:Ada/ada@example.com",
+    steps: [
+      open("open", "/signup", "Sign up"),
+      {
+        id: "name",
+        intent: "enter the name",
+        op: "fill",
+        target: { label: "Name", exact: true },
+        value: "Ada",
+      },
+      {
+        id: "next",
+        intent: "next step",
+        op: "click",
+        target: { role: "button", name: "Next" },
+        enabling: true,
+      },
+      {
+        id: "email",
+        intent: "enter the email",
+        op: "fill",
+        target: { label: "Email", exact: true },
+        value: "ada@example.com",
+      },
+      {
+        id: "go",
+        intent: "create the account",
+        op: "click",
+        target: { role: "button", name: "Create account" },
+        mutating: true,
+        postconditions: post(
+          "Account created for Ada/ada@example.com",
+          "signup:Ada/ada@example.com",
+        ),
+      },
+    ],
+  },
+  {
+    id: "W20-search-filter",
+    goal: `Search the catalog for "pen" and apply it with Enter.`,
+    title: "Filter a list with Enter",
+    startPath: "/search",
+    type: "search:pen",
+    steps: [
+      open("open", "/search", "Catalog"),
+      {
+        id: "q",
+        intent: "type the query",
+        op: "fill",
+        target: { label: "Search", exact: true },
+        value: "pen",
+      },
+      {
+        id: "enter",
+        intent: "apply the filter",
+        op: "press",
+        target: { label: "Search", exact: true },
+        value: "Enter",
+        mutating: true,
+        postconditions: post("Filtered by pen", "search:pen"),
+      },
+    ],
+  },
+  {
+    id: "W21-inline-edit",
+    goal: `Rename the project to Apollo.`,
+    title: "Inline rename",
+    startPath: "/rename",
+    type: "rename:Apollo",
+    steps: [
+      open("open", "/rename", "Project name"),
+      {
+        id: "edit",
+        intent: "start editing",
+        op: "click",
+        target: { role: "button", name: "Edit name" },
+        enabling: true,
+      },
+      {
+        id: "new",
+        intent: "enter the new name",
+        op: "fill",
+        target: { label: "New name", exact: true },
+        value: "Apollo",
+      },
+      {
+        id: "sv",
+        intent: "save the name",
+        op: "click",
+        target: { role: "button", name: "Save name" },
+        mutating: true,
+        postconditions: post("Renamed to Apollo", "rename:Apollo"),
+      },
+    ],
+  },
+  {
+    id: "W22-bulk-select",
+    goal: `Select the Invoice and Receipt messages and delete the selected ones.`,
+    title: "Bulk select and delete",
+    startPath: "/bulk",
+    type: "bulk-delete:2",
+    steps: [
+      open("open", "/bulk", "Messages"),
+      {
+        id: "c1",
+        intent: "select Invoice",
+        op: "check",
+        target: { label: "Invoice", exact: true },
+      },
+      {
+        id: "c2",
+        intent: "select Receipt",
+        op: "check",
+        target: { label: "Receipt", exact: true },
+      },
+      {
+        id: "del",
+        intent: "delete selected",
+        op: "click",
+        target: { role: "button", name: "Delete selected" },
+        mutating: true,
+        postconditions: post("2 deleted", "bulk-delete:2"),
+      },
+    ],
+  },
+];
+
+/** Fourth held-out family (W23-W28), written after the round-4 tool-layer changes and before any run on it. */
+const DEFS_V4: Def[] = [
+  {
+    id: "W23-star-rating",
+    goal: `Rate the product 4 stars.`,
+    title: "Click a rating",
+    startPath: "/rating",
+    type: "rate:4",
+    steps: [
+      open("open", "/rating", "Rate us"),
+      {
+        id: "rate",
+        intent: "rate 4 stars",
+        op: "click",
+        target: { role: "radio", name: "4 stars" },
+        mutating: true,
+        postconditions: post("Rated 4 stars", "rate:4"),
+      },
+    ],
+  },
+  {
+    id: "W24-tag-input",
+    goal: `Add the tag "urgent" using the new tag field and the Enter key.`,
+    title: "Add a tag with Enter",
+    startPath: "/tags",
+    type: "tag:urgent",
+    steps: [
+      open("open", "/tags", "Tags"),
+      {
+        id: "type",
+        intent: "type the tag",
+        op: "fill",
+        target: { label: "New tag", exact: true },
+        value: "urgent",
+      },
+      {
+        id: "enter",
+        intent: "add the tag",
+        op: "press",
+        target: { label: "New tag", exact: true },
+        value: "Enter",
+        mutating: true,
+        postconditions: post("Tag urgent added", "tag:urgent"),
+      },
+    ],
+  },
+  {
+    id: "W25-password-form",
+    goal: `Change the password to "s3cret-pw" (enter it in both fields) and submit.`,
+    title: "Change password form",
+    startPath: "/password",
+    type: "pw-changed",
+    steps: [
+      open("open", "/password", "Change password"),
+      {
+        id: "p1",
+        intent: "enter the password",
+        op: "fill",
+        target: { label: "New password", exact: true },
+        value: "s3cret-pw",
+      },
+      {
+        id: "p2",
+        intent: "repeat the password",
+        op: "fill",
+        target: { label: "Repeat password", exact: true },
+        value: "s3cret-pw",
+      },
+      {
+        id: "go",
+        intent: "submit",
+        op: "click",
+        target: { role: "button", name: "Change password" },
+        mutating: true,
+        postconditions: post("Password changed", "pw-changed"),
+      },
+    ],
+  },
+  {
+    id: "W26-carousel",
+    goal: `Show the third slide of the gallery.`,
+    title: "Advance a carousel twice",
+    startPath: "/carousel",
+    type: "slide:3",
+    steps: [
+      open("open", "/carousel", "Gallery"),
+      {
+        id: "n1",
+        intent: "next slide",
+        op: "click",
+        target: { role: "button", name: "Next slide" },
+        mutating: true,
+        postconditions: post("Showing slide 2", "slide:2"),
+      },
+      {
+        id: "n2",
+        intent: "next slide again",
+        op: "click",
+        target: { role: "button", name: "Next slide" },
+        mutating: true,
+        postconditions: post("Showing slide 3", "slide:3"),
+      },
+    ],
+  },
+  {
+    id: "W27-volume-slider",
+    goal: `Set the volume to 70.`,
+    title: "Set a range slider",
+    startPath: "/volume",
+    type: "volume:70",
+    steps: [
+      open("open", "/volume", "Sound"),
+      {
+        id: "vol",
+        intent: "set volume",
+        op: "fill",
+        target: { label: "Volume", exact: true },
+        value: "70",
+        mutating: true,
+        postconditions: post("Volume 70", "volume:70"),
+      },
+    ],
+  },
+  {
+    id: "W28-mark-read",
+    goal: `Mark message 42 as read.`,
+    title: "Mark as read with a toast",
+    startPath: "/inbox",
+    type: "read:42",
+    steps: [
+      open("open", "/inbox", "Inbox"),
+      {
+        id: "mr",
+        intent: "mark as read",
+        op: "click",
+        target: { role: "button", name: "Mark as read" },
+        mutating: true,
+        postconditions: post("Message 42 read", "read:42"),
+      },
+    ],
+  },
+];
+
 const base = (d: Def): Omit<Scenario, "id" | "title" | "kind" | "category" | "effectAchieved"> => ({
   variant: {},
   app: "widgets",
@@ -484,3 +808,71 @@ export const WIDGET_SCENARIOS_MINIMAL: Scenario[] = WIDGET_SCENARIOS.map((sc) =>
     postconditions: st.postconditions?.filter((v) => v.type === "text" || v.type === "url"),
   })),
 }));
+
+const healthyV3: Scenario[] = DEFS_V3.map((d) => ({
+  ...base(d),
+  id: d.id,
+  title: d.title,
+  category: "baseline" as const,
+  kind: "effect" as const,
+  effectAchieved: (s) => (s.events ?? []).filter((e) => e === d.type).length >= (d.min ?? 1),
+}));
+
+const DEFECTS_V3: Array<[string, "silent" | "error"]> = [
+  ["W17-date-picker", "silent"],
+  ["W18-modal-confirm", "error"],
+  ["W19-two-step-form", "silent"],
+  ["W20-search-filter", "error"],
+  ["W21-inline-edit", "silent"],
+  ["W22-bulk-select", "error"],
+];
+
+const defectsV3: Scenario[] = DEFECTS_V3.map(([id, bug]) => {
+  const d = DEFS_V3.find((x) => x.id === id)!;
+  return {
+    ...base(d),
+    id: `${id}-DEFECT-${bug}`,
+    title: `DEFECT (${bug}): ${d.title}`,
+    category: "seeded-defect" as const,
+    kind: "defect" as const,
+    widgets: { bug },
+    effectAchieved: () => false,
+  };
+});
+
+/** Held-out set 3 (see DEFS_V3). */
+export const WIDGET_SCENARIOS_V3: Scenario[] = [...healthyV3, ...defectsV3];
+
+const healthyV4: Scenario[] = DEFS_V4.map((d) => ({
+  ...base(d),
+  id: d.id,
+  title: d.title,
+  category: "baseline" as const,
+  kind: "effect" as const,
+  effectAchieved: (s) => (s.events ?? []).filter((e) => e === d.type).length >= (d.min ?? 1),
+}));
+
+const DEFECTS_V4: Array<[string, "silent" | "error"]> = [
+  ["W23-star-rating", "silent"],
+  ["W24-tag-input", "error"],
+  ["W25-password-form", "silent"],
+  ["W26-carousel", "error"],
+  ["W27-volume-slider", "silent"],
+  ["W28-mark-read", "error"],
+];
+
+const defectsV4: Scenario[] = DEFECTS_V4.map(([id, bug]) => {
+  const d = DEFS_V4.find((x) => x.id === id)!;
+  return {
+    ...base(d),
+    id: `${id}-DEFECT-${bug}`,
+    title: `DEFECT (${bug}): ${d.title}`,
+    category: "seeded-defect" as const,
+    kind: "defect" as const,
+    widgets: { bug },
+    effectAchieved: () => false,
+  };
+});
+
+/** Held-out set 4 (see DEFS_V4). */
+export const WIDGET_SCENARIOS_V4: Scenario[] = [...healthyV4, ...defectsV4];

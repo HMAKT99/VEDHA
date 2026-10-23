@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { ShopServer, type Variant } from "../fixtures/shop.js";
+import { WidgetsServer } from "../fixtures/widgets.js";
 
 const BIN = path.resolve("packages/mcp/dist/bin.js");
 
@@ -83,7 +84,7 @@ describe("vedha-mcp (stdio, real client)", () => {
     expect(isError(done)).toBe(false);
     expect(textOf(done)).toContain("result: verified");
     // What the action did: the write request, and what changed on the page.
-    expect(textOf(done)).toContain("requests: POST /api/orders 201");
+    expect(textOf(done)).toContain("effect: server confirmed (POST /api/orders 201");
     expect(textOf(done)).toContain("changed on the page");
     expect(textOf(done)).toMatch(/\+ .*Order placed/);
     expect((await shop.oracle()).orders).toHaveLength(1);
@@ -200,4 +201,120 @@ describe("vedha-mcp (stdio, real client)", () => {
     expect(textOf(r)).toContain('import { test, expect } from "@playwright/test"');
     expect(textOf(r)).toContain("Place order");
   }, 60_000);
+});
+
+describe("vedha-mcp: a passed UI check does not hide an unstored write (stdio, real client)", () => {
+  async function pressEscape(bug?: "silent") {
+    const srv = new WidgetsServer(bug ? { bug } : {});
+    const base = await srv.start();
+    const client = new Client({ name: "test", version: "0.0.0" });
+    await client.connect(
+      new StdioClientTransport({
+        command: process.execPath,
+        args: [BIN, "--allow-domain", "127.0.0.1"],
+        stderr: "pipe",
+      }),
+    );
+    cleanup.push(async () => {
+      await client.callTool({ name: "vedha_close", arguments: {} }).catch(() => undefined);
+      await client.close();
+      await srv.stop();
+    });
+    const act = (args: Record<string, unknown>) =>
+      client.callTool({ name: "vedha_act", arguments: args });
+    await act({ op: "goto", intent: "open", value: base + "/keys" });
+    return textOf(
+      await act({
+        op: "press",
+        intent: "close the help panel",
+        value: "Escape",
+        expect: { hidden: { role: "dialog", name: "Help panel" } },
+      }),
+    );
+  }
+
+  it("reports the unstored write as failed", async () => {
+    const out = await pressEscape("silent");
+    expect(out).toMatch(/result: failed/);
+    expect(out).toMatch(/readback_contradiction/);
+  }, 60_000);
+
+  it("stays verified when the event was stored", async () => {
+    expect(await pressEscape()).toMatch(/result: verified/);
+  }, 60_000);
+});
+
+describe("vedha-mcp: chained steps and open failures (stdio, real client)", () => {
+  async function connectWidgets(bug?: "error") {
+    const srv = new WidgetsServer(bug ? { bug } : {});
+    const base = await srv.start();
+    const client = new Client({ name: "test", version: "0.0.0" });
+    await client.connect(
+      new StdioClientTransport({
+        command: process.execPath,
+        args: [BIN, "--allow-domain", "127.0.0.1"],
+        stderr: "pipe",
+      }),
+    );
+    cleanup.push(async () => {
+      await client.callTool({ name: "vedha_close", arguments: {} }).catch(() => undefined);
+      await client.close();
+      await srv.stop();
+    });
+    return { base, client };
+  }
+
+  it("runs follow-up steps in one call and stops at the first that fails", async () => {
+    const { base, client } = await connectWidgets();
+    const ok = textOf(
+      await client.callTool({
+        name: "vedha_act",
+        arguments: {
+          op: "goto",
+          intent: "open",
+          value: base + "/search",
+          then: [
+            { op: "fill", intent: "type", target: { label: "Search" }, value: "pen" },
+            { op: "press", intent: "apply", target: { label: "Search" }, value: "Enter" },
+          ],
+        },
+      }),
+    );
+    expect(ok).toMatch(/step 1 \(step-1\): (verified|unverified)/);
+    expect(ok).toMatch(/step 2 \(step-2\)/);
+    expect(ok).toMatch(/Filtered by pen/);
+    const stopped = textOf(
+      await client.callTool({
+        name: "vedha_act",
+        arguments: {
+          op: "click",
+          intent: "missing",
+          target: { role: "button", name: "Nope" },
+          then: [{ op: "click", intent: "never", target: { role: "button", name: "Also" } }],
+        },
+      }),
+    );
+    expect(stopped).toMatch(/result: failed/);
+    expect(stopped).not.toMatch(/step 1/);
+  }, 90_000);
+
+  it("keeps reminding the model of a rejected write until a later step fixes it", async () => {
+    const { base, client } = await connectWidgets("error");
+    const act = (args: Record<string, unknown>) =>
+      client.callTool({ name: "vedha_act", arguments: args });
+    await act({ op: "goto", intent: "open", value: base + "/search" });
+    await act({ op: "fill", intent: "type", target: { label: "Search" }, value: "pen" });
+    const failed = textOf(
+      await act({
+        op: "press",
+        intent: "apply the filter",
+        target: { label: "Search" },
+        value: "Enter",
+      }),
+    );
+    expect(failed).toMatch(/result: failed/);
+    expect(failed).toMatch(/open failure: "apply the filter"/);
+    const later = textOf(await client.callTool({ name: "vedha_observe", arguments: {} }));
+    expect(later).toMatch(/open failure: "apply the filter"/);
+  }, 90_000);
 });

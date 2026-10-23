@@ -33,6 +33,15 @@ describe("evidence-first result lines", () => {
     expect(lines).toContain("effect: confirmed (read-back /api/events confirms POST /api/event)");
   });
 
+  it("says the server confirmed a passed step that sent a write, and nothing for one that sent none", () => {
+    const sent = describeResult(
+      result({ status: "verified", requests: ["POST /api/event 200"] }),
+    ).join("\n");
+    expect(sent).toContain("effect: server confirmed (POST /api/event 200)");
+    const quiet = describeResult(result({ status: "verified", requests: ["GET /api/x 200"] }));
+    expect(quiet.join("\n")).not.toContain("server confirmed");
+  });
+
   it("lists what was observed, or says nothing was", () => {
     expect(describeResult(result({ requests: ["POST /api/x 200"] })).join("\n")).toContain(
       "effect: observed (requests POST /api/x 200)",

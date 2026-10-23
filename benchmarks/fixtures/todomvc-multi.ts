@@ -12,6 +12,7 @@ import { todomvcDir } from "./todomvc.js";
  * todo list (titles and completed state) to /__state, so no implementation is modified.
  */
 const OBSERVER = `<script>(function(){
+  var seq = 0;
   function snap(){
     // Visible items only: some implementations hide filtered items with CSS instead of removing them.
     var items = Array.prototype.slice.call(document.querySelectorAll(".todo-list li")).filter(function(li){
@@ -20,7 +21,8 @@ const OBSERVER = `<script>(function(){
       var lab = li.querySelector("label"); var chk = li.querySelector(".toggle");
       return { title: (lab ? lab.textContent : li.textContent).trim(), completed: !!(chk ? chk.checked : li.classList.contains("completed")) };
     });
-    try { fetch("/__state", { method: "POST", keepalive: true, body: JSON.stringify({ todos: items }) }); } catch (e) {}
+    // Stamped so the server can drop a snapshot that arrives after a newer one (POSTs are not ordered).
+    try { fetch("/__state", { method: "POST", keepalive: true, body: JSON.stringify({ at: Date.now() * 1000 + (++seq % 1000), todos: items }) }); } catch (e) {}
   }
   // Report immediately (MutationObserver already batches per task): a driver may close the page right after its last action.
   function later(){ snap(); }
@@ -44,6 +46,8 @@ const MIME: Record<string, string> = {
 export class TodoMvcExampleServer {
   private server?: http.Server;
   private state = "";
+  private stateAt = -1;
+  private lastPostMs = 0;
   constructor(private readonly example: string) {}
 
   async start(): Promise<string> {
@@ -53,10 +57,21 @@ export class TodoMvcExampleServer {
     this.server = http.createServer((req, res) => {
       const p = decodeURIComponent(new URL(req.url ?? "/", "http://x").pathname);
       if (p === "/__state" && req.method === "POST") {
+        this.lastPostMs = Date.now();
         let body = "";
         req.on("data", (c) => (body += c));
         req.on("end", () => {
-          this.state = body;
+          let at = 0;
+          try {
+            at = Number((JSON.parse(body) as { at?: number }).at ?? 0);
+          } catch {
+            /* malformed snapshot: keep the previous one */
+            at = -1;
+          }
+          if (at >= this.stateAt) {
+            this.state = body;
+            this.stateAt = at;
+          }
           res.writeHead(204).end();
         });
         return;
@@ -90,6 +105,10 @@ export class TodoMvcExampleServer {
   }
 
   async oracle(): Promise<OracleState> {
+    // The driver may close the page with the last snapshot still in flight: wait until none has arrived for 150 ms (at most 1 s).
+    const deadline = Date.now() + 1000;
+    while (Date.now() - this.lastPostMs < 150 && Date.now() < deadline)
+      await new Promise((r) => setTimeout(r, 25));
     let todos: Array<{ title: string; completed: boolean }> = [];
     try {
       todos = (JSON.parse(this.state) as { todos: typeof todos }).todos;

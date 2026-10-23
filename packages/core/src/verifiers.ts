@@ -32,6 +32,36 @@ export async function pollUntil<T>(
   }
 }
 
+/**
+ * Like `pollUntil`, but a match only counts if a second read (after `stableMs`, which may be 0) still
+ * sees it: some apps render the expected state and then re-render it away (seen on TodoMVC filters), and
+ * a check must not pass on that flash. A match that does not hold sends polling on until the deadline.
+ */
+export async function pollStable<T>(
+  fn: () => Promise<T | undefined>,
+  timeoutMs: number,
+  stableMs: number,
+  intervalMs = 50,
+  abort?: () => boolean,
+): Promise<T | undefined> {
+  const deadline = Date.now() + timeoutMs;
+  for (;;) {
+    const v = await pollUntil(fn, Math.max(0, deadline - Date.now()), intervalMs, abort);
+    if (v === undefined) return v;
+    if (stableMs > 0) await sleep(stableMs);
+    const again = await fn();
+    if (again !== undefined) return again;
+    if (Date.now() >= deadline || abort?.()) return undefined;
+  }
+}
+
+/**
+ * Extra wait before the confirming read of a DOM text/value match (see `pollStable`). 0: the browser
+ * round trip of the second read was enough (M2 flash false passes 9/320 -> 0/320) at 1.07x overhead,
+ * where a 30 ms wait cost 1.52x.
+ */
+export const STABLE_MS = 0;
+
 /** Minimal dotted/indexed JSON path: `a.b[0].c`. Returns undefined when absent. */
 export function jsonPath(value: unknown, path: string): unknown {
   const parts = path
@@ -89,7 +119,7 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
       }
       case "text": {
         let last: string | null = null;
-        const ok = await pollUntil(
+        const ok = await pollStable(
           async () => {
             last = await adapter.text(v.target, Math.min(500, timeoutMs));
             if (last === null) return undefined;
@@ -98,6 +128,7 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
             return true;
           },
           timeoutMs,
+          STABLE_MS,
           50,
           ctx.abort,
         );
@@ -115,12 +146,13 @@ export async function runVerifier(v: Verifier, ctx: VerifyContext): Promise<Verd
       }
       case "value": {
         let last: string | null = null;
-        const ok = await pollUntil(
+        const ok = await pollStable(
           async () => {
             last = await adapter.value(v.target, Math.min(500, timeoutMs));
             return last === v.equals ? true : undefined;
           },
           timeoutMs,
+          STABLE_MS,
           50,
           ctx.abort,
         );

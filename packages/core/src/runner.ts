@@ -47,6 +47,19 @@ const ENABLING_OPS: ReadonlySet<string> = new Set([
   "reload",
 ]);
 
+/** Ops whose handler may send a write after the visible change (so a passed UI check is not yet the whole story). */
+const WRITE_TRIGGERS: ReadonlySet<string> = new Set([
+  "click",
+  "dblclick",
+  "press",
+  "select",
+  "check",
+  "uncheck",
+  "drag",
+  "upload",
+]);
+/** A handler that hides the panel and then sends its write has the request out within a few ms. */
+const WRITE_SETTLE_MS = 12;
 const DEFAULT_TIMEOUT_MS = 5000;
 /** First-attempt budget when alternates exist (see executeAction). */
 const FAST_FIRST_MS = 2000;
@@ -466,7 +479,15 @@ export async function executeAction(spec: ActionSpec, ctx: RunnerContext): Promi
       for (let i = 0; i < 10 && (adapter.pendingRequests?.() ?? 0) > 0; i++) await sleep(25);
       return finishChecked("unverified", { note: "no postconditions declared" });
     }
-    if (verdicts.every((v) => v.status === "pass")) return finishChecked("verified");
+    if (verdicts.every((v) => v.status === "pass")) {
+      // A UI check can pass before the handler's write is even sent (hide the panel, then POST). Let a request
+      // the step triggered start and finish, so the health check and read-back judge the stored result too.
+      if (WRITE_TRIGGERS.has(spec.op) && health && !wroteData(adapter, health)) {
+        await sleep(WRITE_SETTLE_MS);
+        for (let i = 0; i < 50 && (adapter.pendingRequests?.() ?? 0) > 0; i++) await sleep(5);
+      }
+      return finishChecked("verified");
+    }
     if (!spec.mutating) {
       const bad = verdicts.find((v) => v.status !== "pass")!;
       return finish("failed", {

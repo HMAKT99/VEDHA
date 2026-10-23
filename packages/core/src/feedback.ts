@@ -59,7 +59,14 @@ export function describeHeader(h: PageHeader | undefined): string[] {
  * a statement that the effect is unchecked. Enabling steps (hover, scroll, wait) have no effect to report.
  */
 export function effectLine(r: ActionResult, changed = false): string | undefined {
-  if (r.status !== "unverified" || r.enabling) return undefined;
+  if (r.enabling) return undefined;
+  if (r.status === "verified") {
+    // A passed check that also sent a write: say what the server did, so the model has no reason to hunt for more.
+    const writes = (r.requests ?? []).filter((q) => /^(POST|PUT|PATCH|DELETE) /.test(q));
+    if (!writes.length && !r.readback?.length) return undefined;
+    return `effect: server confirmed (${[...writes, ...(r.readback ?? [])].join("; ")})`;
+  }
+  if (r.status !== "unverified") return undefined;
   if (r.readback?.length)
     return `effect: confirmed (${[...(r.observed ?? []), ...r.readback].join("; ")})`;
   const seen = [
@@ -97,11 +104,33 @@ export function describeResult(r: ActionResult, changed = false, effect = true):
   return lines;
 }
 
+/** Largest outline that is still repeated in full after a step that only changed a few lines. */
+const COMPACT_OUTLINE_CHARS = 2500;
+const COMPACT_MAX_CHANGES = 12;
+
+function pageLines(
+  obs: Observation,
+  opts: { mode?: "auto" | "text"; compact?: boolean },
+): string[] {
+  const d = obs.delta;
+  if (
+    opts.compact &&
+    d &&
+    obs.level === "outline" &&
+    obs.outline.length > COMPACT_OUTLINE_CHARS &&
+    d.added.length + d.removed.length <= COMPACT_MAX_CHANGES
+  )
+    return [
+      `page: unchanged apart from the changes above (${obs.outline.split("\n").length} lines; vedha_observe shows all of it)`,
+    ];
+  return ["page:", pageView(obs, opts.mode)];
+}
+
 /** Shared by every actor and tool server so models see the same compact, bounded feedback. */
 export function renderFeedback(
   last: ActionResult | undefined,
   obs: Observation,
-  opts: { mode?: "auto" | "text"; changes?: boolean; effect?: boolean } = {},
+  opts: { mode?: "auto" | "text"; changes?: boolean; effect?: boolean; compact?: boolean } = {},
 ): string {
   const head = last
     ? describeResult(last, describeChanges(obs).length > 0, opts.effect ?? true)
@@ -111,7 +140,6 @@ export function renderFeedback(
     `url: ${obs.url}`,
     ...describeHeader(obs.header),
     ...(opts.changes ? describeChanges(obs) : []),
-    "page:",
-    pageView(obs, opts.mode),
+    ...pageLines(obs, opts),
   ].join("\n");
 }

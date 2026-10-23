@@ -11,6 +11,8 @@ import {
   WIDGET_SCENARIOS,
   WIDGET_SCENARIOS_MINIMAL,
   WIDGET_SCENARIOS_V2,
+  WIDGET_SCENARIOS_V3,
+  WIDGET_SCENARIOS_V4,
 } from "../scenarios/widgets.js";
 import { classify, oracleSummary, type TrialRecord } from "./classify.js";
 import { makeServer } from "./servers.js";
@@ -33,6 +35,8 @@ const SETS = {
   seen: SCENARIOS,
   "held-out": WIDGET_SCENARIOS,
   "held-out-2": WIDGET_SCENARIOS_V2,
+  "held-out-3": WIDGET_SCENARIOS_V3,
+  "held-out-4": WIDGET_SCENARIOS_V4,
   "held-out-minimal": WIDGET_SCENARIOS_MINIMAL,
   independent: INDEPENDENT_SCENARIOS,
   multi: MULTI_SCENARIOS,
