@@ -35,3 +35,9 @@ REA = `rea-agents@6.7.0` (repo `morluto/rea@093ce695`). Run via CLI under Node 2
 ## Environment hazards recorded
 * Default Node 24.9.0 is below REA's `^24.11` requirement; REA was run with nvm Node 22.20.0.
 * Source pin is 1.65.0-next; runtime used 1.64.1 (npm latest at install time). Differences are not characterised (Q1).
+
+## Round 2 (2026-10-20)
+* L-R2-01: `mcp__rea__analyze_javascript_application` (input: pw-build/packages/playwright-core/src/tools/backend, format directory, detail summary). Result: failed after 120 s in the macOS helper compilation (xcrun timeout) while the machine was overloaded. No evidence produced. Not counted as a finding (E-092). To retry when idle.
+* L-R2-02: supplemental method: direct reading of `response.ts` (E-091), labelled verified_static from reading, not from REA.
+* L-R2-03 (idle machine): `analyze_javascript_application` on tools/backend succeeded (41 files, 29,152 AST nodes, 0 parse failures, modules 0, partial coverage, evidence ev_d4fac013...). L-R2-04: `trace_application_feature` string seed "redactSecrets": no match. L-R2-05: `trace_javascript_semantics` property seed "redactSecrets", callers: no match. Result recorded as E-093: REA MCP gives statistics here but no identifier-level traces on this TypeScript source.
+* L-R2-06..08: supplemental direct reading of agent-browser connection.rs (E-094), browser-use service.py (E-095), Stagehand evals (E-096).
