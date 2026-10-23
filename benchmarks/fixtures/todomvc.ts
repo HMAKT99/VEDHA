@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import http from "node:http";
 import type { AddressInfo } from "node:net";
@@ -7,8 +8,9 @@ import type { OracleState } from "./shop.js";
 /**
  * Serves the vanilla ES5 TodoMVC example from a local clone of https://github.com/tastejs/todomvc
  * (MIT; third-party code, not written by this project). The clone is NOT vendored: set
- * VEDHA_TODOMVC_DIR to its root (`git clone --depth 1 https://github.com/tastejs/todomvc`). Nothing
- * is installed or executed from it; the files are read and served as static assets.
+ * VEDHA_TODOMVC_DIR to its root. Published results were measured at commit TODOMVC_COMMIT; a clone at any
+ * other commit still runs but prints a warning. Nothing is installed or executed from it; the files are
+ * read and served as static assets.
  *
  * Two harness-side patches are applied to the served JavaScript, never to the clone on disk:
  *  1. Instrumentation: after every write to the app's in-memory store the full list is POSTed to
@@ -23,14 +25,31 @@ export type Mutant =
   | "clear-removes-all";
 
 const ES5 = "examples/javascript-es5";
+/** The tastejs/todomvc commit the published independent and multi results were measured at. */
+export const TODOMVC_COMMIT = "ff43b02e59dfa604386bb382034b2cd07c2bcd8a";
+const CLONE_HINT = `git clone https://github.com/tastejs/todomvc && git -C todomvc checkout ${TODOMVC_COMMIT.slice(0, 7)}`;
+let commitChecked = false;
 const ES6_DIST = "examples/javascript-es6/dist";
 
 export function todomvcDir(): string {
   const dir = process.env.VEDHA_TODOMVC_DIR;
   if (!dir || !fs.existsSync(path.join(dir, ES5, "index.html")))
     throw new Error(
-      "the independent-app track needs a local TodoMVC clone: `git clone --depth 1 https://github.com/tastejs/todomvc` and set VEDHA_TODOMVC_DIR to it",
+      `the independent-app track needs a local TodoMVC clone: \`${CLONE_HINT}\` and set VEDHA_TODOMVC_DIR to it`,
     );
+  if (!commitChecked) {
+    commitChecked = true;
+    let head = "";
+    try {
+      head = execFileSync("git", ["-C", dir, "rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+    } catch {
+      head = "unknown (not a git checkout)";
+    }
+    if (head !== TODOMVC_COMMIT)
+      process.stderr.write(
+        `warning: VEDHA_TODOMVC_DIR is at ${head}, not ${TODOMVC_COMMIT.slice(0, 7)}; results may not match the published ones (${CLONE_HINT})\n`,
+      );
+  }
   return path.resolve(dir);
 }
 
