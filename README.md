@@ -2,9 +2,9 @@
 
 [![npm](https://img.shields.io/npm/v/@vedhajs/mcp?label=%40vedhajs%2Fmcp)](https://www.npmjs.com/package/@vedhajs/mcp) [![CI](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml/badge.svg)](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-### Playwright that checks the server, not just the screen.
+### Is Playwright alone enough for agentic testing?
 
-Your test clicks "Save", the page says "Saved", and the test passes. But the server returned an error, or stored nothing. **Vedha catches that.** It runs on Playwright and checks that each action really happened before it reports a pass. It is built for AI agents driving a browser and for people writing tests.
+**Not when your agent trusts the screen.** Your agent clicks "Save", the page says "Saved", and it reports success. But the server returned an error, or stored nothing. **Vedha catches that.** It runs on Playwright and checks that each action really happened before it reports a pass. It is built for AI agents driving a browser and for people writing tests.
 
 |                           |                                                                                                    |
 | ------------------------- | -------------------------------------------------------------------------------------------------- |
