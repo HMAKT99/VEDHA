@@ -5,3 +5,4 @@ benchmarks/results/
 pnpm-lock.yaml
 LICENSE
 .github/
+.dryrun/
