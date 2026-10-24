@@ -24,5 +24,17 @@
     "@vedha/core": "workspace:*",
     "playwright": "1.64.1",
     "zod": "4.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HMAKT99/VEDHA.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://github.com/HMAKT99/VEDHA#readme",
+  "bugs": {
+    "url": "https://github.com/HMAKT99/VEDHA/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
