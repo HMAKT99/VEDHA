@@ -1,4 +1,4 @@
-# @vedha/cli
+# @vedhajs/cli
 
 The `vedha` command: run, explore and promote checked browser flows to Playwright tests.
 

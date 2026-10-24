@@ -1,6 +1,6 @@
 import type { Browser, Page } from "playwright";
 import { expect } from "@playwright/test";
-import type { ActionSpec, Verifier } from "@vedha/core";
+import type { ActionSpec, Verifier } from "@vedhajs/core";
 import type { Scenario } from "../scenarios/index.js";
 import type { Driver, DriverOutcome } from "./types.js";
 import { DEFAULT_TIMEOUT, acceptDialogs, doAction, launchBrowser, locateTarget } from "./common.js";

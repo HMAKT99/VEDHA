@@ -11,9 +11,9 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { PlaywrightAdapter, runGeneratedSpec } from "@vedha/adapter-playwright";
-import { RuleActor, Session, explore, promote } from "@vedha/core";
-import type { TestProposal } from "@vedha/core";
+import { PlaywrightAdapter, runGeneratedSpec } from "@vedhajs/adapter-playwright";
+import { RuleActor, Session, explore, promote } from "@vedhajs/core";
+import type { TestProposal } from "@vedhajs/core";
 import { ShopServer, type Variant } from "../fixtures/shop.js";
 
 const RUNS = Number(process.argv[2] ?? "3");

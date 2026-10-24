@@ -1,6 +1,6 @@
 /**
  * B7: security red-team over the Model Context Protocol. The same scripted tool calls drive the real
- * `@playwright/mcp` and `@vedha/mcp` servers, each configured the way its documentation recommends for
+ * `@playwright/mcp` and `@vedhajs/mcp` servers, each configured the way its documentation recommends for
  * restricting a browser to one origin and redacting a secret. The "disallowed" origin is `localhost`
  * on the same fixture server (the allowed origin is `127.0.0.1`), so server-side counters show exactly
  * what reached it. No model is involved.

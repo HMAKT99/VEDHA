@@ -1,4 +1,4 @@
-# @vedha/mcp
+# @vedhajs/mcp
 
 The `vedha-mcp` MCP server: lets an LLM agent drive a browser through Playwright and get a verified, server-checked verdict for each step.
 

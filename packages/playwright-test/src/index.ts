@@ -1,7 +1,7 @@
 import { test as base, expect } from "@playwright/test";
-import { sessionFromPage } from "@vedha/adapter-playwright";
-import { createBundle, describeResult } from "@vedha/core";
-import type { ActionResult, ActionSpec, Policy, RunReport, Session } from "@vedha/core";
+import { sessionFromPage } from "@vedhajs/adapter-playwright";
+import { createBundle, describeResult } from "@vedhajs/core";
+import type { ActionResult, ActionSpec, Policy, RunReport, Session } from "@vedhajs/core";
 
 export { expect };
 export type { ActionResult, ActionSpec, Policy, RunReport };
@@ -39,7 +39,7 @@ function explain(spec: ActionSpec, r: ActionResult): string {
 /**
  * Drop-in replacement for Playwright's `test` with a `vedha` fixture:
  *
- *   import { test, expect } from "@vedha/playwright-test";
+ *   import { test, expect } from "@vedhajs/playwright-test";
  *   test("order", async ({ vedha }) => {
  *     await vedha.verify({ id: "save", intent: "save", op: "click", target: {...}, postconditions: [...] });
  *   });

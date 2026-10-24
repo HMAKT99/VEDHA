@@ -1,5 +1,5 @@
 {
-  "name": "@vedha/adapter-playwright",
+  "name": "@vedhajs/adapter-playwright",
   "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
@@ -11,7 +11,7 @@
     }
   },
   "dependencies": {
-    "@vedha/core": "workspace:*"
+    "@vedhajs/core": "workspace:*"
   },
   "peerDependencies": {
     "playwright": ">=1.64.0 <2"

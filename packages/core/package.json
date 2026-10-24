@@ -1,5 +1,5 @@
 {
-  "name": "@vedha/core",
+  "name": "@vedhajs/core",
   "version": "0.1.0",
   "description": "Vedha core: verified semantic actions, independent verification, bounded recovery, bundles, promotion.",
   "type": "module",

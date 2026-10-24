@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { ActionSpec, Target, Verifier } from "@vedha/core";
+import type { ActionSpec, Target, Verifier } from "@vedhajs/core";
 import type { Scenario } from "./index.js";
 
 /**

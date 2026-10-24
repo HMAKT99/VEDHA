@@ -6,7 +6,7 @@ import {
   classifyError,
   runGeneratedSpec,
   runGeneratedSpecRepeated,
-} from "@vedha/adapter-playwright";
+} from "@vedhajs/adapter-playwright";
 import {
   RuleActor,
   Session,
@@ -16,8 +16,8 @@ import {
   readBundle,
   replayBundle,
   writeBundle,
-} from "@vedha/core";
-import type { ActionSpec, Actor, ActorDecision } from "@vedha/core";
+} from "@vedhajs/core";
+import type { ActionSpec, Actor, ActorDecision } from "@vedhajs/core";
 import { ShopServer, type Variant } from "../fixtures/shop.js";
 import { SCENARIOS } from "../scenarios/index.js";
 

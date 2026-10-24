@@ -1,6 +1,6 @@
-# @vedha/adapter-playwright
+# @vedhajs/adapter-playwright
 
-Runs @vedha/core on a Playwright page: actions, network log, origin allowlist.
+Runs @vedhajs/core on a Playwright page: actions, network log, origin allowlist.
 
 Part of [Vedha](https://github.com/HMAKT99/VEDHA), browser testing on Playwright that checks each action really happened. See the main README for usage, benchmarks and limits.
 

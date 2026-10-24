@@ -1,8 +1,8 @@
 import type { Browser } from "playwright";
 import { launchBrowser } from "./common.js";
-import { PlaywrightAdapter } from "@vedha/adapter-playwright";
-import { Session } from "@vedha/core";
-import type { ActionSpec } from "@vedha/core";
+import { PlaywrightAdapter } from "@vedhajs/adapter-playwright";
+import { Session } from "@vedhajs/core";
+import type { ActionSpec } from "@vedhajs/core";
 import type { Scenario } from "../scenarios/index.js";
 import type { Driver, DriverOutcome } from "./types.js";
 

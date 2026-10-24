@@ -1,4 +1,4 @@
-import type { ActionSpec, Target, Verifier } from "@vedha/core";
+import type { ActionSpec, Target, Verifier } from "@vedhajs/core";
 import type { ChatMessage, Gateway, ToolCall, ToolDef } from "./gateway.js";
 
 /** Identical for every arm: same model, same prompt, same tools. */

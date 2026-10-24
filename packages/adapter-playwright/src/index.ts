@@ -1,7 +1,7 @@
 import path from "node:path";
 import { chromium, firefox, webkit } from "playwright";
 import type { Browser, BrowserContext, FrameLocator, Locator, Page, Route } from "playwright";
-import { AdapterError, Session, pollUntil, urlAllowed } from "@vedha/core";
+import { AdapterError, Session, pollUntil, urlAllowed } from "@vedhajs/core";
 import type {
   ActionOp,
   BrowserAdapter,
@@ -13,7 +13,7 @@ import type {
   Policy,
   RawObservation,
   Target,
-} from "@vedha/core";
+} from "@vedhajs/core";
 
 export { runGeneratedSpec, runGeneratedSpecRepeated } from "./replayCheck.js";
 

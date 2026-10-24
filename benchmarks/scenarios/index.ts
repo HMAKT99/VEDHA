@@ -1,4 +1,4 @@
-import type { ActionSpec, Policy } from "@vedha/core";
+import type { ActionSpec, Policy } from "@vedhajs/core";
 import type { OracleState, Variant } from "../fixtures/shop.js";
 import type { Mutant } from "../fixtures/todomvc.js";
 import type { WidgetsVariant } from "../fixtures/widgets.js";

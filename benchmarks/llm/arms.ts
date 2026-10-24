@@ -1,7 +1,7 @@
 import type { Browser, Page, Response } from "playwright";
-import { PlaywrightAdapter } from "@vedha/adapter-playwright";
-import { Session, describeResult, explore } from "@vedha/core";
-import type { Actor, ActorDecision, ActionResult } from "@vedha/core";
+import { PlaywrightAdapter } from "@vedhajs/adapter-playwright";
+import { Session, describeResult, explore } from "@vedhajs/core";
+import type { Actor, ActorDecision, ActionResult } from "@vedhajs/core";
 import { doAction } from "../drivers/common.js";
 import type { DriverOutcome } from "../drivers/types.js";
 import { LlmAgent, type Decision, type Expect } from "./agent.js";

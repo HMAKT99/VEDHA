@@ -1,5 +1,5 @@
 // Run with: BASE_URL=http://localhost:3000 npx playwright test examples/playwright-test
-import { test } from "@vedha/playwright-test";
+import { test } from "@vedhajs/playwright-test";
 
 const base = process.env.BASE_URL ?? "http://localhost:3000";
 

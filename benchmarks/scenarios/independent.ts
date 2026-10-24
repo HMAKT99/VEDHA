@@ -1,4 +1,4 @@
-import type { ActionSpec, Target } from "@vedha/core";
+import type { ActionSpec, Target } from "@vedhajs/core";
 import type { Mutant } from "../fixtures/todomvc.js";
 import type { Scenario } from "./index.js";
 

@@ -41,7 +41,7 @@ Vedha does not replace Playwright, it builds on it. It reuses Playwright's auto-
 - **Agents can make mistakes without breaking the run.** Failures come back with a hint (`fill` on a dropdown: "use select"); the explore loop continues, but a repeat guard refuses to run the same mutating action again while its earlier outcome is unresolved, and an independent check (`confirms`) can clear an unknown outcome.
 - **Server errors cannot hide behind an optimistic page.** A page-health check fails a mutating step if a request returned 5xx, a write was rejected, or the page threw, even when the declared checks passed.
 - **Real-app reach.** Beyond click/fill/select/check/press: hover, double click, uncheck, upload (fail-closed `uploadRoots`), scroll, drag, wait, back, reload, tab switching, iframe targets, dialog policy.
-- **Usable from any MCP client.** `@vedha/mcp` exposes the same engine as a stdio MCP server.
+- **Usable from any MCP client.** `@vedhajs/mcp` exposes the same engine as a stdio MCP server.
 - **No LLM required.** The core has no model dependency; LLM actors implement a small `Actor` interface outside the core.
 
 It is **not** a Playwright wrapper that forwards commands: it uses Playwright as a replaceable browser substrate (`BrowserAdapter`) and owns the action/verification/recovery/promotion/bundle layers. It does not replace Playwright Test, and it reuses Playwright's actionability and auto-waiting (the strongest part of Playwright, per `research/playwright-execution-model.md`).
@@ -113,7 +113,7 @@ node packages/cli/dist/bin.js replay ./failure-bundle --base-url http://localhos
 ### SDK
 
 ```ts
-import { openSession } from "@vedha/adapter-playwright";
+import { openSession } from "@vedhajs/adapter-playwright";
 
 const session = await openSession({ allowedDomains: ["localhost"] });
 const report = await session.run(steps); // ActionSpec[]

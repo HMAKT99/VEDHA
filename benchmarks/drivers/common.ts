@@ -1,6 +1,6 @@
 import { chromium, firefox, webkit } from "playwright";
 import type { Browser, FrameLocator, Locator, Page } from "playwright";
-import type { ActionSpec, Target } from "@vedha/core";
+import type { ActionSpec, Target } from "@vedhajs/core";
 
 /** Plain Playwright locator for a neutral Target. Baseline drivers use this; they do not import Vedha runtime code. */
 export function locateTarget(page: Page | Locator | FrameLocator, t: Target): Locator {

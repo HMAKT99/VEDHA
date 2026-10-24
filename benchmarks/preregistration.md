@@ -18,7 +18,7 @@ For browser tasks driven by a script or by an LLM, does Vedha (verified actions,
 ## Arms
 
 Scripted (no model): `pw-trust`, `pw-test`, `pw-strong`, `pw-heal-naive`, `sel-trust`, `sel-strong`, `vedha`. `sel-strong` uses explicit waits, UI assertions, fetch instrumentation for response checks, known-banner dismissal and one whole-test retry (the Selenium counterpart of `pw-strong`; no alternate locators, no read-back).
-LLM (MCP vs MCP): `@playwright/mcp` 0.0.83 and `@vedha/mcp`, same model, system prompt, tool-result cap and turn limit, provider pinned, temperature 0. The model ends a run with "RESULT: success|failure"; that claim is classified against the oracle. Vedha's own report verdict is recorded as a secondary signal.
+LLM (MCP vs MCP): `@playwright/mcp` 0.0.83 and `@vedhajs/mcp`, same model, system prompt, tool-result cap and turn limit, provider pinned, temperature 0. The model ends a run with "RESULT: success|failure"; that claim is classified against the oracle. Vedha's own report verdict is recorded as a secondary signal.
 
 ## Metrics (per arm and per scenario category; categories are never merged)
 
