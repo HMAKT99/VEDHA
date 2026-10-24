@@ -50,12 +50,23 @@ It is **not** a Playwright wrapper that forwards commands: it uses Playwright as
 
 ## Quick start
 
+Install from npm (Node 20 or later):
+
 ```bash
-nvm use 22 && pnpm install
-npx playwright install chromium
-pnpm build
-node packages/cli/dist/bin.js doctor
+npm install -D @vedhajs/cli          # the `vedha` command
+npx playwright install chromium      # browser for Playwright, if you don't have it yet
+npx vedha doctor                     # checks Node and the Playwright browser
 ```
+
+| Package                                                                                    | What it is                                        |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| [`@vedhajs/cli`](https://www.npmjs.com/package/@vedhajs/cli)                               | `vedha run / explore / promote / replay / doctor` |
+| [`@vedhajs/mcp`](https://www.npmjs.com/package/@vedhajs/mcp)                               | MCP server (`vedha-mcp`) for LLM agents           |
+| [`@vedhajs/adapter-playwright`](https://www.npmjs.com/package/@vedhajs/adapter-playwright) | SDK: run checked steps on a Playwright page       |
+| [`@vedhajs/playwright-test`](https://www.npmjs.com/package/@vedhajs/playwright-test)       | Vedha checks inside `@playwright/test` specs      |
+| [`@vedhajs/core`](https://www.npmjs.com/package/@vedhajs/core)                             | Engine (installed with the others)                |
+
+From source instead: `nvm use 22 && pnpm install && npx playwright install chromium && pnpm build`, then use `node packages/cli/dist/bin.js` wherever this README says `npx vedha`.
 
 ### Deterministic spec (no LLM)
 
@@ -105,12 +116,14 @@ node packages/cli/dist/bin.js doctor
 ```
 
 ```bash
-node packages/cli/dist/bin.js run order.json --base-url http://localhost:3000 --out ./failure-bundle
+npx vedha run order.json --base-url http://localhost:3000 --out ./failure-bundle
 # exit 0 passed | 1 failed | 2 blocked | 4 outcome_unknown | 5 unverified ; JSON report on stdout
-node packages/cli/dist/bin.js replay ./failure-bundle --base-url http://localhost:3000
+npx vedha replay ./failure-bundle --base-url http://localhost:3000
 ```
 
 ### SDK
+
+`npm install -D @vedhajs/adapter-playwright playwright`
 
 ```ts
 import { openSession } from "@vedhajs/adapter-playwright";
@@ -129,7 +142,7 @@ Wrap an existing Playwright page: `sessionFromPage(page, policy)`.
 ### Agent-driven exploration → regression test
 
 ```bash
-node packages/cli/dist/bin.js explore goal.json --start-url http://localhost:3000/ \
+npx vedha explore goal.json --start-url http://localhost:3000/ \
   --promote order.spec.ts --check http://localhost:3000   # generates the spec and replay-checks it
 ```
 
@@ -137,12 +150,28 @@ The shipped `RuleActor` is a heuristic form-filler used for tests and benchmarks
 
 ### Use it from an MCP client
 
+Claude Code:
+
 ```bash
-pnpm build
-node packages/mcp/dist/bin.js --allow-domain localhost --out ./vedha-out
+claude mcp add vedha -- npx -y @vedhajs/mcp --allow-domain localhost --out ./vedha-out
 ```
 
-Tools: `vedha_act` (one action with the checks you declare in `expect`), `vedha_observe`, `vedha_report`, `vedha_promote` (verified steps to a Playwright spec), `vedha_bundle`, `vedha_close`. The server refuses to start without `--allow-domain HOST` or an explicit `--allow-any-domain`. Mark data-changing steps `mutating: true`; after an unknown outcome Vedha refuses to repeat them until a check confirms the effect (`confirms: "<step id>"`).
+Any client that takes an `mcpServers` config (Claude Desktop, Cursor, VS Code and others):
+
+```json
+{
+  "mcpServers": {
+    "vedha": {
+      "command": "npx",
+      "args": ["-y", "@vedhajs/mcp", "--allow-domain", "localhost", "--out", "./vedha-out"]
+    }
+  }
+}
+```
+
+Run `npx playwright install chromium` once first if Playwright's browser is not installed. `npx -y @vedhajs/mcp --help` lists the options (browser, headed, uploads, secrets to redact, step cap).
+
+Tools: `vedha_act` (one action with the checks you declare in `expect`), `vedha_observe`, `vedha_probe` (GET a same-origin JSON path without moving the page), `vedha_report`, `vedha_promote` (verified steps to a Playwright spec), `vedha_bundle`, `vedha_close`. The server refuses to start without `--allow-domain HOST` or an explicit `--allow-any-domain`. Mark data-changing steps `mutating: true`; after an unknown outcome Vedha refuses to repeat them until a check confirms the effect (`confirms: "<step id>"`).
 
 ### Migrating a Playwright test
 
