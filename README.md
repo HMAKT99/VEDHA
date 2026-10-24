@@ -87,6 +87,8 @@ npx vedha doctor                     # checks Node and the Playwright browser
 | [`@vedhajs/playwright-test`](https://www.npmjs.com/package/@vedhajs/playwright-test)       | Vedha checks inside `@playwright/test` specs      |
 | [`@vedhajs/core`](https://www.npmjs.com/package/@vedhajs/core)                             | Engine (installed with the others)                |
 
+Agent skill (Claude Code, Codex, Cursor and other agents that read `SKILL.md`): `npx skills add HMAKT99/VEDHA` installs [`vedha-verified-browser-testing`](skills/vedha-verified-browser-testing/SKILL.md), which teaches the agent to declare checks, mark writes and never repeat an unknown outcome.
+
 From source instead: `nvm use 22 && pnpm install && npx playwright install chromium && pnpm build`, then use `node packages/cli/dist/bin.js` wherever this README says `npx vedha`.
 
 ### Deterministic spec (no LLM)
