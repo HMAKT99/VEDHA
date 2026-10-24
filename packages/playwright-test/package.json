@@ -24,5 +24,17 @@
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HMAKT99/VEDHA.git",
+    "directory": "packages/playwright-test"
+  },
+  "homepage": "https://github.com/HMAKT99/VEDHA#readme",
+  "bugs": {
+    "url": "https://github.com/HMAKT99/VEDHA/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

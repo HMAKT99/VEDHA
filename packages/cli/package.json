@@ -11,5 +11,20 @@
     "@vedha/adapter-playwright": "workspace:*",
     "playwright": "1.64.1"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HMAKT99/VEDHA.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/HMAKT99/VEDHA#readme",
+  "bugs": {
+    "url": "https://github.com/HMAKT99/VEDHA/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
