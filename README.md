@@ -1,18 +1,39 @@
 # Vedha
 
-**Browser testing that does not take "it looked fine" for an answer.** Vedha runs on Playwright, and checks that each action really happened before it reports a pass. It is built for AI agents driving a browser and for people writing tests.
+[![npm](https://img.shields.io/npm/v/@vedhajs/mcp?label=%40vedhajs%2Fmcp)](https://www.npmjs.com/package/@vedhajs/mcp) [![CI](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml/badge.svg)](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-When an LLM agent tests a web app through Playwright MCP, it reports success whenever the page _looks_ right. Vedha also checks what the server did. On held-out tasks the model had never seen, that made the difference:
+### Playwright that checks the server, not just the screen.
 
-| Same model, same tasks, held-out set 4 (pilot 8) | Playwright MCP | **Vedha MCP**      |
-| ------------------------------------------------ | -------------- | ------------------ |
-| Broken features caught (seeded defects)          | 10 / 18        | **16 / 18**        |
-| Healthy tasks completed                          | 18 / 18        | 17 / 18            |
-| Median tokens, healthy tasks                     | 76,018         | **52,990 (-30%)**  |
-| Median tokens, defect tasks                      | 210,000        | **139,029 (-34%)** |
-| Median wall time, healthy tasks                  | 169 s          | 176 s (+4%)        |
+Your test clicks "Save", the page says "Saved", and the test passes. But the server returned an error, or stored nothing. **Vedha catches that.** It runs on Playwright and checks that each action really happened before it reports a pass. It is built for AI agents driving a browser and for people writing tests.
 
-The defect-catching lead held on every held-out set: **10 vs 4 of 14** (set 2), **15 vs 10 of 18** (set 3) and **16 vs 10 of 18** (set 4).
+|                           |                                                                                                    |
+| ------------------------- | -------------------------------------------------------------------------------------------------- |
+| **~3x fewer missed bugs** | when an AI agent tests: 9 seeded defects missed vs 26 for Playwright MCP (held-out sets 2-4)       |
+| **60 vs 0**               | broken features caught with everyday text/URL checks (140 seeded defects, scripted)                |
+| **30% fewer tokens**      | for the agent on healthy tasks (set 4; 12-46% across sets)                                         |
+| **0 false passes**        | in a 1,120-trial audit, with every seeded defect caught (210/210)                                  |
+| **Within 5%**             | of hand-written Playwright's speed on healthy flows (median 1.05x): the checks cost almost nothing |
+
+```bash
+npx -y @vedhajs/mcp --allow-domain localhost     # MCP server for your agent
+npm install -D @vedhajs/cli                      # or the CLI / SDK for your tests
+```
+
+### Head to head: AI agent testing a web app
+
+Same model, same tasks, written before any run on them. Playwright MCP reports success whenever the page _looks_ right; Vedha also checks what the server did.
+
+| Held-out set 4 (pilot 8)                | Playwright MCP | **Vedha MCP**      |
+| --------------------------------------- | -------------- | ------------------ |
+| Broken features caught (seeded defects) | 10 / 18        | **16 / 18**        |
+| Healthy tasks completed                 | 18 / 18        | 17 / 18            |
+| Median tokens, healthy tasks            | 76,018         | **52,990 (-30%)**  |
+| Median tokens, defect tasks             | 210,000        | **139,029 (-34%)** |
+| Median wall time, healthy tasks         | 169 s          | 176 s (+4%)        |
+
+The lead held on every held-out set: **10 vs 4 of 14** (set 2), **15 vs 10 of 18** (set 3) and **16 vs 10 of 18** (set 4), or 41 vs 24 caught overall.
+
+<sub>Fine print: LLM results are from one free model (`minimax/minimax-m3.1-flash`) at 3 trials per cell. When an expert writes every check by hand, Vedha and Playwright tie; Vedha's lead is with typical checks and with AI agents. All numbers come from raw data in `benchmarks/results/`, and the known misses are listed under [Measured results](#measured-results).</sub>
 
 ## Why use Vedha instead of Playwright alone
 
