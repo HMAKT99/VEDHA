@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { PlaywrightAdapter, runGeneratedSpecRepeated } from "@vedha/adapter-playwright";
+import { PlaywrightAdapter, runGeneratedSpecRepeated } from "@vedhajs/adapter-playwright";
 import {
   RuleActor,
   Session,
@@ -14,8 +14,8 @@ import {
   resolveInside,
   toJUnit,
   writeBundle,
-} from "@vedha/core";
-import type { Policy, RunVerdict, TestProposal } from "@vedha/core";
+} from "@vedhajs/core";
+import type { Policy, RunVerdict, TestProposal } from "@vedhajs/core";
 import { flag, flagAll, has, parseArgs, type Parsed } from "./args.js";
 
 export const EXIT: Record<RunVerdict, number> = {

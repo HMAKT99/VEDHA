@@ -1,4 +1,4 @@
-import type { Policy } from "@vedha/core";
+import type { Policy } from "@vedhajs/core";
 
 export interface McpConfig {
   policy: Policy;

@@ -1,5 +1,5 @@
 {
-  "name": "@vedha/cli",
+  "name": "@vedhajs/cli",
   "version": "0.1.0",
   "type": "module",
   "bin": {
@@ -7,8 +7,8 @@
   },
   "main": "dist/index.js",
   "dependencies": {
-    "@vedha/core": "workspace:*",
-    "@vedha/adapter-playwright": "workspace:*",
+    "@vedhajs/core": "workspace:*",
+    "@vedhajs/adapter-playwright": "workspace:*",
     "playwright": "1.64.1"
   },
   "license": "Apache-2.0",

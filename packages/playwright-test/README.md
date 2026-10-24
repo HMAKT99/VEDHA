@@ -1,4 +1,4 @@
-# @vedha/playwright-test
+# @vedhajs/playwright-test
 
 Use Vedha checks inside @playwright/test specs.
 

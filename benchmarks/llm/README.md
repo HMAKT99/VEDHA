@@ -47,7 +47,7 @@ Why (from the transcripts): the model declared checks that could not pass (for e
 
 ## Pilot 3b (MCP vs MCP, commit 69cbc9f build): a tie on completion, fewer tokens for Vedha
 
-`@playwright/mcp` 0.0.83 vs `@vedha/mcp`, same model (`minimax/minimax-m3.1-flash`), same system prompt, loop and 14-turn cap; 8 scenarios x 2 arms x 2 trials; 374 gateway calls, 2,217,010 prompt + 86,579 completion tokens, spend $0.00. An earlier attempt (`llm-mcp-pilot3-crashed-partial`) died after 8 trials when the fixture server crashed on a non-JSON POST body an agent sent; it is kept only as a record.
+`@playwright/mcp` 0.0.83 vs `@vedhajs/mcp`, same model (`minimax/minimax-m3.1-flash`), same system prompt, loop and 14-turn cap; 8 scenarios x 2 arms x 2 trials; 374 gateway calls, 2,217,010 prompt + 86,579 completion tokens, spend $0.00. An earlier attempt (`llm-mcp-pilot3-crashed-partial`) died after 8 trials when the fixture server crashed on a non-JSON POST body an agent sent; it is kept only as a record.
 
 |                | completion (healthy, 12 trials) | false passes | median tokens/trial      |
 | -------------- | ------------------------------- | ------------ | ------------------------ |

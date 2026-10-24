@@ -1,6 +1,6 @@
 # Implementation status (updated 2026-10-20, after super-plan Phases 0-2)
 
-Project name: **Vedha**. Packages: `@vedha/core`, `@vedha/adapter-playwright`, `@vedha/cli`, `@vedha/mcp`, `@vedha/playwright-test`. Framework freeze tag: `prereg-v1` (see `benchmarks/preregistration.md`, amendments A1-A4).
+Project name: **Vedha**. Packages: `@vedhajs/core`, `@vedhajs/adapter-playwright`, `@vedhajs/cli`, `@vedhajs/mcp`, `@vedhajs/playwright-test`. Framework freeze tag: `prereg-v1` (see `benchmarks/preregistration.md`, amendments A1-A4).
 
 ## What exists
 

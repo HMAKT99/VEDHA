@@ -2,9 +2,9 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { PlaywrightAdapter } from "@vedha/adapter-playwright";
-import { Session } from "@vedha/core";
-import type { ActionSpec, Policy } from "@vedha/core";
+import { PlaywrightAdapter } from "@vedhajs/adapter-playwright";
+import { Session } from "@vedhajs/core";
+import type { ActionSpec, Policy } from "@vedhajs/core";
 import { WidgetsServer } from "../fixtures/widgets.js";
 
 let server: WidgetsServer;

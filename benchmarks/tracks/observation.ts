@@ -11,8 +11,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { PlaywrightAdapter } from "@vedha/adapter-playwright";
-import { RuleActor, Session, explore } from "@vedha/core";
+import { PlaywrightAdapter } from "@vedhajs/adapter-playwright";
+import { RuleActor, Session, explore } from "@vedhajs/core";
 import { ShopServer } from "../fixtures/shop.js";
 
 const TRIALS = Number(process.argv[2] ?? "10");

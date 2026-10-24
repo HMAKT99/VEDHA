@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import type { WebDriver, WebElement } from "selenium-webdriver";
-import type { Target, Verifier } from "@vedha/core";
+import type { Target, Verifier } from "@vedhajs/core";
 import type { Scenario } from "../scenarios/index.js";
 import type { Driver, DriverOutcome } from "./types.js";
 

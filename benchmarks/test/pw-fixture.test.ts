@@ -11,7 +11,7 @@ let okUrl: string;
 let bugUrl: string;
 
 const SPEC = `
-import { test } from "@vedha/playwright-test";
+import { test } from "@vedhajs/playwright-test";
 const steps = (base: string) => [
   { id: "open", intent: "open", op: "goto" as const, value: base + "/",
     postconditions: [{ type: "state" as const, target: { label: "Name", exact: true }, state: "visible" as const }] },
@@ -92,7 +92,7 @@ async function runPlaywright(): Promise<Spec[]> {
   return report.suites.flatMap((s) => [...s.specs, ...(s.suites ?? []).flatMap((x) => x.specs)]);
 }
 
-describe("@vedha/playwright-test", () => {
+describe("@vedhajs/playwright-test", () => {
   it("passes a verified test, fails a hidden server error with the reason, and attaches evidence", async () => {
     const specs = await runPlaywright();
     const by = (t: string) => specs.find((s) => s.title.startsWith(t))!.tests[0]!.results[0]!;

@@ -1,6 +1,6 @@
 /**
  * MCP vs MCP: the same model, system prompt and loop drive two real products through the Model
- * Context Protocol, @playwright/mcp and @vedha/mcp. Nothing here is Vedha-specific except the server
+ * Context Protocol, @playwright/mcp and @vedhajs/mcp. Nothing here is Vedha-specific except the server
  * command, so the comparison does not depend on an adapter written by Vedha's author.
  *
  * The model ends a run by answering without a tool call and writing "RESULT: success" or

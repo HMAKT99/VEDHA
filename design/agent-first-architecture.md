@@ -5,9 +5,9 @@ Working name `Vedha`. Language: TypeScript/Node ≥ 20. Core has no LLM or cloud
 ## 1. Package layout
 
 ```
-packages/core               @vedha/core   - schemas, ActionSpec runner, verifiers, recovery, policy, trace/bundle, promotion, explorer loop
-packages/adapter-playwright @vedha/adapter-playwright - BrowserAdapter over Playwright Page
-packages/cli                @vedha/cli    - `vedha run|observe|promote|replay|doctor`
+packages/core               @vedhajs/core   - schemas, ActionSpec runner, verifiers, recovery, policy, trace/bundle, promotion, explorer loop
+packages/adapter-playwright @vedhajs/adapter-playwright - BrowserAdapter over Playwright Page
+packages/cli                @vedhajs/cli    - `vedha run|observe|promote|replay|doctor`
 benchmarks/                 harness, fixtures, drivers (see methodology)
 ```
 
@@ -41,7 +41,7 @@ Actionability/auto-wait/hit-target (E-008), ARIA snapshot with refs (E-021), loc
 
 ## 6. Interfaces
 
-SDK (`import { Session, runSpec } from '@vedha/core'`), CLI (JSON in/out, exit codes: 0 pass, 1 failed, 2 blocked, 3 error, 4 outcome_unknown), file-based JSON schemas (`schemas/*.json`). MCP/others evaluated later (ADR-0005).
+SDK (`import { Session, runSpec } from '@vedhajs/core'`), CLI (JSON in/out, exit codes: 0 pass, 1 failed, 2 blocked, 3 error, 4 outcome_unknown), file-based JSON schemas (`schemas/*.json`). MCP/others evaluated later (ADR-0005).
 
 ## 7. Non-goals (MVP)
 

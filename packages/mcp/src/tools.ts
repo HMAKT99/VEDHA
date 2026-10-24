@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
-import { PlaywrightAdapter } from "@vedha/adapter-playwright";
+import { PlaywrightAdapter } from "@vedhajs/adapter-playwright";
 import {
   NEVER_PROBE,
   REFUSED_HINT,
@@ -14,8 +14,8 @@ import {
   renderFeedback,
   resolveInside,
   writeBundle,
-} from "@vedha/core";
-import type { ActionSpec, ObservationLevel, Target, Verifier } from "@vedha/core";
+} from "@vedhajs/core";
+import type { ActionSpec, ObservationLevel, Target, Verifier } from "@vedhajs/core";
 import type { McpConfig } from "./config.js";
 
 const MAX_TEXT = 12_000;
