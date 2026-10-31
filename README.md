@@ -4,6 +4,10 @@
 
 ### Is Playwright alone enough for agentic testing?
 
+![Same order flow, same "Order placed" check: Playwright passes, Vedha fails the step because POST /api/orders returned 500, and the server stored 0 orders](examples/demo/demo.gif)
+
+<sub>[Run this demo](examples/demo/) in about 3 seconds: `npx tsx examples/demo/run.ts`</sub>
+
 **Not when your agent trusts the screen.** Your agent clicks "Save", the page says "Saved", and it reports success. But the server returned an error, or stored nothing. **Vedha catches that.** It runs on Playwright and checks that each action really happened before it reports a pass. It is built for AI agents driving a browser and for people writing tests.
 
 |                           |                                                                                                    |
