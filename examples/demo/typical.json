@@ -1,0 +1,23 @@
+{
+  "goal": "place an order",
+  "steps": [
+    { "id": "open", "intent": "open the order form", "op": "goto", "value": "/" },
+    {
+      "id": "name",
+      "intent": "enter name",
+      "op": "fill",
+      "target": { "label": "Name" },
+      "value": "Ada"
+    },
+    {
+      "id": "submit",
+      "intent": "place the order",
+      "op": "click",
+      "target": { "role": "button", "name": "Place order" },
+      "mutating": true,
+      "postconditions": [
+        { "type": "text", "target": { "role": "status" }, "contains": "Order placed" }
+      ]
+    }
+  ]
+}
