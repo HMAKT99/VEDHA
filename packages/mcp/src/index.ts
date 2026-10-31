@@ -19,7 +19,7 @@ const INSTRUCTIONS = `Vedha runs browser actions and reports what it saw: the pa
 /** Builds the server; the transport is attached by the caller. */
 export function createServer(config: McpConfig): { server: McpServer; tools: VedhaTools } {
   const tools = new VedhaTools(config);
-  const server = new McpServer({ name: "vedha", version: "0.1.0" }, { instructions: INSTRUCTIONS });
+  const server = new McpServer({ name: "vedha", version: "0.1.1" }, { instructions: INSTRUCTIONS });
 
   server.registerTool(
     "vedha_act",
@@ -33,7 +33,8 @@ export function createServer(config: McpConfig): { server: McpServer; tools: Ved
   server.registerTool(
     "vedha_observe",
     {
-      description: "Current page as an accessibility outline.",
+      description:
+        "Read the current page without acting: an accessibility outline by default, `controls` for interactive elements only, or `region`/`detail` for one subtree by ref. Read-only.",
       inputSchema: {
         level: z.enum(["outline", "controls", "region", "detail"]).optional(),
         ref: z.string().optional().describe("subtree ref"),
@@ -45,7 +46,8 @@ export function createServer(config: McpConfig): { server: McpServer; tools: Ved
   server.registerTool(
     "vedha_probe",
     {
-      description: "GET a same-origin JSON path; the page stays put.",
+      description:
+        "Read server state with a GET to a same-origin JSON path (such as /api/orders) without leaving the page. Use it to confirm whether a write took effect. Read-only.",
       inputSchema: { path: z.string().startsWith("/") },
       annotations: { readOnlyHint: true },
     },
@@ -54,7 +56,8 @@ export function createServer(config: McpConfig): { server: McpServer; tools: Ved
   server.registerTool(
     "vedha_report",
     {
-      description: "Verdict and per-step status so far.",
+      description:
+        "Overall verdict and each step's status (verified, failed, outcome_unknown, unverified, blocked) with errors and recoveries so far. Read-only.",
       inputSchema: {},
       annotations: { readOnlyHint: true },
     },
@@ -63,7 +66,8 @@ export function createServer(config: McpConfig): { server: McpServer; tools: Ved
   server.registerTool(
     "vedha_promote",
     {
-      description: "Playwright Test spec from the verified steps so far.",
+      description:
+        "Generate a Playwright Test spec from the verified steps so far, with its assumptions listed. Pass `file` to save it under --out.",
       inputSchema: {
         title: z.string().min(1),
         goal: z.string().min(1),
@@ -75,7 +79,8 @@ export function createServer(config: McpConfig): { server: McpServer; tools: Ved
   server.registerTool(
     "vedha_bundle",
     {
-      description: "Save a replayable failure bundle.",
+      description:
+        "Save a failure bundle under --out: goal, steps, verdicts, network summary and a screenshot, replayable with `vedha replay`.",
       inputSchema: { goal: z.string().min(1) },
     },
     ({ goal }) => tools.bundle(goal),
@@ -83,7 +88,7 @@ export function createServer(config: McpConfig): { server: McpServer; tools: Ved
   server.registerTool(
     "vedha_close",
     {
-      description: "Close the browser session.",
+      description: "Close the browser and end the session.",
       inputSchema: {},
     },
     async () => {

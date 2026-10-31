@@ -1,6 +1,6 @@
 {
   "name": "@vedhajs/mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vedha as an MCP server: verified browser actions, recorded recovery, failure bundles and test promotion for any MCP client.",
   "type": "module",
   "bin": {
