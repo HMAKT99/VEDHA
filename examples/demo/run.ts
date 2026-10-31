@@ -9,7 +9,7 @@ import { ShopServer } from "../../benchmarks/fixtures/shop.js";
 const shop = new ShopServer({ bug: "silent" });
 const url = await shop.start();
 console.log(
-  `Order form at ${url}: the server answers 500 and stores nothing, the page still says "Order placed".\n`,
+  `Order form with a bug: the server answers 500 and stores nothing; the page says "Order placed".\n`,
 );
 
 const browser = await chromium.launch();

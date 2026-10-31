@@ -3,7 +3,7 @@
 Output examples/demo/demo.gif
 Set FontSize 18
 Set Width 1300
-Set Height 420
+Set Height 300
 Set Padding 24
 Set TypingSpeed 40ms
 
