@@ -6,3 +6,4 @@ pnpm-lock.yaml
 LICENSE
 .github/
 .dryrun/
+test-results/

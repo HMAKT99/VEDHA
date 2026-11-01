@@ -14,6 +14,9 @@ importers:
       '@types/node':
         specifier: 22.10.2
         version: 22.10.2
+      '@vedhajs/playwright-test':
+        specifier: workspace:^
+        version: link:packages/playwright-test
       eslint:
         specifier: 9.17.0
         version: 9.17.0

@@ -17,3 +17,4 @@ benchmarks/.pw-fixture/
 .playwright-mcp/
 benchmarks/results/redteam/.pw-mcp/
 .dryrun/
+test-results/

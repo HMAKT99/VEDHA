@@ -212,6 +212,10 @@ import { test, expect } from "@playwright/test";
 import { test, expect } from "@vedhajs/playwright-test";
 ```
 
+![The same Playwright test with two imports: @playwright/test passes, @vedhajs/playwright-test fails with "POST /api/orders returned 500"](examples/guard-demo/demo.gif)
+
+<sub>[Run this demo](examples/guard-demo/): `npx tsx examples/guard-demo/run.ts`</sub>
+
 Your tests run exactly as before, with guard mode watching each one. A test whose own checks pass still **fails** if the app answered a request with a 5xx, or a write request (POST/PUT/PATCH/DELETE) failed outright: the page said "Saved", the server didn't. A 4xx answer to a write and an uncaught page error are added to the report as warnings, because validation tests and third-party scripts produce them on purpose. Requests to other sites (analytics, CDNs) are not watched. The findings are attached to the test as `vedha-guard.json`.
 
 ```ts
