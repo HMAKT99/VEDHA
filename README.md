@@ -21,6 +21,7 @@
 ```bash
 npx -y @vedhajs/mcp --allow-domain localhost     # MCP server for your agent
 npm install -D @vedhajs/cli                      # or the CLI / SDK for your tests
+npm install -D @vedhajs/playwright-test          # guard an existing Playwright suite: change one import
 ```
 
 ### Head to head: AI agent testing a web app
@@ -83,13 +84,13 @@ npx playwright install chromium      # browser for Playwright, if you don't have
 npx vedha doctor                     # checks Node and the Playwright browser
 ```
 
-| Package                                                                                    | What it is                                        |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
-| [`@vedhajs/cli`](https://www.npmjs.com/package/@vedhajs/cli)                               | `vedha run / explore / promote / replay / doctor` |
-| [`@vedhajs/mcp`](https://www.npmjs.com/package/@vedhajs/mcp)                               | MCP server (`vedha-mcp`) for LLM agents           |
-| [`@vedhajs/adapter-playwright`](https://www.npmjs.com/package/@vedhajs/adapter-playwright) | SDK: run checked steps on a Playwright page       |
-| [`@vedhajs/playwright-test`](https://www.npmjs.com/package/@vedhajs/playwright-test)       | Vedha checks inside `@playwright/test` specs      |
-| [`@vedhajs/core`](https://www.npmjs.com/package/@vedhajs/core)                             | Engine (installed with the others)                |
+| Package                                                                                    | What it is                                                                |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| [`@vedhajs/cli`](https://www.npmjs.com/package/@vedhajs/cli)                               | `vedha run / explore / promote / replay / doctor`                         |
+| [`@vedhajs/mcp`](https://www.npmjs.com/package/@vedhajs/mcp)                               | MCP server (`vedha-mcp`) for LLM agents                                   |
+| [`@vedhajs/adapter-playwright`](https://www.npmjs.com/package/@vedhajs/adapter-playwright) | SDK: run checked steps on a Playwright page                               |
+| [`@vedhajs/playwright-test`](https://www.npmjs.com/package/@vedhajs/playwright-test)       | One-line guard for existing `@playwright/test` suites, plus checked steps |
+| [`@vedhajs/core`](https://www.npmjs.com/package/@vedhajs/core)                             | Engine (installed with the others)                                        |
 
 Agent skill (Claude Code, Codex, Cursor and other agents that read `SKILL.md`): `npx skills add HMAKT99/VEDHA` installs [`vedha-verified-browser-testing`](skills/vedha-verified-browser-testing/SKILL.md), which teaches the agent to declare checks, mark writes and never repeat an unknown outcome.
 
@@ -201,6 +202,25 @@ Run `npx playwright install chromium` once first if Playwright's browser is not 
 Tools: `vedha_act` (one action with the checks you declare in `expect`), `vedha_observe`, `vedha_probe` (GET a same-origin JSON path without moving the page), `vedha_report`, `vedha_promote` (verified steps to a Playwright spec), `vedha_bundle`, `vedha_close`. The server refuses to start without `--allow-domain HOST` or an explicit `--allow-any-domain`. Mark data-changing steps `mutating: true`; after an unknown outcome Vedha refuses to repeat them until a check confirms the effect (`confirms: "<step id>"`).
 
 ### Migrating a Playwright test
+
+**One line, no rewrite.** Install `@vedhajs/playwright-test` and change the import in your existing tests:
+
+```ts
+// before
+import { test, expect } from "@playwright/test";
+// after
+import { test, expect } from "@vedhajs/playwright-test";
+```
+
+Your tests run exactly as before, with guard mode watching each one. A test whose own checks pass still **fails** if the app answered a request with a 5xx, or a write request (POST/PUT/PATCH/DELETE) failed outright: the page said "Saved", the server didn't. A 4xx answer to a write and an uncaught page error are added to the report as warnings, because validation tests and third-party scripts produce them on purpose. Requests to other sites (analytics, CDNs) are not watched. The findings are attached to the test as `vedha-guard.json`.
+
+```ts
+test.use({ vedhaGuard: "strict" }); // 4xx writes and page errors fail too
+test.use({ vedhaGuard: { ignore: ["/api/flaky", /\/v2\//], hosts: ["api.other-domain.com"] } });
+test.use({ vedhaGuard: false }); // off for these tests (for example a test that expects a 500)
+```
+
+**Checked steps.** For steps that must hold, Vedha can also run the action itself and verify it:
 
 ```ts
 // before

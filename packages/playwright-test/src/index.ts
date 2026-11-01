@@ -2,9 +2,19 @@ import { test as base, expect } from "@playwright/test";
 import { sessionFromPage } from "@vedhajs/adapter-playwright";
 import { createBundle, describeResult } from "@vedhajs/core";
 import type { ActionResult, ActionSpec, Policy, RunReport, Session } from "@vedhajs/core";
+import {
+  failedRequestFinding,
+  guardError,
+  pageErrorFinding,
+  resolveGuard,
+  responseFinding,
+  watched,
+} from "./guard.js";
+import type { GuardFinding, GuardSetting } from "./guard.js";
 
 export { expect };
 export type { ActionResult, ActionSpec, Policy, RunReport };
+export type { GuardFinding, GuardOptions, GuardSetting } from "./guard.js";
 
 /** What the `vedha` fixture gives a test. */
 export interface VedhaHandle {
@@ -28,6 +38,21 @@ export interface VedhaOptions {
    * outcome_unknown or unverified). Set false for tests that expect failures.
    */
   vedhaStrict: boolean;
+  /**
+   * Guard mode for ordinary Playwright tests, on by default: fails a test whose own checks passed if
+   * the app answered a request with 5xx or a write request failed, and annotates 4xx answers to writes
+   * and uncaught page errors. "strict" makes those fail too; `false` turns it off.
+   */
+  vedhaGuard: GuardSetting;
+}
+
+/** The frame's page URL, or undefined for requests without one (service workers). */
+function pageUrlOf(frame: () => { page(): { url(): string } | null }): string | undefined {
+  try {
+    return frame().page()?.url();
+  } catch {
+    return undefined;
+  }
 }
 
 const OK = new Set(["passed", "passed_with_recovery"]);
@@ -37,7 +62,8 @@ function explain(spec: ActionSpec, r: ActionResult): string {
 }
 
 /**
- * Drop-in replacement for Playwright's `test` with a `vedha` fixture:
+ * Drop-in replacement for Playwright's `test`. Changing the import alone turns on guard mode
+ * (`vedhaGuard`) for existing tests. For checked steps, use the `vedha` fixture:
  *
  *   import { test, expect } from "@vedhajs/playwright-test";
  *   test("order", async ({ vedha }) => {
@@ -47,9 +73,56 @@ function explain(spec: ActionSpec, r: ActionResult): string {
  * Runner features (retries, sharding, reporters, traces) work unchanged. The run report and, when
  * anything did not verify, the failure bundle are attached to the test result.
  */
-export const test = base.extend<{ vedha: VedhaHandle } & VedhaOptions>({
+export const test = base.extend<{ vedha: VedhaHandle; _vedhaGuard: void } & VedhaOptions>({
   vedhaPolicy: [{}, { option: true }],
   vedhaStrict: [true, { option: true }],
+  vedhaGuard: [true, { option: true }],
+  _vedhaGuard: [
+    async ({ context, vedhaGuard, vedhaStrict }, use, testInfo) => {
+      const o = resolveGuard(vedhaGuard);
+      if (!o) return use();
+      const found: GuardFinding[] = [];
+      // vedhaStrict: false means the test expects failures, so guard findings only annotate it.
+      const add = (f: GuardFinding | undefined) =>
+        f && found.push(vedhaStrict ? f : { ...f, level: "warn" });
+      context.on("response", (r) => {
+        const req = r.request();
+        if (
+          watched(
+            r.url(),
+            pageUrlOf(() => r.frame()),
+            o,
+          )
+        )
+          add(responseFinding(req.method(), r.url(), r.status(), o));
+      });
+      context.on("requestfailed", (req) => {
+        if (
+          watched(
+            req.url(),
+            pageUrlOf(() => req.frame()),
+            o,
+          )
+        )
+          add(failedRequestFinding(req.method(), req.url(), req.failure()?.errorText ?? "failed"));
+      });
+      context.on("weberror", (e) => add(pageErrorFinding(e.error().message, o)));
+
+      await use();
+
+      if (!found.length) return;
+      await testInfo.attach("vedha-guard.json", {
+        body: JSON.stringify(found, null, 2),
+        contentType: "application/json",
+      });
+      for (const f of found.filter((x) => x.level === "warn"))
+        testInfo.annotations.push({ type: "vedha-guard warning", description: f.message });
+      const fails = found.filter((x) => x.level === "fail");
+      // A test that already failed keeps its own error; the findings are in the attachment.
+      if (fails.length && testInfo.errors.length === 0) throw guardError(fails);
+    },
+    { auto: true },
+  ],
   vedha: async ({ page, vedhaPolicy, vedhaStrict }, use, testInfo) => {
     const session = await sessionFromPage(page, vedhaPolicy);
     const handle: VedhaHandle = {

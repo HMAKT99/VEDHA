@@ -1,7 +1,7 @@
 {
   "name": "@vedhajs/playwright-test",
-  "version": "0.1.0",
-  "description": "Playwright Test fixture for Vedha: verified steps inside ordinary Playwright tests, with the report and failure bundle attached to the test result.",
+  "version": "0.2.0",
+  "description": "Change one import to find Playwright tests that pass while the app returns 5xx or drops writes; plus checked Vedha steps inside @playwright/test.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,5 +36,14 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "playwright",
+    "playwright-test",
+    "testing",
+    "e2e",
+    "false-positive",
+    "api",
+    "vedha"
+  ]
 }
