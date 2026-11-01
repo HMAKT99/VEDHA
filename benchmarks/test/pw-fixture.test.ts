@@ -11,7 +11,7 @@ let okUrl: string;
 let bugUrl: string;
 
 const SPEC = `
-import { test } from "@vedhajs/playwright-test";
+import { test, expect } from "@vedhajs/playwright-test";
 const steps = (base: string) => [
   { id: "open", intent: "open", op: "goto" as const, value: base + "/",
     postconditions: [{ type: "state" as const, target: { label: "Name", exact: true }, state: "visible" as const }] },
@@ -34,6 +34,36 @@ test.describe("non-strict", () => {
   test.use({ vedhaStrict: false });
   test("keeps going, attaches the bundle", async ({ vedha }) => {
     for (const s of steps(process.env.BUG_URL!)) await vedha.step(s);
+  });
+});
+
+// Guard mode: ordinary Playwright tests, unchanged except for the import.
+const plain = async (page: import("@playwright/test").Page, base: string) => {
+  await page.goto(base + "/");
+  await page.getByLabel("Name", { exact: true }).fill("Ada");
+  await page.getByRole("button", { name: "Place order" }).click();
+  await expect(page.getByRole("status")).toContainText("Order placed");
+};
+
+test("guard: plain test on a healthy app passes", async ({ page }) => {
+  await plain(page, process.env.OK_URL!);
+});
+
+test("guard: plain test whose checks pass over a server 500 fails", async ({ page }) => {
+  await plain(page, process.env.BUG_URL!);
+});
+
+test.describe("guard off", () => {
+  test.use({ vedhaGuard: false });
+  test("guard: off keeps Playwright's verdict", async ({ page }) => {
+    await plain(page, process.env.BUG_URL!);
+  });
+});
+
+test.describe("guard ignore", () => {
+  test.use({ vedhaGuard: { ignore: ["/api/orders"] } });
+  test("guard: an ignored endpoint is not reported", async ({ page }) => {
+    await plain(page, process.env.BUG_URL!);
   });
 });
 `;
@@ -109,5 +139,21 @@ describe("@vedhajs/playwright-test", () => {
     const lenient = by("keeps going");
     expect(lenient.status).toBe("passed");
     expect(lenient.attachments.map((a) => a.name)).toContain("vedha-failure-bundle.json");
+  }, 120_000);
+
+  it("guard mode: fails an ordinary test whose checks passed over a server 500, with opt-outs", async () => {
+    const specs = await runPlaywright();
+    const by = (t: string) => specs.find((s) => s.title.startsWith(t))!.tests[0]!.results[0]!;
+
+    expect(by("guard: plain test on a healthy app").status).toBe("passed");
+
+    const caught = by("guard: plain test whose checks pass");
+    expect(caught.status).toBe("failed");
+    expect(caught.error?.message).toContain("Vedha guard");
+    expect(caught.error?.message).toContain("POST /api/orders returned 500");
+    expect(caught.attachments.map((a) => a.name)).toContain("vedha-guard.json");
+
+    expect(by("guard: off keeps").status).toBe("passed");
+    expect(by("guard: an ignored endpoint").status).toBe("passed");
   }, 120_000);
 });
