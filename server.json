@@ -1,0 +1,34 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.HMAKT99/vedha",
+  "title": "Vedha",
+  "description": "Browser testing on Playwright that checks the server, not just the screen, before it reports a pass.",
+  "repository": {
+    "url": "https://github.com/HMAKT99/VEDHA",
+    "source": "github",
+    "subfolder": "packages/mcp"
+  },
+  "websiteUrl": "https://github.com/HMAKT99/VEDHA#readme",
+  "version": "0.1.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@vedhajs/mcp",
+      "version": "0.1.2",
+      "transport": { "type": "stdio" },
+      "packageArguments": [
+        {
+          "type": "named",
+          "name": "--allow-domain",
+          "description": "Host the browser may visit (repeat for more hosts). The server refuses to start without one.",
+          "isRequired": true,
+          "isRepeated": true,
+          "format": "string",
+          "default": "localhost",
+          "valueHint": "host"
+        }
+      ]
+    }
+  ]
+}

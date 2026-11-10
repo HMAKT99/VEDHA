@@ -1,6 +1,7 @@
 {
   "name": "@vedhajs/mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "mcpName": "io.github.HMAKT99/vedha",
   "description": "Vedha as an MCP server: verified browser actions, recorded recovery, failure bundles and test promotion for any MCP client.",
   "type": "module",
   "bin": {
