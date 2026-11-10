@@ -19,7 +19,7 @@ const INSTRUCTIONS = `Vedha runs browser actions and reports what it saw: the pa
 /** Builds the server; the transport is attached by the caller. */
 export function createServer(config: McpConfig): { server: McpServer; tools: VedhaTools } {
   const tools = new VedhaTools(config);
-  const server = new McpServer({ name: "vedha", version: "0.1.1" }, { instructions: INSTRUCTIONS });
+  const server = new McpServer({ name: "vedha", version: "0.1.2" }, { instructions: INSTRUCTIONS });
 
   server.registerTool(
     "vedha_act",

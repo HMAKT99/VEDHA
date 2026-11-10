@@ -2,13 +2,25 @@
 
 [![npm](https://img.shields.io/npm/v/@vedhajs/mcp?label=%40vedhajs%2Fmcp)](https://www.npmjs.com/package/@vedhajs/mcp) [![CI](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml/badge.svg)](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-### Is Playwright alone enough for agentic testing?
+### Your Playwright tests pass over silent 500s. Change one import.
 
-![Same order flow, same "Order placed" check: Playwright passes, Vedha fails the step because POST /api/orders returned 500, and the server stored 0 orders](examples/demo/demo.gif)
+```bash
+npm install -D @vedhajs/playwright-test
+```
 
-<sub>[Run this demo](examples/demo/) in about 3 seconds: `npx tsx examples/demo/run.ts`</sub>
+```ts
+import { test, expect } from "@vedhajs/playwright-test"; // was "@playwright/test"
+```
 
-**Not when your agent trusts the screen.** Your agent clicks "Save", the page says "Saved", and it reports success. But the server returned an error, or stored nothing. **Vedha catches that.** It runs on Playwright and checks that each action really happened before it reports a pass. It is built for AI agents driving a browser and for people writing tests.
+![The same Playwright test with two imports: @playwright/test passes, @vedhajs/playwright-test fails with "POST /api/orders returned 500"](examples/guard-demo/demo.gif)
+
+<sub>[Run this demo](examples/guard-demo/): `npx tsx examples/guard-demo/run.ts`</sub>
+
+The page says "Order placed", so the test passes. But the server answered `POST /api/orders` with a 500 and stored nothing. With the import changed, your tests run exactly as before, and a test whose own checks pass still **fails** when the app answered a request with a 5xx or a write failed outright. No rewrite, no new assertions. Details and options: [guard mode](#migrating-a-playwright-test). For CI, see [`examples/ci/`](examples/ci/).
+
+### And when an AI agent does the testing
+
+An agent that trusts the screen makes the same mistake: it clicks "Save", sees "Saved" and reports success. Vedha's MCP server, CLI and SDK run on Playwright and check that each action really happened (page, network, and a read-back of stored data) before they report a pass.
 
 |                           |                                                                                                    |
 | ------------------------- | -------------------------------------------------------------------------------------------------- |
@@ -20,9 +32,10 @@
 
 ```bash
 npx -y @vedhajs/mcp --allow-domain localhost     # MCP server for your agent
-npm install -D @vedhajs/cli                      # or the CLI / SDK for your tests
-npm install -D @vedhajs/playwright-test          # guard an existing Playwright suite: change one import
+npm install -D @vedhajs/cli                      # or the CLI / SDK for checked steps
 ```
+
+<sub>[Agent-side demo](examples/demo/) (Playwright PASS vs Vedha FAILED on the same silent 500): `npx tsx examples/demo/run.ts`</sub>
 
 ### Head to head: AI agent testing a web app
 
@@ -211,10 +224,6 @@ import { test, expect } from "@playwright/test";
 // after
 import { test, expect } from "@vedhajs/playwright-test";
 ```
-
-![The same Playwright test with two imports: @playwright/test passes, @vedhajs/playwright-test fails with "POST /api/orders returned 500"](examples/guard-demo/demo.gif)
-
-<sub>[Run this demo](examples/guard-demo/): `npx tsx examples/guard-demo/run.ts`</sub>
 
 Your tests run exactly as before, with guard mode watching each one. A test whose own checks pass still **fails** if the app answered a request with a 5xx, or a write request (POST/PUT/PATCH/DELETE) failed outright: the page said "Saved", the server didn't. A 4xx answer to a write and an uncaught page error are added to the report as warnings, because validation tests and third-party scripts produce them on purpose. Requests to other sites (analytics, CDNs) are not watched. The findings are attached to the test as `vedha-guard.json`.
 
