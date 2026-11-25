@@ -1,6 +1,6 @@
 # Vedha
 
-[![npm](https://img.shields.io/npm/v/@vedhajs/mcp?label=%40vedhajs%2Fmcp)](https://www.npmjs.com/package/@vedhajs/mcp) [![CI](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml/badge.svg)](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/@vedhajs/mcp?label=%40vedhajs%2Fmcp)](https://www.npmjs.com/package/@vedhajs/mcp) [![CI](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml/badge.svg)](https://github.com/HMAKT99/VEDHA/actions/workflows/ci.yml) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE) [![HMAKT99/VEDHA MCP server](https://glama.ai/mcp/servers/HMAKT99/VEDHA/badges/score.svg)](https://glama.ai/mcp/servers/HMAKT99/VEDHA)
 
 ### Your Playwright tests pass over silent 500s. Change one import.
 
